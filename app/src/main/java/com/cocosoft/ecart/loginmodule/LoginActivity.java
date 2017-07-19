@@ -40,6 +40,7 @@ import com.cocosoft.ecart.cartmodule.CartItem;
 import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.orderHistory.OrderHistory;
 import com.cocosoft.ecart.scanlistmodule.ProductItem;
+import com.cocosoft.ecart.scanlistmodule.ScannedListFragment;
 import com.cocosoft.ecart.wishlistmodule.WishListFragment;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -119,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
         init();
-        openFrag(0);
+        openFrag(0, null);
         Profile fbProfile = Profile.getCurrentProfile();
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -241,25 +242,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.menu_home:
-                        openFrag(0);
+                        openFrag(0, null);
                         return true;
                     // For rest of the options we just show a toast on click
                     case R.id.menu_favourite:
-                        openFrag(5);
+                        openFrag(5, null);
                         return true;
 
                     case R.id.menu_allusers:
-                        openFrag(7);
+                        openFrag(7, null);
                         return true;
 
                     case R.id.menu_settings:
-                        openFrag(4);
+                        openFrag(4, null);
                         return true;
 
                     case R.id.menu_edit:
                         boolean isloggedin = appSharedPrefs.getBoolean("isloggedin", false);
                         if (isloggedin)
-                            openFrag(3);
+                            openFrag(3, null);
                         else
                             Toast.makeText(getApplicationContext(), "Please login to continue", Toast.LENGTH_SHORT).show();
                         return true;
@@ -270,15 +271,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         return true;
 
                     case R.id.menu_login:
-                        openFrag(1);
+                        openFrag(1, null);
                         return true;
 
                     case R.id.menu_updateprofile:
-                        openFrag(8);
+                        openFrag(8, null);
                         return true;
 
                     case R.id.menu_history:
-                        openFrag(6);
+                        openFrag(6, null);
                         return true;
 
                     case R.id.menu_logout:
@@ -370,7 +371,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    private void openFrag(int i) {
+    private void openFrag(int i, String result) {
         boolean isloggedin = appSharedPrefs.getBoolean("isloggedin", false);
 
         switch (i) {
@@ -412,6 +413,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case 8:
                 firstFragment = new ProfileFragment();
                 break;
+
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -432,12 +434,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             this.finish();
         }
     }
-/*
-    @Override
-    public void onFragmentOpen() {
-        mActionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }*/
 
     @Override
     public void onClick(View v) {
@@ -450,28 +446,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-  /*  @Override
-    public void onQuantityChange(String productid, int quantity) {
-
-
-        saveTempData(mProductArray);
-    }*/
-/*
-    private void saveTempData(ArrayList<ProductItem> mProductArray) {
-
-        String json = gson.toJson(mProductArray);
-        prefsEditor.putString("tempdata", json);
-        prefsEditor.commit();
-    }*/
-
-    /*
-
-        @Override
-        public void onScanResult(JSONObject obj, int scantype) {
-
-            saveTempData(mProductArray);
-        }
-    */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -727,12 +701,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         protected void onPostExecute(String result) {
             if (result != null) {
                 Log.e(TAG, "==" + result);
-                try {
+
                     if (firstFragment != null)
-                        ((HomeFragment) firstFragment).openScanListFrag(new JSONObject(result), 1);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                        ((HomeFragment) firstFragment).openScanListFrag(result);
+
 
             }
         }

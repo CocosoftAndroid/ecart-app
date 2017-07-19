@@ -58,7 +58,7 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ScannedListFragment extends Fragment implements View.OnClickListener, QuantityListener, WishlistListener, IndividualItemListener, CheckboxListener, ScanResultListener {
+public class ScannedListFragment extends Fragment implements View.OnClickListener, QuantityListener, WishlistListener, IndividualItemListener, CheckboxListener {
 
     private Button mAddCartTxt;
     private static final String LOG_TAG = ScannedListFragment.class.getSimpleName();
@@ -78,12 +78,15 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
     private RelativeLayout mSearchLayout;
     private int scantype;
     private QuantityListener mQuantityLis;
-    private ScanResultListener mScanResultLis;
+
 
     private Gson gson;
     private CheckBox mSelectAllChkBox;
     private APIInterface apiInterface;
     private Call<WishList> response;
+
+    private Call<Product> response2;
+    private String nfcResult;
 
 
     @Override
@@ -92,14 +95,18 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         mProductArray = getArguments().getParcelableArrayList("productarray");
         isScan = getArguments().getBoolean("isscan");
         scantype = getArguments().getInt("scantype");
+        if(scantype==1)
+        {
+            nfcResult = getArguments().getString("nfcresult");
+        }
         prefs = getContext().getSharedPreferences("cocosoft", MODE_PRIVATE);
         prefsEditor = prefs.edit();
 
     }
 
-    public void setInterface(QuantityListener qlis, ScanResultListener scanlis) {
+    public void setInterface(QuantityListener qlis) {
         this.mQuantityLis = qlis;
-        this.mScanResultLis = scanlis;
+
     }
 
     @Nullable
@@ -193,6 +200,15 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
             startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
         }
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
+        if(scantype==1)
+        {
+            try {
+                onScanResult(new JSONObject(nfcResult),1);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
@@ -362,9 +378,55 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    @Override
-    public void onScanResult(JSONObject obj, int scantype) {
-        mScanResultLis.onScanResult(obj, scantype);
-        mScanListAdapter.notifyDataSetChanged();
+
+
+    public void onScanResult(JSONObject obj, final int scantype) {
+        final String id = obj.optString("id");
+        final ProductItem dbItem = new ProductItem();
+        response2 = apiInterface.getProduct(Integer.parseInt(id));
+        response2.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                dbItem.setProductId(response.body().getProductId());
+                dbItem.setProductName(response.body().getProductName());
+                dbItem.setProductPrice(response.body().getPrice());
+                dbItem.setProductDesc(response.body().getProductDesc());
+                dbItem.setImageUrl(response.body().getImgUrl());
+                Log.e("ProdName", "=" + response.body().getProductName());
+                if (dbItem != null) {
+                    if (mProductArray.size() > 0) {
+                        ProductItem item = null;
+                        for (int i = 0; i < mProductArray.size(); i++) {
+                            if (mProductArray.get(i).getProductId().equals(id)) {
+                                item = mProductArray.get(i);
+                                Log.e("ProdName2", "=" + item.getProductName());
+                                Toast.makeText(getContext(), item.getProductName() + " added", Toast.LENGTH_SHORT).show();
+                                int count = item.getCount();
+                                item.setCount(count + 1);
+                                item.setScantype(scantype);
+                            }
+                        }
+                        if (item == null) {
+                            mProductArray.add(new ProductItem(id, dbItem.getProductName(), dbItem.getProductDesc(), dbItem.getProductPrice(),dbItem.getImageUrl(), 1, scantype, false));
+                        }
+                    } else {
+                        mProductArray.add(new ProductItem(id, dbItem.getProductName(), dbItem.getProductDesc(), dbItem.getProductPrice(),dbItem.getImageUrl(), 1, scantype, false));
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Item not found on Database", Toast.LENGTH_SHORT).show();
+                }
+                String json = gson.toJson(mProductArray);
+                prefsEditor.putString("tempscanlist", json);
+                prefsEditor.commit();
+                mScanListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+
+            }
+        });
+
+
     }
 }

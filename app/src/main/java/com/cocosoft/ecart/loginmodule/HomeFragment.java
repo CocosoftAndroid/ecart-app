@@ -48,7 +48,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by.dmin on 3/16/2017.
  */
 
-public class HomeFragment extends Fragment implements View.OnClickListener, QuantityListener, ScanResultListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, QuantityListener {
 
     private LinearLayout mLLayout1, mLLayout2, mLLayout3;
     private ArrayList<ProductItem> mProductArray = new ArrayList<>();
@@ -128,27 +128,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
                 break;
             case R.id.llay2:
                 scanTypeFlag = 2;
-                openFrag(1, true);
+                openFrag(1, true, null);
                 break;
             case R.id.llay3:
                 scanTypeFlag = 3;
-                openFrag(1, true);
+                openFrag(1, true, null);
                 break;
             case R.id.cart_img:
-                openFrag(2, false);
+                openFrag(2, false, null);
                 break;
         }
     }
 
-    private void openFrag(int i, boolean cameraflag) {
+    private void openFrag(int i, boolean cameraflag, String result) {
         switch (i) {
             case 1:
                 firstFragment = new ScannedListFragment();
-                ((ScannedListFragment) firstFragment).setInterface(this, this);
+                ((ScannedListFragment) firstFragment).setInterface(this);
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("productarray", mProductArray);
                 bundle.putBoolean("isscan", cameraflag);
                 bundle.putInt("scantype", scanTypeFlag);
+                bundle.putString("nfcresult", result);
                 firstFragment.setArguments(bundle);
                 break;
             case 2:
@@ -163,10 +164,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
         fragmentTransaction.commit();
     }
 
-    public void openScanListFrag(JSONObject jsonObject, int flag) {
-        onScanResult(jsonObject, flag);
-        openFrag(1, false);
-    }
 
     @Override
     public void onQuantityChange(String productid, int quantity) {
@@ -189,53 +186,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
         prefsEditor.commit();
     }
 
-    @Override
-    public void onScanResult(JSONObject obj, final int scantype) {
-        final String id = obj.optString("id");
-        final ProductItem dbItem = new ProductItem();
-        response = apiInterface.getProduct(Integer.parseInt(id));
-        response.enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                dbItem.setProductId(response.body().getProductId());
-                dbItem.setProductName(response.body().getProductName());
-                dbItem.setProductPrice(response.body().getPrice());
-                dbItem.setProductDesc(response.body().getProductDesc());
-                dbItem.setImageUrl(response.body().getImgUrl());
-                Log.e("ProdName", "=" + response.body().getProductName());
-                if (dbItem != null) {
-                    if (mProductArray.size() > 0) {
-                        ProductItem item = null;
-                        for (int i = 0; i < mProductArray.size(); i++) {
-                            if (mProductArray.get(i).getProductId().equals(id)) {
-                                item = mProductArray.get(i);
-                                Log.e("ProdName2", "=" + item.getProductName());
-                                Toast.makeText(getContext(), item.getProductName() + " added", Toast.LENGTH_SHORT).show();
-                                int count = item.getCount();
-                                item.setCount(count + 1);
-                                item.setScantype(scantype);
-                            }
-                        }
-                        if (item == null) {
-                            mProductArray.add(new ProductItem(id, dbItem.getProductName(), dbItem.getProductDesc(), dbItem.getProductPrice(),dbItem.getImageUrl(), 1, scantype, false));
-                        }
-                    } else {
-                        mProductArray.add(new ProductItem(id, dbItem.getProductName(), dbItem.getProductDesc(), dbItem.getProductPrice(),dbItem.getImageUrl(), 1, scantype, false));
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Item not found on Database", Toast.LENGTH_SHORT).show();
-                }
-                String json = gson.toJson(mProductArray);
-                prefsEditor.putString("tempscanlist", json);
-                prefsEditor.commit();
-            }
 
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-
-            }
-        });
-
-
+    public void openScanListFrag(String result) {
+        scanTypeFlag = 1;
+        openFrag(1, false, result);
     }
 }

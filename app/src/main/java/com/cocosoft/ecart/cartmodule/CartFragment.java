@@ -27,10 +27,25 @@ import com.cocosoft.ecart.loginmodule.IndividualItemFragment;
 import com.cocosoft.ecart.loginmodule.LoginFragment;
 import com.cocosoft.ecart.network.APIInterface;
 import com.cocosoft.ecart.network.RetrofitAPIClient;
+import com.cocosoft.ecart.orderHistory.OrderList;
+import com.cocosoft.ecart.orderHistory.OrderMaster;
 import com.cocosoft.ecart.scanlistmodule.ProductItem;
 import com.cocosoft.ecart.wishlistmodule.WishList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.payu.india.Extras.PayUChecksum;
+import com.payu.india.Model.PaymentParams;
+import com.payu.india.Model.PayuConfig;
+import com.payu.india.Model.PayuHashes;
+import com.payu.india.Model.PostData;
+import com.payu.india.Payu.Payu;
+import com.payu.india.Payu.PayuConstants;
+import com.payu.india.Payu.PayuErrors;
+import com.payu.payuui.Activity.PayUBaseActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -62,6 +77,22 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     private APIInterface apiInterface;
     private Call<WishList> response;
 
+    private Call<OrderMaster> Orderresponse;
+    private Integer totalitems = 0;
+    private Double totalPrice=0.0;
+    private List<OrderList> orderlist = new ArrayList<>();
+
+    /* payu money variable declarations */
+    private String merchantKey, userCredentials;
+    private PaymentParams mPaymentParams;
+    private PayuConfig payuConfig;
+    private PayUChecksum checksum;
+    String username,token,firstName= "default";
+    private final String salt = "eCwWELxi";// "13p0PXZk";
+    String txnid; String amount; String productInfo;
+    String udf1; String udf2; String udf3; String udf4; String udf5;
+    String status= null,err_msg = null,card_typ;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +111,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
+        apiInterface = RetrofitAPIClient.getClient(this.getActivity()).create(APIInterface.class);
         init(view);
         setListeners();
         return view;
@@ -123,20 +155,36 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
 
     @Override
     public void onClick(View v) {
+        Payu.setInstance(this.getActivity());
         boolean isloggedin = prefs.getBoolean("isloggedin", false);
-        String username = prefs.getString("username", "");
+        username = prefs.getString("username", "");
+
+
+        token = prefs.getString("token","");
+
         switch (v.getId()) {
             case R.id.add_cart_txt:
                 if (isloggedin) {
                     Toast.makeText(getContext(), "Processing Payment", Toast.LENGTH_SHORT).show();
                     if(_checkoutAmount!=0)
                     {
-                        Intent i=new Intent(CartFragment.this.getActivity(),BillingPage.class);
-                        i.putExtra("Checkout Amount",_checkoutAmount);
-                        Bundle args = new Bundle();
-                        args.putParcelableArrayList("ARRAYLIST",mCartArray);
-                        i.putExtra("BUNDLE",args);
-                        startActivity(i);
+
+                        for (int y = 0; y < mCartArray.size(); y++) {
+                            totalitems = totalitems + mCartArray.get(y).getCount();
+                            for(int i = 0; i<mCartArray.get(y).getCount(); i++)
+                                totalPrice = totalPrice + mCartArray.get(y).getProductPrice();
+                            Log.i("product details",String.valueOf(totalitems));
+                            Log.i("product details",String.valueOf(totalPrice));
+
+                                Log.e("firstname", firstName);
+
+                            Log.i("username",username);
+
+                            orderlist.add(new OrderList(0, mCartArray.get(y).getProductId(), mCartArray.get(y).getProductName(), mCartArray.get(y).getProductPrice(), mCartArray.get(y).getCount()));
+                            productInfo=mCartArray.get(y).getProductName();
+                            Log.i("productInfo",productInfo);
+                        }
+                        navigateToBaseActivity(v);
                     }
                     else
                     {
@@ -153,6 +201,227 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
 
         }
     }
+
+    public void navigateToBaseActivity(View view) {
+
+
+        merchantKey = "gtKFFx"; //0MQaQP
+        amount = String.valueOf(_checkoutAmount);
+        txnid = ""+System.currentTimeMillis();
+        udf1 = "udf1";udf2 = "udf2";udf3 = "udf3";udf4 = "udf4";udf5 = "udf5";
+        int environment = PayuConstants.STAGING_ENV;
+        userCredentials = merchantKey + ":" + username;
+        mPaymentParams = new PaymentParams();
+        mPaymentParams.setKey(merchantKey);
+        mPaymentParams.setAmount(amount);
+        mPaymentParams.setProductInfo(productInfo);
+        mPaymentParams.setFirstName(firstName);
+        mPaymentParams.setEmail(username);
+        mPaymentParams.setTxnId(txnid);
+
+        /**
+         * Surl --> Success url is where the transaction response is posted by PayU on successful transaction
+         * Furl --> Failre url is where the transaction response is posted by PayU on failed transaction
+         */
+        mPaymentParams.setSurl("http://192.168.0.104:8080/success");
+        mPaymentParams.setFurl("http://192.168.0.104:8080/failure");
+        mPaymentParams.setUdf1(udf1);
+        mPaymentParams.setUdf2(udf2);
+        mPaymentParams.setUdf3(udf3);
+        mPaymentParams.setUdf4(udf4);
+        mPaymentParams.setUdf5(udf5);
+        mPaymentParams.setUserCredentials(userCredentials);
+
+
+        //TODO Sets the payment environment in PayuConfig object
+        payuConfig = new PayuConfig();
+        payuConfig.setEnvironment(environment);
+        generateHashFromSDK(mPaymentParams, salt);
+
+    }
+
+
+    public void generateHashFromSDK(PaymentParams mPaymentParams, String salt) {
+        PayuHashes payuHashes = new PayuHashes();
+        PostData postData = new PostData();
+
+        // payment Hash;
+        checksum = null;
+        checksum = new PayUChecksum();
+        checksum.setAmount(mPaymentParams.getAmount());
+        checksum.setKey(mPaymentParams.getKey());
+        checksum.setTxnid(mPaymentParams.getTxnId());
+        checksum.setEmail(mPaymentParams.getEmail());
+        checksum.setSalt(salt);
+        checksum.setProductinfo(mPaymentParams.getProductInfo());
+        checksum.setFirstname(mPaymentParams.getFirstName());
+        checksum.setUdf1(mPaymentParams.getUdf1());
+        checksum.setUdf2(mPaymentParams.getUdf2());
+        checksum.setUdf3(mPaymentParams.getUdf3());
+        checksum.setUdf4(mPaymentParams.getUdf4());
+        checksum.setUdf5(mPaymentParams.getUdf5());
+
+        postData = checksum.getHash();
+        if (postData.getCode() == PayuErrors.NO_ERROR) {
+            payuHashes.setPaymentHash(postData.getResult());
+        }
+
+        String var1 = mPaymentParams.getUserCredentials() == null ? PayuConstants.DEFAULT : mPaymentParams.getUserCredentials();
+        String key = mPaymentParams.getKey();
+
+        if ((postData = calculateHash(key, PayuConstants.PAYMENT_RELATED_DETAILS_FOR_MOBILE_SDK, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR) // Assign post data first then check for success
+            payuHashes.setPaymentRelatedDetailsForMobileSdkHash(postData.getResult());
+        //vas
+        if ((postData = calculateHash(key, PayuConstants.VAS_FOR_MOBILE_SDK, PayuConstants.DEFAULT, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
+            payuHashes.setVasForMobileSdkHash(postData.getResult());
+
+        // getIbibocodes
+        if ((postData = calculateHash(key, PayuConstants.GET_MERCHANT_IBIBO_CODES, PayuConstants.DEFAULT, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
+            payuHashes.setMerchantIbiboCodesHash(postData.getResult());
+
+        if (!var1.contentEquals(PayuConstants.DEFAULT)) {
+            // get user card
+            if ((postData = calculateHash(key, PayuConstants.GET_USER_CARDS, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR) // todo rename storedc ard
+                payuHashes.setStoredCardsHash(postData.getResult());
+            // save user card
+            if ((postData = calculateHash(key, PayuConstants.SAVE_USER_CARD, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
+                payuHashes.setSaveCardHash(postData.getResult());
+            // delete user card
+            if ((postData = calculateHash(key, PayuConstants.DELETE_USER_CARD, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
+                payuHashes.setDeleteCardHash(postData.getResult());
+            // edit user card
+            if ((postData = calculateHash(key, PayuConstants.EDIT_USER_CARD, var1, salt)) != null && postData.getCode() == PayuErrors.NO_ERROR)
+                payuHashes.setEditCardHash(postData.getResult());
+        }
+
+        if (mPaymentParams.getOfferKey() != null) {
+            postData = calculateHash(key, PayuConstants.OFFER_KEY, mPaymentParams.getOfferKey(), salt);
+            if (postData.getCode() == PayuErrors.NO_ERROR) {
+                payuHashes.setCheckOfferStatusHash(postData.getResult());
+            }
+        }
+
+        if (mPaymentParams.getOfferKey() != null && (postData = calculateHash(key, PayuConstants.CHECK_OFFER_STATUS, mPaymentParams.getOfferKey(), salt)) != null && postData.getCode() == PayuErrors.NO_ERROR) {
+            payuHashes.setCheckOfferStatusHash(postData.getResult());
+        }
+
+        // we have generated all the hases now lest launch sdk's ui
+        launchSdkUI(payuHashes);
+    }
+
+    // deprecated, should be used only for testing.
+    private PostData calculateHash(String key, String command, String var1, String salt) {
+        checksum = null;
+        checksum = new PayUChecksum();
+        checksum.setKey(key);
+        checksum.setCommand(command);
+        checksum.setVar1(var1);
+        checksum.setSalt(salt);
+        return checksum.getHash();
+    }
+
+    /**
+     * This method adds the Payuhashes and other required params to intent and launches the PayuBaseActivity.java
+     *
+     * @param payuHashes it contains all the hashes generated from merchant server
+     */
+    public void launchSdkUI(PayuHashes payuHashes) {
+
+        Intent intent = new Intent(this.getActivity(), PayUBaseActivity.class);
+        intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
+        intent.putExtra(PayuConstants.PAYMENT_PARAMS, mPaymentParams);
+        intent.putExtra(PayuConstants.PAYU_HASHES, payuHashes);
+
+        startActivityForResult(intent,PayuConstants.PAYU_REQUEST_CODE);
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
+            if (data != null) {
+
+
+                String status = getStstusandTranDetails(data.getStringExtra("payu_response"));
+                if (status.equals("No Error"))
+                {
+
+                    addBillDetailToWeb(new OrderMaster("", 0, status, card_typ, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
+                    emptyCheckoutData();
+                    Toast.makeText(this.getActivity(), "Transaction successfull", Toast.LENGTH_LONG).show();
+                    onPressGotoHomePage();
+
+
+                }
+                else
+                {
+                    Toast.makeText(this.getActivity(), "Payment failed with Error message(" +status +") . Please try checkout again", Toast.LENGTH_LONG).show();
+                }
+                Log.d("payUMoney data",data.getStringExtra("payu_response"));
+
+
+            } else {
+                Toast.makeText(this.getActivity(), "Couldn't do transaction ! Try again", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+
+    public String getStstusandTranDetails(String response)
+    {
+        try {
+            JSONObject jsonObj = new JSONObject(response);
+            status = jsonObj.getString("status");
+            amount = jsonObj.getString("amount");
+            err_msg = jsonObj.getString("Error_Message");
+            card_typ = jsonObj.getString("card_type");
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        return err_msg;
+    }
+
+    private void addBillDetailToWeb(OrderMaster orderMaster) {
+
+        Orderresponse = apiInterface.addOrder(orderMaster, token);
+        Orderresponse.enqueue(new Callback<OrderMaster>() {
+
+            @Override
+            public void onResponse(Call<OrderMaster> call, Response<OrderMaster> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<OrderMaster> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    void onPressGotoHomePage()
+    {
+        Intent i = new Intent(CartFragment.this.getActivity(),com.cocosoft.ecart.loginmodule.LoginActivity.class);
+        startActivity(i);
+    }
+    void emptyCheckoutData()
+    {
+        mCartArray.clear();
+        prefsEditor = prefs.edit();
+        String json = (new Gson()).toJson(mCartArray);
+        prefsEditor.putString("tempcartlist", json);
+        prefsEditor.commit();
+        String aftertempdata = prefs.getString("tempcartlist",null);
+        Log.i("aftertempdata",aftertempdata);
+
+
+    }
+
 
     @Override
     public void onQuantityChange(String productid, int quantity) {

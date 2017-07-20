@@ -1,6 +1,7 @@
 package com.cocosoft.ecart.loginmodule;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -29,6 +30,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by.dmin on 3/16/2017.
  */
@@ -47,6 +50,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
     private String mUserType="user";
     private RadioGroup mRadioGroup1;
     private APIInterface apiInterface;
+
     private Call<User> response;
 
     @Nullable
@@ -103,6 +107,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         mRadioGroup1=(RadioGroup)v.findViewById(R.id.radioGroup1);
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
 
+
     }
 
     @Override
@@ -137,6 +142,8 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
             mWarnTxt.setText("Not a valid email ");
         }
         else {
+
+
             response = apiInterface.registerUser(new User(0,mFirstNameETxt.getText().toString().trim(),mLastNameETxt.getText().toString().trim(),mEmailEdtText.getText().toString().trim(),mPwdEdtTxt.getText().toString().trim(),0,"","",""));
             response.enqueue(new Callback<User>() {
                 @Override
@@ -152,6 +159,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
             getActivity().getSupportFragmentManager().popBackStack();
 
             Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT).show();
+
             getActivity().getSupportFragmentManager().popBackStack();
         }
     }

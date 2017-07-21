@@ -176,10 +176,6 @@
     <orderEntry type="library" exported="" name="mediarouter-v7-24.0.0" level="project" />
     <orderEntry type="module" module-name="sdkui" exported="" />
     <orderEntry type="library" exported="" name="android-android-25" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-23.2.1" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-23.2.1" level="project" />
-    <orderEntry type="library" exported="" name="animated-vector-drawable-23.2.1" level="project" />
-    <orderEntry type="library" exported="" name="support-vector-drawable-23.2.1" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-23.2.1" level="project" />
+    <orderEntry type="library" exported="" name="sdkui-unspecified" level="project" />
   </component>
 </module>

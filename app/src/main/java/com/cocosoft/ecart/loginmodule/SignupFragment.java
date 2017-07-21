@@ -50,6 +50,8 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
     private String mUserType="user";
     private RadioGroup mRadioGroup1;
     private APIInterface apiInterface;
+    private SharedPreferences.Editor editor;
+
 
     private Call<User> response;
 
@@ -106,6 +108,8 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         mSearchLayout.setVisibility(View.GONE);
         mRadioGroup1=(RadioGroup)v.findViewById(R.id.radioGroup1);
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
+        editor = getContext().getSharedPreferences("cocosoft", MODE_PRIVATE).edit();
+
 
 
     }
@@ -143,7 +147,8 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         }
         else {
 
-
+            editor.putString("firstname",mFirstNameETxt.getText().toString().trim());
+            editor.commit();
             response = apiInterface.registerUser(new User(0,mFirstNameETxt.getText().toString().trim(),mLastNameETxt.getText().toString().trim(),mEmailEdtText.getText().toString().trim(),mPwdEdtTxt.getText().toString().trim(),0,"","",""));
             response.enqueue(new Callback<User>() {
                 @Override

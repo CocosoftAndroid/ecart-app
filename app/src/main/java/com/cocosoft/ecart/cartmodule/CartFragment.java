@@ -158,6 +158,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         Payu.setInstance(this.getActivity());
         boolean isloggedin = prefs.getBoolean("isloggedin", false);
         username = prefs.getString("username", "");
+        firstName = prefs.getString("firstname","nfound");
 
 
         token = prefs.getString("token","");
@@ -168,23 +169,16 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                     Toast.makeText(getContext(), "Processing Payment", Toast.LENGTH_SHORT).show();
                     if(_checkoutAmount!=0)
                     {
+                        productInfo=mCartArray.get(0).getProductName();
+                        navigateToBaseActivity(); // call this function for payumoney gateway
 
-                        for (int y = 0; y < mCartArray.size(); y++) {
-                            totalitems = totalitems + mCartArray.get(y).getCount();
-                            for(int i = 0; i<mCartArray.get(y).getCount(); i++)
-                                totalPrice = totalPrice + mCartArray.get(y).getProductPrice();
-                            Log.i("product details",String.valueOf(totalitems));
-                            Log.i("product details",String.valueOf(totalPrice));
-
-                                Log.e("firstname", firstName);
-
-                            Log.i("username",username);
-
-                            orderlist.add(new OrderList(0, mCartArray.get(y).getProductId(), mCartArray.get(y).getProductName(), mCartArray.get(y).getProductPrice(), mCartArray.get(y).getCount()));
-                            productInfo=mCartArray.get(y).getProductName();
-                            Log.i("productInfo",productInfo);
-                        }
-                        navigateToBaseActivity(v);
+                        // uncomment below for authorize.net code and comment navigateToBaseActivity func call
+                       /* Intent i=new Intent(CartFragment.this.getActivity(),BillingPage.class);
+                        i.putExtra("Checkout Amount",_checkoutAmount);
+                        Bundle args = new Bundle();
+                        args.putParcelableArrayList("ARRAYLIST",mCartArray);
+                        i.putExtra("BUNDLE",args);
+                        startActivity(i);*/
                     }
                     else
                     {
@@ -202,7 +196,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         }
     }
 
-    public void navigateToBaseActivity(View view) {
+    public void navigateToBaseActivity() {
 
 
         merchantKey = "gtKFFx"; //0MQaQP
@@ -347,6 +341,19 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                 if (status.equals("No Error"))
                 {
 
+                    for (int y = 0; y < mCartArray.size(); y++) {
+                        totalitems = totalitems + mCartArray.get(y).getCount();
+                        for(int i = 0; i<mCartArray.get(y).getCount(); i++)
+                            totalPrice = totalPrice + mCartArray.get(y).getProductPrice();
+                        Log.i("product details",String.valueOf(totalitems));
+                        Log.i("product details",String.valueOf(totalPrice));
+                        Log.i("firstname", firstName);
+                        Log.i("username",username);
+
+                        orderlist.add(new OrderList(0, mCartArray.get(y).getProductId(), mCartArray.get(y).getProductName(), mCartArray.get(y).getProductPrice(), mCartArray.get(y).getCount()));
+                        productInfo=mCartArray.get(y).getProductName();
+
+                    }
                     addBillDetailToWeb(new OrderMaster("", 0, status, card_typ, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
                     emptyCheckoutData();
                     Toast.makeText(this.getActivity(), "Transaction successfull", Toast.LENGTH_LONG).show();

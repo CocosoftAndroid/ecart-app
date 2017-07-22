@@ -80,7 +80,7 @@
                 android:drawableLeft="@drawable/ic_phone"
                 android:drawablePadding="@dimen/dp10"
                 android:hint="Phone Number"
-                android:inputType="textPassword"
+                android:inputType="number"
                 android:maxLines="1"
                 android:padding="@dimen/dp10" />
 

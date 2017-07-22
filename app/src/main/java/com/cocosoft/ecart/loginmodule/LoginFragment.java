@@ -131,7 +131,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             response.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    Log.e("Token", "=" + response.body().toString());
+//                    Log.e("Token", "=" + response.body().toString());
 
                     editor.putBoolean("isloggedin", true);
                     editor.putString("username", mUserNameEdtTxt.getText().toString().trim());
@@ -142,7 +142,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         editor.putString("usertype", "user");
                         editor.commit();
                     }
-                    Toast.makeText(getContext(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override
@@ -150,8 +150,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     Log.e("Token", "=" + t.getMessage());
                 }
             });
+            Toast.makeText(getContext(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
             getActivity().getSupportFragmentManager().popBackStack();
             getActivity().getSupportFragmentManager().popBackStack();
+
         }
     }
 

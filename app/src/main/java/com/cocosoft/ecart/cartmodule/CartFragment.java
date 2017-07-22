@@ -237,12 +237,12 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
 
             Toast.makeText(getContext(), "Added to Wishlist", Toast.LENGTH_SHORT).show();
 //            mDB.addToWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true,true), token);
 
         } else {
             Toast.makeText(getContext(), "Wishlist Removed", Toast.LENGTH_SHORT).show();
 //            mDB.removeWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false,true), token);
         }
 
     }

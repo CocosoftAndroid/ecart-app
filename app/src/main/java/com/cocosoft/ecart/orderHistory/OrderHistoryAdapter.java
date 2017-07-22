@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -85,6 +86,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             @Override
             public void onClick(View v) {
                 List<OrderList> olist=orderHistoryList.get(position).getOrderList();
+                cartlist= null;
+                cartlist=new ArrayList<CartItem>();
                 for(int y=0;y<olist.size();y++)
                 {
                     cartlist.add(new CartItem(olist.get(y).getProductId(),olist.get(y).getProductName(),"",olist.get(y).getProductPrice(),olist.get(y).getProductCount(),0,false));
@@ -99,10 +102,14 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         View view = activity.getLayoutInflater().inflate(R.layout.dialoglayout, null);
         RecyclerView lv = (RecyclerView) view.findViewById(R.id.dialoglist);
         LinearLayoutManager lmanager=new LinearLayoutManager(context);
-        BillingAdapter adapter = new BillingAdapter(context, listContent);
+        BillingAdapter adapter = new BillingAdapter(context, listContent,2);
         lv.setLayoutManager(lmanager);
         lv.setAdapter(adapter);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(view);
+        Window window = dialog.getWindow();
+        window.setLayout(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+
         dialog.show();
     }
 

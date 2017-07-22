@@ -6,20 +6,29 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cocosoft.ecart.R;
+import com.cocosoft.ecart.database.DatabaseHandler;
+import com.cocosoft.ecart.network.APIInterface;
+import com.cocosoft.ecart.network.RetrofitAPIClient;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -40,6 +49,16 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private ArrayList<AddressItem> mAddressArray = new ArrayList<>();
     private EditText mNameTxt, mAddress1Txt, mAddress2Txt, mCityTxt, mStateTxt, mZipTxt,mCountryTxt, mPhoneNoTxt, mCNameTxt, mCAddress1Txt, mCAddress2Txt, mCCityTxt, mCStateTxt, mCZipTxt,mCCountryTxt, mCPhoneNoTxt;
 
+    private EditText mUserNameEdtTxt;
+    private EditText mPwdEdtTxt;
+    private EditText mConfirmPwdEdtTxt, mEmailEdtText, mFirstNameETxt, mLastNameETxt;
+    private TextView mSignupTxt, mWarnTxt, mDOBTxt;
+    private DatabaseHandler mDB;
+
+    private String mUserType = "user";
+    private RadioGroup mRadioGroup1;
+    private APIInterface apiInterface;
+    private Call<User> response;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +139,11 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mSearchLayout.setVisibility(View.GONE);
         mTitleTxtView.setText("Profile");
         gson = new Gson();
+        mPhoneNoTxt = (EditText) view.findViewById(R.id.phone_etxt);
+        mEmailEdtText = (EditText) view.findViewById(R.id.email_txt);
+        mFirstNameETxt = (EditText) view.findViewById(R.id.firstname_etxt);
+        mLastNameETxt = (EditText) view.findViewById(R.id.lastname_etxt);
+        apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
     }
 
     private void saveProfileData() {
@@ -128,6 +152,23 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         String json = gson.toJson(mAddressArray);
         prefsEditor.putString("profiledataof" + username, json);
         prefsEditor.commit();
+        response = apiInterface.updateUser(new User(0, mFirstNameETxt.getText().toString().trim(), mLastNameETxt.getText().toString().trim(), mEmailEdtText.getText().toString().trim(), "", 0, "", mPhoneNoTxt.getText().toString().trim(), ""));
+        response.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("LoginFragment", "=" + t.getMessage());
+            }
+        });
+
+        Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
+
+
+
     }
 
     @Override
@@ -135,7 +176,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.save_txt:
                 saveProfileData();
-                Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

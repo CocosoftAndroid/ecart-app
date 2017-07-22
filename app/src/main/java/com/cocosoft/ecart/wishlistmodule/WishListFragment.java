@@ -25,6 +25,7 @@ import com.cocosoft.ecart.listeners.WishlistListener;
 import com.cocosoft.ecart.loginmodule.LoginFragment;
 import com.cocosoft.ecart.network.APIInterface;
 import com.cocosoft.ecart.network.RetrofitAPIClient;
+import com.cocosoft.ecart.scanlistmodule.Product;
 import com.cocosoft.ecart.scanlistmodule.ProductItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -59,6 +60,7 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
     private APIInterface apiInterface;
     private Call<List<WishList>> response;
     private Call<WishList> response2;
+    private Call<Product> response3;
     private List<WishList> mWishListArr = new ArrayList<>();
 
 
@@ -94,7 +96,7 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onResponse(Call<List<WishList>> call, Response<List<WishList>> response) {
                 mWishListArr = response.body();
-                Log.e("ee","="+mWishListArr.size());
+                Log.e("ee", "=" + mWishListArr.size());
                 for (int y = 0; y < mWishListArr.size(); y++) {
 
                     mProductArray.add(new ProductItem("" + mWishListArr.get(y).getProductId(), mWishListArr.get(y).getProductName(), "", mWishListArr.get(y).getPrice(), 0, 0, false));
@@ -105,7 +107,7 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
 
             @Override
             public void onFailure(Call<List<WishList>> call, Throwable t) {
-                Log.e("ee","="+t.getMessage());
+                Log.e("ee", "=" + t.getMessage());
             }
         });
 
@@ -170,11 +172,11 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
 
     private void addToCart() {
 
-        for (int i = 0; i < mWishlistArray.size(); i++) {
-            if (mWishlistArray.get(i).isChecked()) {
+        for (int i = 0; i < mWishListArr.size(); i++) {
+            if (mWishListArr.get(i).getChecked()) {
                 CartItem cartItem = null;
                 for (int j = 0; j < mCartArray.size(); j++) {
-                    if (mWishlistArray.get(i).getProductid().equals(mCartArray.get(j).getProductId())) {
+                    if (mWishListArr.get(i).getProductId() == Integer.parseInt(mCartArray.get(j).getProductId())) {
                         cartItem = mCartArray.get(j);
                     }
                 }
@@ -182,8 +184,26 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
                     int count = cartItem.getCount();
                     cartItem.setCount(count + 1);
                 } else {
-                    ProductItem it = mDb.getProductItem(mWishlistArray.get(i).getProductid());
-                    mCartArray.add(new CartItem(it.getProductId(), it.getProductName(),it.getProductDesc(), it.getProductPrice(), 1, it.getScantype(), it.isChecked()));
+
+                    Log.e("else", "elseres3");
+                   /* response3 = apiInterface.getProduct(mWishListArr.get(i).getProductId());
+                    response3.enqueue(new Callback<Product>() {
+                        @Override
+                        public void onResponse(Call<Product> call, Response<Product> response) {
+                            Product it = response.body();
+                            mCartArray.add(new CartItem(it.getProductId(), it.getProductName(), it.getProductDesc(), it.getPrice(), 1, it.getScantype(), it.isChecked()));
+                            Log.e("else","mCartArray"+it.getProductName());
+                        }
+
+                        @Override
+                        public void onFailure(Call<Product> call, Throwable t) {
+
+                        }
+                    });
+*/
+                    WishList it = mWishListArr.get(i);
+                    mCartArray.add(new CartItem("" + it.getProductId(), it.getProductName(), "", it.getPrice(), 1, 1, false));
+
                 }
             }
         }
@@ -224,16 +244,18 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
     public void onFavouriteClicked(String productid, String productname, Double price, boolean isChecked) {
         String username = prefs.getString("username", "");
         String token = prefs.getString("token", "");
-        addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false), token);
+        addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false, false), token);
 
     }
+
     private void addWishList(WishList wlist, String token) {
-        response2 = apiInterface.addWishList(wlist,token);
+        response2 = apiInterface.addWishList(wlist, token);
         response2.enqueue(new Callback<WishList>() {
             @Override
             public void onResponse(Call<WishList> call, Response<WishList> response) {
 
             }
+
             @Override
             public void onFailure(Call<WishList> call, Throwable t) {
 
@@ -241,11 +263,12 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
         });
 
     }
+
     @Override
     public void onChecked(String productid, boolean isChecked) {
-        for (int i = 0; i < mWishlistArray.size(); i++) {
-            if (mWishlistArray.get(i).getProductid().equals(productid)) {
-                mWishlistArray.get(i).setChecked(isChecked);
+        for (int i = 0; i < mWishListArr.size(); i++) {
+            if (mWishListArr.get(i).getProductId() == Integer.parseInt(productid)) {
+                mWishListArr.get(i).setChecked(isChecked);
             }
         }
     }
@@ -279,7 +302,6 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
             isChecked = checked;
         }
     }
-
 
 
 }

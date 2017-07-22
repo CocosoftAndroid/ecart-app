@@ -27,13 +27,17 @@ public class WishList {
     @Expose
     private Boolean favourite;
 
-    public WishList(int productId, String userEmail, String productName, Double price, Long created, Boolean favourite) {
+    private boolean checked=false;
+
+
+    public WishList(int productId, String userEmail, String productName, Double price, Long created, Boolean favourite, Boolean checked) {
         this.productId = productId;
         this.userEmail = userEmail;
         this.productName = productName;
         this.price = price;
         this.created = created;
         this.favourite = favourite;
+        this.checked = checked;
     }
 
     public int getProductId() {
@@ -84,4 +88,11 @@ public class WishList {
         this.favourite = favourite;
     }
 
+    public boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 }

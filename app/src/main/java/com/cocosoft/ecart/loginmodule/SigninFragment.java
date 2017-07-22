@@ -1,6 +1,7 @@
 package com.cocosoft.ecart.loginmodule;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,18 +15,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cocosoft.ecart.R;
 import com.facebook.CallbackManager;
 import com.google.android.gms.common.SignInButton;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Srikanth on 5/5/2017.
  */
 
-public class SigninFragment extends Fragment implements View.OnClickListener
-{
-
+public class SigninFragment extends Fragment implements View.OnClickListener {
 
 
     Button _esaySignup;
@@ -39,10 +41,8 @@ public class SigninFragment extends Fragment implements View.OnClickListener
     private RelativeLayout mSearchLayout;
 
 
-    private static final String TAG = "SignInFragment";
-    CallbackManager callbackManager;
-
     Activity activity;
+    private SharedPreferences appSharedPrefs;
 
     @Override
     public void onResume() {
@@ -53,8 +53,8 @@ public class SigninFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       //  FacebookSdk.sdkInitialize(getApplicationContext());
-         //AppEventsLogger.activateApp(getActivity()this);
+        //  FacebookSdk.sdkInitialize(getApplicationContext());
+        //AppEventsLogger.activateApp(getActivity()this);
     }
 
     @Override
@@ -63,12 +63,6 @@ public class SigninFragment extends Fragment implements View.OnClickListener
         View v = inflater.inflate(R.layout.activity_signin, container, false);
         init(v);
         setListeners();
-
-
-
-
-
-
         return v;
     }
 
@@ -83,14 +77,11 @@ public class SigninFragment extends Fragment implements View.OnClickListener
 
     private void init(View v) {
 
-        _esaySignup = (Button)v.findViewById(R.id.shopEsaySignIn);
+        _esaySignup = (Button) v.findViewById(R.id.shopEsaySignIn);
         signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
         ((TextView) signInButton.getChildAt(0)).setText("Sign In with Google");
         loginButton = (Button) v.findViewById(R.id.facebook_login_button);
-
-        _esayLoginIn = (Button)v.findViewById(R.id.shopEsayLoginIn);
-
-
+        _esayLoginIn = (Button) v.findViewById(R.id.shopEsayLoginIn);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
@@ -99,6 +90,7 @@ public class SigninFragment extends Fragment implements View.OnClickListener
         mCartImg.setVisibility(View.GONE);
         mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
         mSearchLayout.setVisibility(View.GONE);
+        appSharedPrefs = getActivity().getSharedPreferences("cocosoft", MODE_PRIVATE);
 
     }
 
@@ -113,8 +105,8 @@ public class SigninFragment extends Fragment implements View.OnClickListener
         fragmentTransaction.addToBackStack("h");
         fragmentTransaction.commit();
     }
-    private void Esay_login()
-    {
+
+    private void Esay_login() {
         Fragment signUpfmt = null;
         signUpfmt = new LoginFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -133,29 +125,32 @@ public class SigninFragment extends Fragment implements View.OnClickListener
 
                 break;
             case R.id.sign_in_button:
-                Log.i("Google sign in","google");
+                Log.i("Google sign in", "google");
                 activity = getActivity();
-                if(activity instanceof LoginActivity) {
+                if (activity instanceof LoginActivity) {
                     ((LoginActivity) activity).signIn();
                 }
                 break;
             case R.id.facebook_login_button:
                 activity = getActivity();
-                Log.i("facebook sign in","facebook");
-                if(activity instanceof LoginActivity) {
+                Log.i("facebook sign in", "facebook");
+                if (activity instanceof LoginActivity) {
                     ((LoginActivity) activity).fb_login();
                 }
 
                 break;
             case R.id.shopEsayLoginIn:
-                 Esay_login();
-                 LoginFragment.setValue(2);
+                if (appSharedPrefs.getBoolean("isloggedin", false)) {
+                    Toast.makeText(getContext(), "Already Logged In", Toast.LENGTH_SHORT).show();
+                } else {
+                    Esay_login();
+                    LoginFragment.setValue(2);
+                }
                 break;
 
 
         }
     }
-
 
 
 }

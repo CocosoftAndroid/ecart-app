@@ -274,9 +274,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         openFrag(1, null);
                         return true;
 
-                    case R.id.menu_updateprofile:
+                   /* case R.id.menu_updateprofile:
                         openFrag(8, null);
-                        return true;
+                        return true;*/
 
                     case R.id.menu_history:
                         openFrag(6, null);
@@ -315,7 +315,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String userType = appSharedPrefs.getString("usertype", "user");
                 Menu menu = mNavigationView.getMenu();
                 MenuItem loginitem = menu.findItem(R.id.menu_login);
-                MenuItem updateprofile = menu.findItem(R.id.menu_updateprofile);
+//                MenuItem updateprofile = menu.findItem(R.id.menu_updateprofile);
                 MenuItem orderHistory = menu.findItem(R.id.menu_history);
                 MenuItem logoutitem = menu.findItem(R.id.menu_logout);
                 MenuItem nfcwriteritem = menu.findItem(R.id.menu_nfcwriter);
@@ -324,7 +324,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     loginitem.setVisible(false);
                     orderHistory.setVisible(true);
                     logoutitem.setVisible(true);
-                    updateprofile.setVisible(true);
+//                    updateprofile.setVisible(true);
                     if (userType.equals("admin")) {
                         nfcwriteritem.setVisible(true);
                         allusersitem.setVisible(true);
@@ -337,7 +337,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     orderHistory.setVisible(false);
                     logoutitem.setVisible(false);
                     nfcwriteritem.setVisible(false);
-                    updateprofile.setVisible(false);
+//                    updateprofile.setVisible(false);
                     allusersitem.setVisible(false);
                 }
 
@@ -702,8 +702,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (result != null) {
                 Log.e(TAG, "==" + result);
 
-                    if (firstFragment != null)
-                        ((HomeFragment) firstFragment).openScanListFrag(result);
+                if (firstFragment != null)
+                    ((HomeFragment) firstFragment).openScanListFrag(result);
 
 
             }

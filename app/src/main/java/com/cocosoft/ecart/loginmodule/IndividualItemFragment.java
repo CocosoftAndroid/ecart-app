@@ -100,7 +100,7 @@ public class IndividualItemFragment extends Fragment implements View.OnClickList
                         Toast.makeText(getContext(), "Added to Wishlist", Toast.LENGTH_SHORT).show();
                     }*/
 
-                    addWishList(new WishList(Integer.parseInt(item.getProductId()), username, item.getProductName(), item.getProductPrice(), null, true), token);
+                    addWishList(new WishList(Integer.parseInt(item.getProductId()), username, item.getProductName(), item.getProductPrice(), null, true,true), token);
                 } else {
                     Toast.makeText(getContext(), "Please login to continue", Toast.LENGTH_SHORT).show();
                 }

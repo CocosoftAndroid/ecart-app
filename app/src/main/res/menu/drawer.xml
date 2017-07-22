@@ -43,7 +43,7 @@
             android:icon="@drawable/ic_list_fav"
             android:title="Orders" />
     </group>
-
+<!--
     <group
         android:id="@+id/grp11"
         android:checkableBehavior="single">
@@ -53,7 +53,7 @@
             android:checked="false"
             android:icon="@drawable/ic_list_fav"
             android:title="Update Profile" />
-    </group>
+    </group>-->
     <group
         android:id="@+id/grp6"
         android:checkableBehavior="single">

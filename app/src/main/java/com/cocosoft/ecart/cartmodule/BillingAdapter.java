@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class BillingAdapter extends RecyclerView.Adapter<BillingAdapter.MyViewHolders> {
 
+    private  int flag=1;
     private ArrayList<CartItem> productList;
     private Context context;
     public class MyViewHolders extends RecyclerView.ViewHolder {
@@ -31,10 +32,23 @@ public class BillingAdapter extends RecyclerView.Adapter<BillingAdapter.MyViewHo
         this.context = c;
     }
 
+
+    public BillingAdapter(Context c, ArrayList<CartItem> list,int flag) {
+        this.productList = list;
+        this.context = c;
+        this.flag=flag;
+    }
     @Override
     public MyViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.inflate_billing_item, parent, false);
-        return new MyViewHolders(itemView);
+        if(flag==1) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.inflate_billing_item, parent, false);
+            return new MyViewHolders(itemView);
+        }
+        else
+        { View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.inflate_billing_item2, parent, false);
+            return new MyViewHolders(itemView);
+
+        }
     }
 
     @Override

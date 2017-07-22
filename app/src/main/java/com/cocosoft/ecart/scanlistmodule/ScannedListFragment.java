@@ -95,8 +95,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         mProductArray = getArguments().getParcelableArrayList("productarray");
         isScan = getArguments().getBoolean("isscan");
         scantype = getArguments().getInt("scantype");
-        if(scantype==1)
-        {
+        if (scantype == 1) {
             nfcResult = getArguments().getString("nfcresult");
         }
         prefs = getContext().getSharedPreferences("cocosoft", MODE_PRIVATE);
@@ -126,7 +125,6 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         mCartImg.setVisibility(View.VISIBLE);
         mSearchLayout.setVisibility(View.VISIBLE);
         changeCount();
-
     }
 
     private int changeCount() {
@@ -200,10 +198,9 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
             startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
         }
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
-        if(scantype==1)
-        {
+        if (scantype == 1) {
             try {
-                onScanResult(new JSONObject(nfcResult),1);
+                onScanResult(new JSONObject(nfcResult), 1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -236,7 +233,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         for (int i = 0; i < mProductArray.size(); i++) {
             if (mProductArray.get(i).isChecked()) {
                 {
-                    mCartArray.add(new CartItem(mProductArray.get(i).getProductId(), mProductArray.get(i).getProductName(), mProductArray.get(i).getProductDesc(),mProductArray.get(i).getProductPrice(), mProductArray.get(i).getCount(), mProductArray.get(i).getScantype(), mProductArray.get(i).isChecked()));
+                    mCartArray.add(new CartItem(mProductArray.get(i).getProductId(), mProductArray.get(i).getProductName(), mProductArray.get(i).getProductDesc(), mProductArray.get(i).getProductPrice(), mProductArray.get(i).getCount(), mProductArray.get(i).getScantype(), mProductArray.get(i).isChecked()));
                 }
             }
         }
@@ -306,10 +303,9 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
             case 2:
                 firstFragment = new IndividualItemFragment();
                 ProductItem item = null;
-                for(int ij=0;ij<mProductArray.size();ij++)
-                {
-                    if(mProductArray.get(ij).getProductId().equals(productid))
-                        item=mProductArray.get(ij);
+                for (int ij = 0; ij < mProductArray.size(); ij++) {
+                    if (mProductArray.get(ij).getProductId().equals(productid))
+                        item = mProductArray.get(ij);
                 }
                 Bundle bundles = new Bundle();
                 bundles.putParcelable("item", item);
@@ -326,8 +322,6 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onFavouriteClicked(String productid, boolean isChecked) {
-
-
     }
 
     @Override
@@ -335,17 +329,14 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         String username = prefs.getString("username", "");
         String token = prefs.getString("token", "");
         if (isChecked) {
-
             Toast.makeText(getContext(), "Added to Wishlist", Toast.LENGTH_SHORT).show();
-//            mDB.addToWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true), token);
-
+            //mDB.addToWishlist(productid, username);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true,false), token);
         } else {
             Toast.makeText(getContext(), "Wishlist Removed", Toast.LENGTH_SHORT).show();
 //            mDB.removeWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false,false), token);
         }
-
     }
 
     private void addWishList(WishList wlist, String token) {
@@ -378,8 +369,6 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         }
     }
 
-
-
     public void onScanResult(JSONObject obj, final int scantype) {
         final String id = obj.optString("id");
         final ProductItem dbItem = new ProductItem();
@@ -407,10 +396,10 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
                             }
                         }
                         if (item == null) {
-                            mProductArray.add(new ProductItem(id, dbItem.getProductName(), dbItem.getProductDesc(), dbItem.getProductPrice(),dbItem.getImageUrl(), 1, scantype, false));
+                            mProductArray.add(new ProductItem(id, dbItem.getProductName(), dbItem.getProductDesc(), dbItem.getProductPrice(), dbItem.getImageUrl(), 1, scantype, false));
                         }
                     } else {
-                        mProductArray.add(new ProductItem(id, dbItem.getProductName(), dbItem.getProductDesc(), dbItem.getProductPrice(),dbItem.getImageUrl(), 1, scantype, false));
+                        mProductArray.add(new ProductItem(id, dbItem.getProductName(), dbItem.getProductDesc(), dbItem.getProductPrice(), dbItem.getImageUrl(), 1, scantype, false));
                     }
                 } else {
                     Toast.makeText(getContext(), "Item not found on Database", Toast.LENGTH_SHORT).show();
@@ -423,10 +412,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
-
             }
         });
-
-
     }
 }

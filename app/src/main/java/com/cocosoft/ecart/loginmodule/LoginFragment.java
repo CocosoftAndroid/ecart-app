@@ -142,7 +142,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         editor.putString("usertype", "user");
                         editor.commit();
                     }
-//                    Toast.makeText(getContext(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -150,6 +150,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     Log.e("Token", "=" + t.getMessage());
                 }
             });
+            getActivity().getSupportFragmentManager().popBackStack();
             getActivity().getSupportFragmentManager().popBackStack();
         }
     }

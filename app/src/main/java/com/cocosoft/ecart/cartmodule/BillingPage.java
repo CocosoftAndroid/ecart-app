@@ -88,7 +88,7 @@ public class BillingPage extends AppCompatActivity {
     private JSONObject transactionRes;
     private String username;
     private Integer totalitems = 0;
-    private Double totalPrice=0.0;
+    private Double totalPrice = 0.0;
     private List<OrderList> orderlist = new ArrayList<>();
     private String acctype;
 
@@ -110,7 +110,7 @@ public class BillingPage extends AppCompatActivity {
         Intent i = getIntent();
         checkoutAmount = i.getIntExtra("Checkout Amount", 0);
         Bundle args = i.getBundleExtra("BUNDLE");
-        itemDetails =  args.getParcelableArrayList("ARRAYLIST");
+        itemDetails = args.getParcelableArrayList("ARRAYLIST");
         for (int y = 0; y < itemDetails.size(); y++) {
             totalitems = totalitems + itemDetails.get(y).getCount();
             totalPrice = totalPrice + itemDetails.get(y).getProductPrice();
@@ -180,6 +180,10 @@ public class BillingPage extends AppCompatActivity {
                                         addBillDetailToWeb(new OrderMaster("", 0, "success", acctype, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
                                         emptyCheckoutData();
                                         onPressGotoHomePage();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Transaction Failed", Toast.LENGTH_SHORT).show();
+                                        addBillDetailToWeb(new OrderMaster("", 0, "failed", acctype, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
+
                                     }
                                     if (status.contains("cardNumber") || status.contains("credit card number is invalid")) {
                                         _cardNumber.setError("Invalid Card Number");
@@ -229,7 +233,6 @@ public class BillingPage extends AppCompatActivity {
 
     void emptyCheckoutData() {
         itemDetails.clear();
-
         String beforetempdata = prefs.getString("tempcartlist", null);
         Log.i("beforetempdata", beforetempdata);
         prefsEditor = prefs.edit();

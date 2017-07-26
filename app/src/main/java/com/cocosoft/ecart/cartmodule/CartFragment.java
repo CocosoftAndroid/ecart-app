@@ -97,6 +97,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     String udf4;
     String udf5;
     String status = null, err_msg = null, card_typ;
+    private String countryName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -166,6 +167,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         username = prefs.getString("username", "");
         firstName = prefs.getString("firstname", "nfound");
         token = prefs.getString("token", "");
+        countryName = prefs.getString("country", "");
 
         switch (v.getId()) {
             case R.id.add_cart_txt:
@@ -173,14 +175,20 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                     Toast.makeText(getContext(), "Processing Payment", Toast.LENGTH_SHORT).show();
                     if (_checkoutAmount != 0) {
                         productInfo = mCartArray.get(0).getProductName();
-                        navigateToBaseActivity(); // call this function for payumoney gateway
+                        if (countryName.equals("India")) {
+                            navigateToBaseActivity();  // call this function for payumoney gateway
+
+                        } else {
+                            //For US and UK (Authorize.net)
+                            Intent i = new Intent(CartFragment.this.getActivity(), BillingPage.class);
+                            i.putExtra("Checkout Amount", _checkoutAmount);
+                            Bundle args = new Bundle();
+                            args.putParcelableArrayList("ARRAYLIST", mCartArray);
+                            i.putExtra("BUNDLE", args);
+                            startActivity(i);
+                        }
                         // uncomment below for authorize.net code and comment navigateToBaseActivity func call
-                       /* Intent i=new Intent(CartFragment.this.getActivity(),BillingPage.class);
-                        i.putExtra("Checkout Amount",_checkoutAmount);
-                        Bundle args = new Bundle();
-                        args.putParcelableArrayList("ARRAYLIST",mCartArray);
-                        i.putExtra("BUNDLE",args);
-                        startActivity(i);*/
+
                     } else {
                         Toast.makeText(getContext(), "Sorry !! No items in your Cart to check out", Toast.LENGTH_SHORT).show();
                     }
@@ -196,7 +204,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     }
 
     public void navigateToBaseActivity() {
-
 
         merchantKey = "gtKFFx"; //0MQaQP
         amount = String.valueOf(_checkoutAmount);
@@ -327,10 +334,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
         intent.putExtra(PayuConstants.PAYMENT_PARAMS, mPaymentParams);
         intent.putExtra(PayuConstants.PAYU_HASHES, payuHashes);
-
         startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
-
-
+        
     }
 
     @Override

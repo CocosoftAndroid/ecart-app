@@ -183,7 +183,6 @@ public class BillingPage extends AppCompatActivity {
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Transaction Failed", Toast.LENGTH_SHORT).show();
                                         addBillDetailToWeb(new OrderMaster("", 0, "failed", acctype, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
-
                                     }
                                     if (status.contains("cardNumber") || status.contains("credit card number is invalid")) {
                                         _cardNumber.setError("Invalid Card Number");
@@ -239,11 +238,8 @@ public class BillingPage extends AppCompatActivity {
         String json = (new Gson()).toJson(itemDetails);
         prefsEditor.putString("tempcartlist", json);
         prefsEditor.commit();
-
         String aftertempdata = prefs.getString("tempcartlist", null);
         Log.i("aftertempdata", aftertempdata);
-
-
     }
 
     public class sendJSONDataToServer extends AsyncTask<String, Void, String> {
@@ -267,16 +263,13 @@ public class BillingPage extends AppCompatActivity {
                 writer.write(json);
                 Log.i("JSON String", json);
                 writer.close();
-
                 InputStream inputStream = con.getInputStream();
                 StringBuffer buffer = new StringBuffer();
                 BufferedReader reader;
                 reader = new BufferedReader(new InputStreamReader(inputStream));
-
                 String inputLine;
                 while ((inputLine = reader.readLine()) != null)
                     buffer.append(inputLine + "\n");
-
                 JsonResponse = buffer.toString();
                 Log.i("JSON Response", JsonResponse);
                 storeJSONDataInDB(JsonResponse);
@@ -304,11 +297,9 @@ public class BillingPage extends AppCompatActivity {
             }
             Log.e("BillingPage", "=" + jsonObj.toString());
             Log.i("returnCode", returnCode);
-
             if (jsonObj.getJSONObject("transactionResponse").has("messages")) {
                 Log.i("Inside", "transactionResponse");
                 Log.i("Inside", "messages");
-
                 desc = jsonObj.getJSONObject("transactionResponse").getJSONArray("messages").getJSONObject(0).getString("description");
                 status = status + desc;
             } else {

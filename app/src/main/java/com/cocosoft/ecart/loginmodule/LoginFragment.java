@@ -64,6 +64,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     private APIInterface apiInterface;
     private Call<String> response;
     private CheckBox mAdminCheckbox;
+    private String countryName;
 
 
     public static int getValue() {
@@ -121,7 +122,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
         mSearchLayout.setVisibility(View.GONE);
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
         editor = getContext().getSharedPreferences("cocosoft", MODE_PRIVATE).edit();
-getLocation();
+        getLocation();
 
     }
 
@@ -237,18 +238,21 @@ getLocation();
                 return;
             }
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Log.e("getCountryName", "rrw1" );
+            Log.e("getCountryName", "rrw1");
             if (location != null) {
                 Log.e("TAG", "GPS is on");
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 Log.e("getCountryName", "rrw" + getCountryName(getContext(), latitude, longitude));
+                countryName = getCountryName(getContext(), latitude, longitude);
+                editor.putString("country", countryName);
+                editor.commit();
 
             } else {
                 //This is what you need:
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-                Log.e("getCountryName", "rrw1else" );
+                Log.e("getCountryName", "rrw1else");
             }
         } else {
             //prompt user to enable location....
@@ -273,7 +277,10 @@ getLocation();
         //open the map:
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-        Log.e("getCountryName", "rrwlch" );
+        countryName = getCountryName(getContext(), latitude, longitude);
+        editor.putString("country", countryName);
+        editor.commit();
+        Log.e("getCountryName", "rrwlch");
     }
 
     @Override

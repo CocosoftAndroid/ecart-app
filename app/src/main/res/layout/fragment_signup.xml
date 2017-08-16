@@ -30,14 +30,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp20"
                 android:layout_marginLeft="@dimen/dp32"
-               android:maxLines="1"
-
                 android:layout_marginRight="@dimen/dp32"
                 android:background="@drawable/ic_edit_txt_bg"
                 android:drawableLeft="@drawable/ic_username"
                 android:drawablePadding="@dimen/dp10"
                 android:hint="First Name"
-                android:padding="@dimen/dp10" />
+                android:lines="1"
+                android:padding="@dimen/dp10"
+                android:text="" />
 
             <EditText
                 android:id="@+id/lastname_etxt"
@@ -47,11 +47,11 @@
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
                 android:background="@drawable/ic_edit_txt_bg"
-                android:maxLines="1"
-
                 android:drawableLeft="@drawable/ic_username"
+
                 android:drawablePadding="@dimen/dp10"
                 android:hint="Last Name"
+                android:lines="1"
                 android:padding="@dimen/dp10" />
 
             <EditText
@@ -61,11 +61,11 @@
                 android:layout_marginBottom="@dimen/dp20"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:maxLines="1"
                 android:background="@drawable/ic_edit_txt_bg"
                 android:drawableLeft="@drawable/ic_username"
                 android:drawablePadding="@dimen/dp10"
                 android:hint="User Name"
+                android:lines="1"
                 android:padding="@dimen/dp10" />
 
             <EditText
@@ -75,12 +75,12 @@
                 android:layout_marginBottom="@dimen/dp20"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:maxLines="1"
                 android:background="@drawable/ic_edit_txt_bg"
                 android:drawableLeft="@drawable/ic_password"
                 android:drawablePadding="@dimen/dp10"
                 android:hint="Password"
                 android:inputType="textPassword"
+                android:lines="1"
                 android:padding="@dimen/dp10" />
 
             <EditText
@@ -90,19 +90,19 @@
                 android:layout_marginBottom="@dimen/dp20"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:maxLines="1"
                 android:background="@drawable/ic_edit_txt_bg"
                 android:drawableLeft="@drawable/ic_password"
                 android:drawablePadding="@dimen/dp10"
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
+                android:lines="1"
                 android:padding="@dimen/dp10" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp20"
+                android:layout_marginBottom="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
                 android:orientation="horizontal">
@@ -110,8 +110,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gender"
                     android:padding="@dimen/dp5"
+                    android:text="Gender"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:textColor="@color/black" />
 
@@ -128,12 +128,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:checked="false"
-                        android:text="Male"
                         android:maxLines="1"
                         android:padding="@dimen/dp5"
-                        android:textColor="@color/grey_15"
+                        android:text="Male"
                         android:textAppearance="?android:textAppearanceMedium"
-                    />
+                        android:textColor="@color/grey_15" />
 
                     <RadioButton
                         android:id="@+id/radioButton2"
@@ -141,14 +140,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:checked="false"
-                        android:text="Female"
                         android:maxLines="1"
-                        android:textColor="@color/grey_15"
                         android:padding="@dimen/dp5"
+                        android:text="Female"
                         android:textAppearance="?android:textAppearanceMedium"
-                />
+                        android:textColor="@color/grey_15" />
                 </RadioGroup>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -159,9 +158,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DOB"
                     android:layout_gravity="center_vertical"
                     android:padding="@dimen/dp5"
+                    android:text="DOB"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:textColor="@color/black" />
 
@@ -169,14 +168,14 @@
                     android:id="@+id/dob_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-             android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp32"
                     android:layout_marginRight="@dimen/dp32"
-                    android:drawableRight="@drawable/ic_date"
                     android:drawablePadding="@dimen/dp10"
-                    android:text="               "
-                    android:padding="@dimen/dp10" />
+                    android:drawableRight="@drawable/ic_date"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp10"
+                    android:text="               " />
             </LinearLayout>
 
             <EditText
@@ -186,11 +185,11 @@
                 android:layout_marginBottom="@dimen/dp20"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:maxLines="1"
                 android:background="@drawable/ic_edit_txt_bg"
                 android:drawableLeft="@drawable/ic_email"
                 android:drawablePadding="@dimen/dp10"
                 android:hint="Email"
+                android:lines="1"
                 android:padding="@dimen/dp10" />
 
             <EditText
@@ -198,7 +197,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp20"
-                android:maxLines="1"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
                 android:background="@drawable/ic_edit_txt_bg"
@@ -206,6 +204,8 @@
                 android:drawablePadding="@dimen/dp10"
                 android:hint="Phone Number"
                 android:inputType="number"
+                android:lines="1"
+                android:maxLength="14"
                 android:padding="@dimen/dp10" />
 
             <LinearLayout
@@ -213,15 +213,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp20"
                 android:layout_marginLeft="@dimen/dp32"
-                android:visibility="gone"
                 android:layout_marginRight="@dimen/dp32"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User Type"
                     android:padding="@dimen/dp5"
+                    android:text="User Type"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:textColor="@color/black" />
 
@@ -238,12 +238,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:checked="true"
-                        android:text="User"
                         android:maxLines="1"
                         android:padding="@dimen/dp5"
-                        android:textColor="@color/grey_15"
+                        android:text="User"
                         android:textAppearance="?android:textAppearanceMedium"
-                        />
+                        android:textColor="@color/grey_15" />
 
                     <RadioButton
                         android:id="@+id/admin_radio_btn"
@@ -251,14 +250,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:checked="false"
-                        android:text="Admin"
                         android:maxLines="1"
-                        android:textColor="@color/grey_15"
                         android:padding="@dimen/dp5"
+                        android:text="Admin"
                         android:textAppearance="?android:textAppearanceMedium"
-                        />
+                        android:textColor="@color/grey_15" />
                 </RadioGroup>
             </LinearLayout>
+
             <TextView
                 android:id="@+id/warning_txt"
                 android:layout_width="wrap_content"

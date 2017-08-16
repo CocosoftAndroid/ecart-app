@@ -5,6 +5,7 @@
     android:layout_margin="@dimen/dp2">
 
     <LinearLayout
+        android:id="@+id/llayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/footer"
@@ -19,8 +20,9 @@
             android:gravity="end"
             android:padding="@dimen/dp10"
             android:text="Grand Total= $540"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/black" />
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/grey_15" />
+        0
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rview"
@@ -30,6 +32,28 @@
         </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/noitem_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_sadsimley" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/dp15"
+            android:text="No Items in Cart"
+            android:textAppearance="?android:textAppearanceLarge" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/footer"
@@ -72,7 +96,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/dp15"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/custombutton"
                 android:gravity="center"
                 android:paddingBottom="@dimen/dp10"
                 android:paddingLeft="@dimen/dp20"
@@ -82,6 +106,8 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
+
+
         </LinearLayout>
 
     </LinearLayout>

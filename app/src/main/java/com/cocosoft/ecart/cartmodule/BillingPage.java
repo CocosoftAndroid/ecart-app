@@ -113,7 +113,7 @@ public class BillingPage extends AppCompatActivity {
         itemDetails = args.getParcelableArrayList("ARRAYLIST");
         for (int y = 0; y < itemDetails.size(); y++) {
             totalitems = totalitems + itemDetails.get(y).getCount();
-            totalPrice = totalPrice + itemDetails.get(y).getProductPrice();
+            totalPrice = totalPrice + (itemDetails.get(y).getProductPrice() * itemDetails.get(y).getCount());
             orderlist.add(new OrderList(0, itemDetails.get(y).getProductId(), itemDetails.get(y).getProductName(), itemDetails.get(y).getProductPrice(), itemDetails.get(y).getCount()));
         }
         Log.i("Item Name", itemDetails.get(0).getProductName());
@@ -123,7 +123,7 @@ public class BillingPage extends AppCompatActivity {
         mBillingAdapter = new BillingAdapter(this, itemDetails);
         mBillingRView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mBillingRView.setAdapter(mBillingAdapter);
-        _amountDisplay.setText("SubTotal : $ " + String.valueOf(checkoutAmount));
+        _amountDisplay.setText("SUB TOTAL : $ " + String.valueOf(checkoutAmount));
         _pay = (Button) findViewById(R.id.pay);
         prefs = getSharedPreferences("cocosoft", MODE_PRIVATE);
         gson = new Gson();
@@ -171,7 +171,8 @@ public class BillingPage extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                     if (status.contains("Successful.")) {
-                                        Toast.makeText(getApplicationContext(), "Transaction Successful", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getApplicationContext(), "Transaction Successful", Toast.LENGTH_SHORT).show();
+                                        showAlertMsg(1);
                                         try {
                                             acctype = transactionRes.getString("accountType");
                                         } catch (JSONException e) {
@@ -179,9 +180,11 @@ public class BillingPage extends AppCompatActivity {
                                         }
                                         addBillDetailToWeb(new OrderMaster("", 0, "success", acctype, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
                                         emptyCheckoutData();
-                                        onPressGotoHomePage();
+
+
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Transaction Failed", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getApplicationContext(), "Transaction Failed", Toast.LENGTH_SHORT).show();
+                                        showAlertMsg(2);
                                         addBillDetailToWeb(new OrderMaster("", 0, "failed", acctype, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
                                     }
                                     if (status.contains("cardNumber") || status.contains("credit card number is invalid")) {
@@ -205,6 +208,28 @@ public class BillingPage extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void showAlertMsg(final int status) {
+        String msg = "";
+        if (status == 1) {
+            msg = "Transaction Successfull !";
+        } else {
+            msg = "Transaction Failed !";
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                        if (status == 1) {
+                            onPressGotoHomePage();
+                        }
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void addBillDetailToWeb(OrderMaster orderMaster) {

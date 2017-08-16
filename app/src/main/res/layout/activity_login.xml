@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/dp20"
+                        android:layout_marginRight="@dimen/dp10"
                         android:layout_marginTop="@dimen/dp15"
                         android:src="@drawable/ic_cart" />
 
@@ -81,7 +81,7 @@
                         android:gravity="center"
                         android:text="0"
                         android:textAppearance="?android:textAppearanceSmall"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/colorPrimary" />
                 </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>
@@ -98,9 +98,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_margin="@dimen/dp5"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp8"
+
                     android:layout_toLeftOf="@+id/cam_mic"
-                    android:background="@drawable/ic_edit_txt_bg"
+                    android:background="@drawable/ic_edit_txt_bg2"
                     app:queryHint="Type something..." />
 
                 <LinearLayout

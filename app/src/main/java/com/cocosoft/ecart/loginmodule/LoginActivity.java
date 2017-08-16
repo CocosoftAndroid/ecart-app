@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         FacebookSdk.setIsDebugEnabled(true);
                                         FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
                                         Profile profile = Profile.getCurrentProfile();
-                                        Log.d("Anusha", "FACEBOOK success");
+                                        Log.e("Anusha", "FACEBOOK"+AccessToken.getCurrentAccessToken());
                                         if (profile != null) {
                                             Log.d("Anusha", "profile");
                                             userName = profile.getName();

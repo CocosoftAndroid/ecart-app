@@ -24,7 +24,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="@dimen/dp15"
-                android:text="Select All" />
+                android:textAppearance="?android:textAppearanceSmall"
+                android:text="SELECT ALL" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rview"
@@ -71,8 +72,7 @@
                 android:paddingRight="40dp"
                 android:text="Add To Cart"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="#ffffff"
-                android:textStyle="bold" />
+                android:textColor="#ffffff" />
         </LinearLayout>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

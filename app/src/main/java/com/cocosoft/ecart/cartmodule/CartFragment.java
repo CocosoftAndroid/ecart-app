@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +99,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     String udf5;
     String status = null, err_msg = null, card_typ;
     private String countryName;
+    private LinearLayout mLinearLayout;
+    private LinearLayout mNoItemLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -142,6 +145,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     private void init(View view) {
         gson = new Gson();
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
+        mLinearLayout = (LinearLayout) view.findViewById(R.id.llayout1);
+        mNoItemLayout = (LinearLayout) view.findViewById(R.id.noitem_layout);
         mAddCartTxt = (TextView) view.findViewById(R.id.add_cart_txt);
         mAddWishTxt = (TextView) view.findViewById(R.id.add_wish_txt);
         mGrandTotalTxt = (TextView) view.findViewById(R.id.grandtotal_txt);
@@ -158,6 +163,15 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         mCountTxtView.setVisibility(View.GONE);
         mCartImg.setVisibility(View.GONE);
         calculateTotal();
+        if (mCartArray.size() == 0) {
+            mLinearLayout.setVisibility(View.GONE);
+            mAddCartTxt.setVisibility(View.GONE);
+            mNoItemLayout.setVisibility(View.VISIBLE);
+        } else {
+            mLinearLayout.setVisibility(View.VISIBLE);
+            mNoItemLayout.setVisibility(View.GONE);
+            mAddCartTxt.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -335,7 +349,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         intent.putExtra(PayuConstants.PAYMENT_PARAMS, mPaymentParams);
         intent.putExtra(PayuConstants.PAYU_HASHES, payuHashes);
         startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
-        
+
     }
 
     @Override
@@ -368,6 +382,9 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
 
                 } else {
                     Toast.makeText(this.getActivity(), "Payment failed with Error message(" + status + ") . Please try checkout again", Toast.LENGTH_LONG).show();
+                    addBillDetailToWeb(new OrderMaster("", 0, "failed", card_typ, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
+
+
                 }
                 Log.d("payUMoney data", data.getStringExtra("payu_response"));
 
@@ -458,7 +475,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         for (int i = 0; i < mCartArray.size(); i++) {
             _checkoutAmount = _checkoutAmount + (mCartArray.get(i).getCount() * mCartArray.get(i).getProductPrice().intValue());
         }
-        mGrandTotalTxt.setText("Grand Total = $ " + _checkoutAmount);
+        mGrandTotalTxt.setText("GRAND TOTAL = $ " + _checkoutAmount);
     }
 
     private void openFrag(int i, String productid) {
@@ -472,7 +489,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                 ProductItem item = null;
                 for (int ij = 0; ij < mCartArray.size(); ij++) {
                     if (mCartArray.get(ij).getProductId().equals(productid))
-                        item = new ProductItem(mCartArray.get(ij).getProductId(), mCartArray.get(ij).getProductName(), mCartArray.get(ij).getProductDesc(), mCartArray.get(ij).getProductPrice(), 0, 0, false);
+                        item = new ProductItem(mCartArray.get(ij).getProductId(), mCartArray.get(ij).getProductName(), mCartArray.get(ij).getProductDesc(), mCartArray.get(ij).getProductPrice(), mCartArray.get(ij).getImageUrl(), 0, 0, false);
                 }
                 Bundle bundles = new Bundle();
                 bundles.putParcelable("item", item);

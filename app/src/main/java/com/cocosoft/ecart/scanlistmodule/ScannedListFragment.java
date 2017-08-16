@@ -78,13 +78,10 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
     private RelativeLayout mSearchLayout;
     private int scantype;
     private QuantityListener mQuantityLis;
-
-
     private Gson gson;
     private CheckBox mSelectAllChkBox;
     private APIInterface apiInterface;
     private Call<WishList> response;
-
     private Call<Product> response2;
     private String nfcResult;
 
@@ -105,7 +102,6 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
 
     public void setInterface(QuantityListener qlis) {
         this.mQuantityLis = qlis;
-
     }
 
     @Nullable
@@ -142,7 +138,6 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
                 {
                     mCount = mCount + mCartArray.get(i).getCount();
                 }
-
             }
         }
         mCountTxtView.setText("" + mCount);
@@ -172,7 +167,6 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
             }
         });
     }
-
 
     private void init(View view) {
         gson = new Gson();
@@ -205,7 +199,6 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
                 e.printStackTrace();
             }
         }
-
     }
 
 
@@ -215,9 +208,8 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
             case R.id.add_cart_txt:
                 addToCart();
                 if (changeCount() == 0) {
-                    Toast.makeText(getContext(), "Please add atleast one item", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please select atleast one item", Toast.LENGTH_SHORT).show();
                 } else {
-
                     openFrag(0, "");
                 }
                 break;
@@ -233,7 +225,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         for (int i = 0; i < mProductArray.size(); i++) {
             if (mProductArray.get(i).isChecked()) {
                 {
-                    mCartArray.add(new CartItem(mProductArray.get(i).getProductId(), mProductArray.get(i).getProductName(), mProductArray.get(i).getProductDesc(), mProductArray.get(i).getProductPrice(), mProductArray.get(i).getCount(), mProductArray.get(i).getScantype(), mProductArray.get(i).isChecked()));
+                    mCartArray.add(new CartItem(mProductArray.get(i).getProductId(), mProductArray.get(i).getProductName(), mProductArray.get(i).getProductDesc(), mProductArray.get(i).getProductPrice(),mProductArray.get(i).getImageUrl(), mProductArray.get(i).getCount(), mProductArray.get(i).getScantype(), mProductArray.get(i).isChecked()));
                 }
             }
         }
@@ -259,8 +251,6 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
                     if (obj != null) {
                         onScanResult(obj, scantype);
                         mScanListAdapter.notifyDataSetChanged();
-
-
                     }
                 } else
                     Log.e(LOG_TAG, String.format(getString(R.string.barcode_error_format), CommonStatusCodes.getStatusCodeString(resultCode)));
@@ -291,15 +281,12 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
                 Bundle bundle = new Bundle();
                 firstFragment.setArguments(bundle);
                 break;
-
             case 1:
                 firstFragment = new LoginFragment();
                 break;
-
             case 3:
                 firstFragment = new WishListFragment();
                 break;
-
             case 2:
                 firstFragment = new IndividualItemFragment();
                 ProductItem item = null;
@@ -331,11 +318,11 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         if (isChecked) {
             Toast.makeText(getContext(), "Added to Wishlist", Toast.LENGTH_SHORT).show();
             //mDB.addToWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true,false), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true, false), token);
         } else {
             Toast.makeText(getContext(), "Wishlist Removed", Toast.LENGTH_SHORT).show();
 //            mDB.removeWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false,false), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false, false), token);
         }
     }
 

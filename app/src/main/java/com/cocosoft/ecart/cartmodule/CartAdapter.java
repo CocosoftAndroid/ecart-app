@@ -101,7 +101,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
             if (mDB.wishlistAlreadyAdded(username, productList.get(position).getProductId()))
                 holder.favBtn.setChecked(true);
         }
-        holder.productName.setText(productList.get(position).getProductId() + " - " + productList.get(position).getProductName());
+        holder.productName.setText("("+productList.get(position).getProductId() + ") " + productList.get(position).getProductName());
         holder.count.setText("" + productList.get(position).getCount());
         holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
         holder.plusBtn.setOnClickListener(new View.OnClickListener() {

@@ -33,22 +33,17 @@ public class MonthYearPickerDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
         Calendar cal = Calendar.getInstance();
-
         View dialog = inflater.inflate(R.layout.date_picker_dialog, null);
         final NumberPicker monthPicker = (NumberPicker) dialog.findViewById(R.id.picker_month);
         final NumberPicker yearPicker = (NumberPicker) dialog.findViewById(R.id.picker_year);
-
         monthPicker.setMinValue(1);
         monthPicker.setMaxValue(12);
         monthPicker.setValue(cal.get(Calendar.MONTH) + 1);
-
         int year = cal.get(Calendar.YEAR);
-        yearPicker.setMinValue(year);
-        yearPicker.setMaxValue(MAX_YEAR);
+        yearPicker.setMinValue(1900);
+        yearPicker.setMaxValue(year);
         yearPicker.setValue(year);
-
         builder.setView(dialog)
                 // Add action buttons
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {

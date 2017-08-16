@@ -125,6 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="left"
+            android:visibility="gone"
             android:orientation="horizontal">
             <CheckBox
                 android:id="@+id/fav_btn"

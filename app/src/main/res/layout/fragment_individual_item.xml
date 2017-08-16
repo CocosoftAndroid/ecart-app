@@ -7,12 +7,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp15"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/product_img"
             android:layout_width="220dp"
             android:layout_height="220dp"
+            android:background="@drawable/ic_imgborder"
+            android:padding="@dimen/dp5"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_fog" />
 
         <TextView
@@ -30,6 +34,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp10"
             android:text="20 $"
+            android:paddingBottom="@dimen/dp15"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/grey_15" />
 
@@ -48,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp10"
             android:background="@drawable/custombutton"
-            android:paddingLeft="40dp"
-            android:paddingRight="40dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:text="Add To Wishlist"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="#ffffff"

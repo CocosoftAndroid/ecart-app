@@ -164,6 +164,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
         if (mUserNameEdtTxt.getText().toString().trim().length() == 0) {
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Please enter a valid Username");
+        } else if (mPwdEdtTxt.getText().toString().trim().length() == 0) {
+            mWarnTxt.setVisibility(View.VISIBLE);
+            mWarnTxt.setText("Please enter a valid Password");
         } else {
 
          /*   Intent i = new Intent(getContext(), MainActivity.class);
@@ -175,26 +178,28 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
                 public void onResponse(Call<String> call, Response<String> response) {
 //                    Log.e("Token", "=" + response.body().toString());
 
-                    editor.putBoolean("isloggedin", true);
-                    editor.putString("username", mUserNameEdtTxt.getText().toString().trim());
-                    editor.putString("token", "Bearer " + response.body().toString());
-                    if (mAdminCheckbox.isChecked())
-                        editor.putString("usertype", "admin");
-                    else {
-                        editor.putString("usertype", "user");
-                        editor.commit();
+                    if (response.body() != null) {
+                        editor.putBoolean("isloggedin", true);
+                        editor.putString("username", mUserNameEdtTxt.getText().toString().trim());
+                        editor.putString("token", "Bearer " + response.body().toString());
+                        if (mAdminCheckbox.isChecked())
+                            editor.putString("usertype", "admin");
+                        else {
+                            editor.putString("usertype", "user");
+                            editor.commit();
+                        }
+                        Toast.makeText(getContext(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        getActivity().getSupportFragmentManager().popBackStack();
                     }
-
                 }
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
-                    Log.e("Token", "=" + t.getMessage());
+                    Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             });
-            Toast.makeText(getContext(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
-            getActivity().getSupportFragmentManager().popBackStack();
-            getActivity().getSupportFragmentManager().popBackStack();
+
 
         }
     }

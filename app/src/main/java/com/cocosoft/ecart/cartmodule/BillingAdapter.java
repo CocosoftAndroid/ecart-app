@@ -18,10 +18,11 @@ public class BillingAdapter extends RecyclerView.Adapter<BillingAdapter.MyViewHo
     private ArrayList<CartItem> productList;
     private Context context;
     public class MyViewHolders extends RecyclerView.ViewHolder {
-        public TextView productName, productPrice, count;
+        public TextView productName, productPrice,productid, count;
         public MyViewHolders(View view) {
             super(view);
             productName = (TextView) view.findViewById(R.id.name);
+            productid = (TextView) view.findViewById(R.id.idtxt);
             productPrice = (TextView) view.findViewById(R.id.price);
             count = (TextView) view.findViewById(R.id.quantity);
         }
@@ -53,9 +54,10 @@ public class BillingAdapter extends RecyclerView.Adapter<BillingAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(final MyViewHolders holder, final int position) {
-        holder.productName.setText(productList.get(position).getProductId() + " - " + productList.get(position).getProductName());
+        holder.productName.setText(productList.get(position).getProductName());
         holder.count.setText("" + productList.get(position).getCount());
         holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
+        holder.productid.setText(productList.get(position).getProductId());
     }
 
     @Override

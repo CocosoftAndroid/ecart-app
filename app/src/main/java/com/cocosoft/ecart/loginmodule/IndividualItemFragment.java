@@ -78,9 +78,11 @@ public class IndividualItemFragment extends Fragment implements View.OnClickList
         String[] splited = item.getImageUrl().split("\\\\");
         Log.e("urll","="+splited[splited.length-1]);
         mTitleTxtView.setText(item.getProductName());
+        Log.e("ewewqwe","="+"http://54.68.141.32:8080/"+splited[splited.length-1]);
         Glide.with(getContext()).load("http://54.68.141.32:8080/"+splited[splited.length-1])
                 .thumbnail(0.5f)
                 .crossFade()
+                .placeholder(R.drawable.ic_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mProductImg);
 
@@ -110,6 +112,8 @@ public class IndividualItemFragment extends Fragment implements View.OnClickList
 
 
     private void addWishList(WishList wlist, String token) {
+
+        Log.e("EREC","="+wlist.getProductId());
         response = apiInterface.addWishList(wlist, token);
         response.enqueue(new Callback<WishList>() {
 

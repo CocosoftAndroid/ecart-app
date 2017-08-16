@@ -85,7 +85,6 @@ public class OrderHistory extends Fragment implements View.OnClickListener {
         mLManager = new LinearLayoutManager(getContext());
         mOrderHistoryRView = (RecyclerView) v.findViewById(R.id.rview);
         mOrderHistoryRView.setLayoutManager(mLManager);
-
         getorderHistoryList();
     }
 
@@ -96,15 +95,15 @@ public class OrderHistory extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<List<OrderMaster>> call, Response<List<OrderMaster>> response) {
                 mOrderHistoryList = response.body();
-                Log.e("opo","="+mOrderHistoryList.size());
-                mOrderHistoryAdapter = new OrderHistoryAdapter(getActivity(),getContext(), mOrderHistoryList);
+
+                mOrderHistoryAdapter = new OrderHistoryAdapter(getActivity(), getContext(), mOrderHistoryList);
                 mOrderHistoryRView.setAdapter(mOrderHistoryAdapter);
                 mOrderHistoryAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<List<OrderMaster>> call, Throwable t) {
-                Log.e("opo","="+t.getMessage());
+                Log.e("opo", "=" + t.getMessage());
             }
         });
     }

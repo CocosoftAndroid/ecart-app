@@ -12,6 +12,7 @@ public class CartItem implements Parcelable {
     private String productName="";
     private String productDesc="";
     private Double productPrice=0.0;
+    private String imageUrl="";
     private int count=0;
     private int scantype=0;
     private boolean isChecked=false;
@@ -26,11 +27,30 @@ public class CartItem implements Parcelable {
         this.isChecked = isChecked;
     }
 
+    public CartItem(String productId, String productName, String productDesc, Double productPrice, String imageUrl, int count, int scantype, boolean isChecked) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productDesc = productDesc;
+        this.productPrice = productPrice;
+        this.imageUrl = imageUrl;
+        this.count = count;
+        this.scantype = scantype;
+        this.isChecked = isChecked;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     protected CartItem(Parcel in) {
         productId = in.readString();
         productName = in.readString();
         productDesc = in.readString();
-        productPrice = in.readDouble();
+        imageUrl = in.readString();
         count = in.readInt();
         scantype = in.readInt();
         isChecked = in.readByte() != 0;
@@ -109,6 +129,7 @@ public class CartItem implements Parcelable {
         isChecked = checked;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -119,7 +140,7 @@ public class CartItem implements Parcelable {
         dest.writeString(productId);
         dest.writeString(productName);
         dest.writeString(productDesc);
-        dest.writeDouble(productPrice);
+        dest.writeString(imageUrl);
         dest.writeInt(count);
         dest.writeInt(scantype);
         dest.writeByte((byte) (isChecked ? 1 : 0));

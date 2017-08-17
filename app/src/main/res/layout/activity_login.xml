@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="@dimen/dp5"
-                    android:src="@drawable/ic_logo_top" />
+                    android:src="@drawable/ic_logo_icon" />
 
                 <TextView
                     android:id="@+id/title_txt"

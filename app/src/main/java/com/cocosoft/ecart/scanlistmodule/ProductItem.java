@@ -49,8 +49,8 @@ public class ProductItem implements Parcelable {
         productId = in.readString();
         productName = in.readString();
         productDesc = in.readString();
-        imageUrl= in.readString();
         productPrice = in.readDouble();
+        imageUrl= in.readString();
         count = in.readInt();
         scantype = in.readInt();
         isChecked = in.readByte() != 0;
@@ -61,8 +61,9 @@ public class ProductItem implements Parcelable {
         dest.writeString(productId);
         dest.writeString(productName);
         dest.writeString(productDesc);
-        dest.writeString(imageUrl);
+
         dest.writeDouble(productPrice);
+        dest.writeString(imageUrl);
         dest.writeInt(count);
         dest.writeInt(scantype);
         dest.writeByte((byte) (isChecked ? 1 : 0));

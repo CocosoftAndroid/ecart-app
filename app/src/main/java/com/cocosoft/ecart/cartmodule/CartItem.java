@@ -38,18 +38,11 @@ public class CartItem implements Parcelable {
         this.isChecked = isChecked;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     protected CartItem(Parcel in) {
         productId = in.readString();
         productName = in.readString();
         productDesc = in.readString();
+        productPrice = in.readDouble();
         imageUrl = in.readString();
         count = in.readInt();
         scantype = in.readInt();
@@ -67,6 +60,15 @@ public class CartItem implements Parcelable {
             return new CartItem[size];
         }
     };
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 
     public String getProductDesc() {
         return productDesc;
@@ -140,6 +142,7 @@ public class CartItem implements Parcelable {
         dest.writeString(productId);
         dest.writeString(productName);
         dest.writeString(productDesc);
+        dest.writeDouble(productPrice);
         dest.writeString(imageUrl);
         dest.writeInt(count);
         dest.writeInt(scantype);

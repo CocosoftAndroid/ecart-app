@@ -36,13 +36,14 @@ public class SigninFragment extends Fragment implements View.OnClickListener {
     Button _esayLoginIn;
 
     private TextView mCountTxtView;
-    private TextView mTitleTxtView;
+    private TextView mTitleTxtView, mGuestTxt;
     private ImageView mCartImg;
     private RelativeLayout mSearchLayout;
 
 
     Activity activity;
     private SharedPreferences appSharedPrefs;
+    private SharedPreferences.Editor editor;
 
     @Override
     public void onResume() {
@@ -72,6 +73,7 @@ public class SigninFragment extends Fragment implements View.OnClickListener {
         signInButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         _esayLoginIn.setOnClickListener(this);
+        mGuestTxt.setOnClickListener(this);
 
     }
 
@@ -85,12 +87,14 @@ public class SigninFragment extends Fragment implements View.OnClickListener {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
+        mGuestTxt = (TextView) v.findViewById(R.id.guest_txt);
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
         mCountTxtView.setVisibility(View.GONE);
         mCartImg.setVisibility(View.GONE);
         mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
         mSearchLayout.setVisibility(View.GONE);
         appSharedPrefs = getActivity().getSharedPreferences("cocosoft", MODE_PRIVATE);
+        editor = appSharedPrefs.edit();
 
     }
 
@@ -146,6 +150,12 @@ public class SigninFragment extends Fragment implements View.OnClickListener {
                     Esay_login();
                     LoginFragment.setValue(2);
                 }
+                break;
+
+            case R.id.guest_txt:
+                editor.putBoolean("isGuest", true);
+                editor.commit();
+                getActivity().getSupportFragmentManager().popBackStack();
                 break;
 
 

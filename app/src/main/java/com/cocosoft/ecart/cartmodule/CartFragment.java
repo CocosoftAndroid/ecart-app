@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +49,6 @@ import com.payu.payuui.Activity.PayUBaseActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,6 +162,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
         mCountTxtView.setVisibility(View.GONE);
         mCartImg.setVisibility(View.GONE);
+        RelativeLayout mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
+        mSearchLayout.setVisibility(View.VISIBLE);
         calculateTotal();
         if (mCartArray.size() == 0) {
             mLinearLayout.setVisibility(View.GONE);
@@ -178,6 +180,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     public void onClick(View v) {
         Payu.setInstance(this.getActivity());
         boolean isloggedin = prefs.getBoolean("isloggedin", false);
+        boolean isGuest = prefs.getBoolean("isGuest", false);
         username = prefs.getString("username", "");
         firstName = prefs.getString("firstname", "nfound");
         token = prefs.getString("token", "");
@@ -185,21 +188,17 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
 
         switch (v.getId()) {
             case R.id.add_cart_txt:
-                if (isloggedin) {
-                    Toast.makeText(getContext(), "Processing Payment", Toast.LENGTH_SHORT).show();
+                if (isloggedin || isGuest) {
+
                     if (_checkoutAmount != 0) {
                         productInfo = mCartArray.get(0).getProductName();
                         if (countryName.equals("India")) {
                             navigateToBaseActivity();  // call this function for payumoney gateway
-
                         } else {
                             //For US and UK (Authorize.net)
-                            Intent i = new Intent(CartFragment.this.getActivity(), BillingPage.class);
-                            i.putExtra("Checkout Amount", _checkoutAmount);
-                            Bundle args = new Bundle();
-                            args.putParcelableArrayList("ARRAYLIST", mCartArray);
-                            i.putExtra("BUNDLE", args);
-                            startActivity(i);
+
+                            openFrag(3, "");
+
                         }
                         // uncomment below for authorize.net code and comment navigateToBaseActivity func call
 
@@ -494,6 +493,13 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                 Bundle bundles = new Bundle();
                 bundles.putParcelable("item", item);
                 firstFragment.setArguments(bundles);
+                break;
+            case 3:
+                firstFragment = new BillingFragment();
+                Bundle args = new Bundle();
+                args.putParcelableArrayList("ARRAYLIST", mCartArray);
+                args.putInt("Checkout Amount", _checkoutAmount);
+                firstFragment.setArguments(args);
                 break;
         }
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

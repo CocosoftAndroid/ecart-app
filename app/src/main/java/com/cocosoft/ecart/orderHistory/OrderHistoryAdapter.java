@@ -14,11 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+
 import com.cocosoft.ecart.R;
 import com.cocosoft.ecart.cartmodule.BillingAdapter;
 import com.cocosoft.ecart.cartmodule.CartItem;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,6 +46,18 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             totalTxt = (TextView) view.findViewById(R.id.total_txt);
             cardView = (CardView) view.findViewById(R.id.card_view);
         }
+
+        private String getDate(long timeStamp) {
+
+            try {
+                DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                Date netDate = (new Date(timeStamp));
+                return sdf.format(netDate);
+            } catch (Exception ex) {
+                return "xx";
+            }
+        }
+
     }
 
     public OrderHistoryAdapter(Activity a, Context c, List<OrderMaster> list) {
@@ -61,6 +77,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.transactionIdTxt.setText(orderHistoryList.get(position).getTransactionId());
         holder.countTxt.setText("" + orderHistoryList.get(position).getTotalItems());
         holder.totalTxt.setText("$ " + orderHistoryList.get(position).getTotalPrice());
+        holder.dateTxt.setText(holder.getDate(orderHistoryList.get(position).getCreated()));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

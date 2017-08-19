@@ -49,7 +49,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class LoginFragment extends Fragment implements View.OnClickListener, LocationListener {
-    private TextView mSignupTxt;
+    private TextView mSignupTxt, mGuestTxt;
     private TextView mLoginTxt;
     private EditText mUserNameEdtTxt;
     private EditText mPwdEdtTxt;
@@ -101,10 +101,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
         mSignupTxt.setOnClickListener(this);
         mLoginTxt.setOnClickListener(this);
         mSettingsImg.setOnClickListener(this);
+        mGuestTxt.setOnClickListener(this);
     }
 
     private void init(View v) {
         mSignupTxt = (TextView) v.findViewById(R.id.signup_txt);
+        mGuestTxt = (TextView) v.findViewById(R.id.guest_txt);
         mAdminCheckbox = (CheckBox) v.findViewById(R.id.checkbox_admin);
         mLoginTxt = (TextView) v.findViewById(R.id.login_txt);
         mUserNameEdtTxt = (EditText) v.findViewById(R.id.username_etxt);
@@ -156,6 +158,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
             case R.id.login_txt:
                 doLogin();
                 break;
+            case R.id.guest_txt:
+                editor.putBoolean("isGuest", true);
+                editor.commit();
+                getActivity().getSupportFragmentManager().popBackStack();
+                break;
         }
     }
 
@@ -168,20 +175,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Please enter a valid Password");
         } else {
-
-         /*   Intent i = new Intent(getContext(), MainActivity.class);
-            startActivity(i);*/
-
+         /* Intent i = new Intent(getContext(), MainActivity.class);
+            startActivity(i); */
             response = apiInterface.loginUser(new LoginCredentials(mUserNameEdtTxt.getText().toString().trim(), mPwdEdtTxt.getText().toString().trim()));
             response.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-//                    Log.e("Token", "=" + response.body().toString());
-
+                    //Log.e("Token", "=" + response.body().toString());
                     if (response.body() != null) {
                         editor.putBoolean("isloggedin", true);
                         editor.putString("username", mUserNameEdtTxt.getText().toString().trim());
                         editor.putString("token", "Bearer " + response.body().toString());
+                        Log.e("token", "=" + response.body().toString());
                         if (mAdminCheckbox.isChecked())
                             editor.putString("usertype", "admin");
                         else {
@@ -193,7 +198,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
                         getActivity().getSupportFragmentManager().popBackStack();
                     }
                 }
-
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();

@@ -57,13 +57,8 @@
             android:name="com.cocosoft.ecart.multireadmodule.MultiReaderActivity"
             android:screenOrientation="portrait">
 
-
         </activity>
 
-
-        <activity
-            android:name="com.cocosoft.ecart.cartmodule.BillingPage"
-            android:screenOrientation="portrait" />
         <activity
             android:name="com.cocosoft.ecart.barcode.BarcodeCaptureActivity"
             android:screenOrientation="portrait"

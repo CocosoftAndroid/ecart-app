@@ -15,16 +15,13 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.cocosoft.ecart.R;
 import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.listeners.CheckboxListener;
 import com.cocosoft.ecart.listeners.IndividualItemListener;
 import com.cocosoft.ecart.listeners.QuantityListener;
 import com.cocosoft.ecart.listeners.WishlistListener;
-
 import java.util.ArrayList;
-
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -42,11 +39,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
 
     public class MyViewHolders extends RecyclerView.ViewHolder {
         public TextView productName, productPrice, count;
-        public ImageView plusBtn, minusBtn, indicatorImg,removeBtn;
-        public CheckBox favBtn,cartCheckbox;
+        public ImageView plusBtn, minusBtn, indicatorImg, removeBtn;
+        public CheckBox favBtn, cartCheckbox;
         public CardView cardView;
-
-
         public MyViewHolders(View view) {
             super(view);
             productName = (TextView) view.findViewById(R.id.name_txt);
@@ -59,10 +54,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
             cartCheckbox = (CheckBox) view.findViewById(R.id.cart_chkbox);
             indicatorImg = (ImageView) view.findViewById(R.id.indicator);
             cardView = (CardView) view.findViewById(R.id.card_view);
-
         }
     }
-
 
     public CartAdapter(Context c, ArrayList<CartItem> list, QuantityListener listener, WishlistListener wishlistLis, IndividualItemListener individualListener, CheckboxListener checkboxLis) {
         this.productList = list;
@@ -73,7 +66,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
         this.isloggedin = prefs.getBoolean("isloggedin", false);
         this.mDB = new DatabaseHandler(context);
         this.individualListener = individualListener;
-        this.checkboxListener=checkboxLis;
+        this.checkboxListener = checkboxLis;
     }
 
     public CartAdapter(Context c, ArrayList<CartItem> list, QuantityListener listener, IndividualItemListener individualListener) {
@@ -84,13 +77,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
         this.isloggedin = prefs.getBoolean("isloggedin", false);
         this.mDB = new DatabaseHandler(context);
         this.individualListener = individualListener;
-
     }
 
     @Override
     public MyViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.inflate_cart_item, parent, false);
-
         return new MyViewHolders(itemView);
     }
 
@@ -101,7 +92,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
             if (mDB.wishlistAlreadyAdded(username, productList.get(position).getProductId()))
                 holder.favBtn.setChecked(true);
         }
-        holder.productName.setText("("+productList.get(position).getProductId() + ") " + productList.get(position).getProductName());
+        holder.productName.setText("(" + productList.get(position).getProductId() + ") " + productList.get(position).getProductName());
         holder.count.setText("" + productList.get(position).getCount());
         holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
         holder.plusBtn.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +108,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
                     quantityListener.onQuantityChange(productList.get(position).getProductId(), -1);
             }
         });
-
         holder.removeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,11 +118,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
             case 1:
                 holder.indicatorImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nfc));
                 break;
-
             case 2:
                 holder.indicatorImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_barcode));
                 break;
-
             case 3:
                 holder.indicatorImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_qrcode));
                 break;
@@ -140,15 +128,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
         holder.favBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if (isloggedin) {
-                    wishlistListener.onFavouriteClicked(productList.get(position).getProductId(),productList.get(position).getProductName(),productList.get(position).getProductPrice(), isChecked);
-
+                    wishlistListener.onFavouriteClicked(productList.get(position).getProductId(), productList.get(position).getProductName(), productList.get(position).getProductPrice(), isChecked);
                 } else {
                     Toast.makeText(context, "Please login to continue", Toast.LENGTH_SHORT).show();
                     holder.favBtn.setChecked(false);
                 }
-
             }
         });
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +145,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
         holder.cartCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkboxListener.onChecked(productList.get(position).getProductId(),isChecked);
+                checkboxListener.onChecked(productList.get(position).getProductId(), isChecked);
             }
         });
     }

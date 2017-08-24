@@ -264,9 +264,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp15"
+            android:checked="true"
             android:gravity="center"
             android:padding="@dimen/dp10"
-            android:checked="true"
             android:text="Same as present address"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/colorPrimary"
@@ -276,8 +276,8 @@
             android:id="@+id/shippinglayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"

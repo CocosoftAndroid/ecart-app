@@ -21,12 +21,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cocosoft.ecart.R;
 import com.cocosoft.ecart.common.DividerItemDecoration;
 import com.cocosoft.ecart.loginmodule.EditProfileFragment;
+import com.cocosoft.ecart.loginmodule.HomeFragment;
 import com.cocosoft.ecart.network.APIInterface;
 import com.cocosoft.ecart.network.RetrofitAPIClient;
 import com.cocosoft.ecart.orderHistory.OrderList;
@@ -87,7 +89,7 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
     private BillingAdapter mBillingAdapter;
     private Gson gson;
     private ArrayList<EditProfileFragment.AddressItem> mAddressArray;
-    private TextView mShippingAddrTxt,mBillingAddrTxt;
+    private TextView mShippingAddrTxt, mBillingAddrTxt;
     private APIInterface apiInterface;
     private String token;
     private Call<OrderMaster> response;
@@ -100,7 +102,7 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
     private TextView mCountTxtView;
     private TextView mTitleTxtView;
     private ImageView mCartImg;
-
+    private LinearLayout mAddrLayout;
 
 
     @Nullable
@@ -113,7 +115,7 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setListeners() {
-
+        mAddrLayout.setOnClickListener(this);
     }
 
     private void init(View view) {
@@ -127,6 +129,7 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
         _amountDisplay = (TextView) view.findViewById(R.id.tranAmount);
         mShippingAddrTxt = (TextView) view.findViewById(R.id.shipping_addr_txt);
         mBillingAddrTxt = (TextView) view.findViewById(R.id.billing_addr_txt);
+        mAddrLayout = (LinearLayout) view.findViewById(R.id.addr_layout);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
@@ -156,27 +159,24 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
         username = prefs.getString("username", null);
         token = prefs.getString("token", null);
         String tempdata = prefs.getString("profiledataof" + username, null);
-        boolean shippingsame = prefs.getBoolean("sameshippingaddress",false);
+        boolean shippingsame = prefs.getBoolean("sameshippingaddress", false);
         Type type = new TypeToken<List<EditProfileFragment.AddressItem>>() {
         }.getType();
         ArrayList<EditProfileFragment.AddressItem> arr = gson.fromJson(tempdata, type);
         if (arr != null) {
             mAddressArray = gson.fromJson(tempdata, type);
-            EditProfileFragment.AddressItem billingAddrItem=mAddressArray.get(0);
-            EditProfileFragment.AddressItem shippingAddrItem=mAddressArray.get(1);
-            if(shippingsame)
-            {
+            EditProfileFragment.AddressItem billingAddrItem = mAddressArray.get(0);
+            EditProfileFragment.AddressItem shippingAddrItem = mAddressArray.get(1);
+            if (shippingsame) {
                 mShippingAddrTxt.setText("Same As Billing Address");
-            }
-            else
-            {
+            } else {
                 mShippingAddrTxt.setText(shippingAddrItem.toString());
             }
             mBillingAddrTxt.setText(billingAddrItem.toString());
 
 
         }
-        mShippingAddrTxt.setOnClickListener(this);
+
         _pay.setOnClickListener(this);
     }
 
@@ -222,26 +222,25 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
     }
 
     void onPressGotoHomePage() {
-        /*Intent i = new Intent(BillingFragment.this, com.cocosoft.ecart.loginmodule.LoginActivity.class);
-        startActivity(i);*/
+        openFrag(1);
     }
 
     void emptyCheckoutData() {
         itemDetails.clear();
         String beforetempdata = prefs.getString("tempcartlist", null);
-        Log.i("beforetempdata", beforetempdata);
+
         prefsEditor = prefs.edit();
         String json = (new Gson()).toJson(itemDetails);
         prefsEditor.putString("tempcartlist", json);
         prefsEditor.commit();
         String aftertempdata = prefs.getString("tempcartlist", null);
-        Log.i("aftertempdata", aftertempdata);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.shipping_addr_txt:
+            case R.id.addr_layout:
                 openFrag(0);
                 break;
             case R.id.pay:
@@ -322,6 +321,9 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
         switch (i) {
             case 0:
                 firstFragment = new EditProfileFragment();
+                break;
+            case 1:
+                firstFragment = new HomeFragment();
                 break;
         }
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

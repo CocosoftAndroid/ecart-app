@@ -148,7 +148,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mCCountryTxt = (EditText) view.findViewById(R.id.ccountry_txt);
         mCPhoneNoTxt = (EditText) view.findViewById(R.id.cphno_txt);
         mShippingLayout = (LinearLayout) view.findViewById(R.id.shippinglayout);
-
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
         mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
         mCountTxtView.setVisibility(View.GONE);
@@ -201,7 +200,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void saveProfileData() {
-        String username = prefs.getString("username", null);
+        String username = prefs.getString("username", "guest");
         mAddressArray.clear();
         mAddressArray.add(new AddressItem(mCNameTxt.getText().toString().trim(), mCAddress1Txt.getText().toString().trim(), mCAddress2Txt.getText().toString().trim(), mCCityTxt.getText().toString().trim(), mCStateTxt.getText().toString().trim(), mCZipTxt.getText().toString().trim(), mCCountryTxt.getText().toString().trim(), mCPhoneNoTxt.getText().toString().trim()));
         mAddressArray.add(new AddressItem(mNameTxt.getText().toString().trim(), mAddress1Txt.getText().toString().trim(), mAddress2Txt.getText().toString().trim(), mCityTxt.getText().toString().trim(), mStateTxt.getText().toString().trim(), mZipTxt.getText().toString().trim(), mCountryTxt.getText().toString().trim(), mPhoneNoTxt.getText().toString().trim()));
@@ -217,7 +216,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Log.e("LoginFragment", "=" + t.getMessage());
+
             }
         });
 

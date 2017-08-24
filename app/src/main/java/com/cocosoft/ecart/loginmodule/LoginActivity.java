@@ -258,12 +258,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         return true;
 
                     case R.id.menu_edit:
-                        boolean isloggedin = appSharedPrefs.getBoolean("isloggedin", false);
-                        if (isloggedin)
+
                             openFrag(3, null);
-                        else
-                            Toast.makeText(getApplicationContext(), "Please login to continue", Toast.LENGTH_SHORT).show();
-                        return true;
+                          return true;
 
                     case R.id.menu_nfcwriter:
                         Intent intent = new Intent(context, NfcWriter.class);

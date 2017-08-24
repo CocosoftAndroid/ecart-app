@@ -76,7 +76,6 @@ public class IndividualItemFragment extends Fragment implements View.OnClickList
         mProductPrice.setText("$ " + item.getProductPrice());
         mProductDesc.setText(item.getProductDesc());
         String[] splited = item.getImageUrl().split("\\\\");
-        Log.e("urll","="+splited[splited.length-1]);
         mTitleTxtView.setText(item.getProductName());
         Log.e("ewewqwe","="+"http://54.68.141.32:8080/"+splited[splited.length-1]);
         Glide.with(getContext()).load("http://54.68.141.32:8080/"+splited[splited.length-1])
@@ -85,8 +84,6 @@ public class IndividualItemFragment extends Fragment implements View.OnClickList
                 .placeholder(R.drawable.ic_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mProductImg);
-
-
     }
 
     @Override
@@ -97,11 +94,8 @@ public class IndividualItemFragment extends Fragment implements View.OnClickList
                 String username = prefs.getString("username", "");
                 String token = prefs.getString("token", "");
                 if (isloggedin) {
-                   /* if (!(mDb.wishlistAlreadyAdded(username, item.getProductId()))) {
-                        mDb.addToWishlist(item.getProductId(), username);
-                        Toast.makeText(getContext(), "Added to Wishlist", Toast.LENGTH_SHORT).show();
-                    }*/
-
+                    mAddWishlistBtn.setEnabled(false);
+                    mAddWishlistBtn.setAlpha(0.4f);
                     addWishList(new WishList(Integer.parseInt(item.getProductId()), username, item.getProductName(), item.getProductPrice(), null, true,true), token);
                 } else {
                     Toast.makeText(getContext(), "Please login to continue", Toast.LENGTH_SHORT).show();
@@ -112,19 +106,18 @@ public class IndividualItemFragment extends Fragment implements View.OnClickList
 
 
     private void addWishList(WishList wlist, String token) {
-
-        Log.e("EREC","="+wlist.getProductId());
         response = apiInterface.addWishList(wlist, token);
         response.enqueue(new Callback<WishList>() {
-
             @Override
             public void onResponse(Call<WishList> call, Response<WishList> response) {
-
+                mAddWishlistBtn.setEnabled(true);
+                mAddWishlistBtn.setAlpha(1f);
             }
-
             @Override
             public void onFailure(Call<WishList> call, Throwable t) {
-
+                Log.e("EREC","=");
+                mAddWishlistBtn.setEnabled(true);
+                mAddWishlistBtn.setAlpha(1f);
             }
         });
     }

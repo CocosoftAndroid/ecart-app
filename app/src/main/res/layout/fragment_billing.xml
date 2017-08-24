@@ -122,6 +122,7 @@
                 android:textColor="@color/black" />
 
             <LinearLayout
+                android:id="@+id/addr_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp8"
@@ -155,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingLeft="@dimen/dp10"
-                    android:paddingTop="@dimen/dp10"
+
                     android:text="Shipping Address"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/colorPrimary" />

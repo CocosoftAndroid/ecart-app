@@ -26,6 +26,7 @@ import com.cocosoft.ecart.listeners.CheckboxListener;
 import com.cocosoft.ecart.listeners.IndividualItemListener;
 import com.cocosoft.ecart.listeners.QuantityListener;
 import com.cocosoft.ecart.listeners.WishlistListener;
+import com.cocosoft.ecart.loginmodule.EditProfileFragment;
 import com.cocosoft.ecart.loginmodule.IndividualItemFragment;
 import com.cocosoft.ecart.loginmodule.LoginFragment;
 import com.cocosoft.ecart.network.APIInterface;
@@ -181,7 +182,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         Payu.setInstance(this.getActivity());
         boolean isloggedin = prefs.getBoolean("isloggedin", false);
         boolean isGuest = prefs.getBoolean("isGuest", false);
-        username = prefs.getString("username", "");
+        username = prefs.getString("username", "guest");
         firstName = prefs.getString("firstname", "nfound");
         token = prefs.getString("token", "");
         countryName = prefs.getString("country", "");
@@ -189,30 +190,42 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         switch (v.getId()) {
             case R.id.add_cart_txt:
                 if (isloggedin || isGuest) {
-
-                    if (_checkoutAmount != 0) {
-                        productInfo = mCartArray.get(0).getProductName();
-                        if (countryName.equals("India")) {
-                            navigateToBaseActivity();  // call this function for payumoney gateway
-                        } else {
-                            //For US and UK (Authorize.net)
-
-                            openFrag(3, "");
-
-                        }
-                        // uncomment below for authorize.net code and comment navigateToBaseActivity func call
-
+                    if (isAddressFilled()) {
+                        doPayment();
                     } else {
-                        Toast.makeText(getContext(), "Sorry !! No items in your Cart to check out", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Please fill you Billing and Shipping Address", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.i("CartFragment", "User Not logged IN");
                     openFrag(1, "");
-//                    openFrag(3,"");
-
                 }
                 break;
 
+        }
+    }
+
+    private boolean isAddressFilled() {
+        String tempdata = prefs.getString("profiledataof" + username, null);
+        Type type = new TypeToken<List<EditProfileFragment.AddressItem>>() {
+        }.getType();
+        ArrayList<EditProfileFragment.AddressItem> arr = gson.fromJson(tempdata, type);
+        if (arr != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void doPayment() {
+        if (_checkoutAmount != 0) {
+            productInfo = mCartArray.get(0).getProductName();
+            if (countryName.equals("India")) {
+                navigateToBaseActivity();  // call this function for payumoney gateway
+            } else {
+                //For US and UK (Authorize.net)
+                openFrag(3, "");
+            }
+        } else {
+            Toast.makeText(getContext(), "Sorry !! No items in your Cart to check out", Toast.LENGTH_SHORT).show();
         }
     }
 

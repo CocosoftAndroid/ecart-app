@@ -199,7 +199,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                     openFrag(1, "");
                 }
                 break;
-
         }
     }
 

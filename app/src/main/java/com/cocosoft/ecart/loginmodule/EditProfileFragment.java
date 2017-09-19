@@ -66,6 +66,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private RadioGroup mRadioGroup1;
     private APIInterface apiInterface;
     private Call<User> response;
+    private Call<AddressItem> response2;
     private LinearLayout mShippingLayout;
 
     @Override
@@ -162,10 +163,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         setProfileData();
         mCheckBox.setChecked(prefs.getBoolean("sameshippingaddress", true));
         if (mCheckBox.isChecked()) {
-
             mShippingLayout.setVisibility(View.GONE);
         } else {
-
             mShippingLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -202,8 +201,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private void saveProfileData() {
         String username = prefs.getString("username", "guest");
         mAddressArray.clear();
-        mAddressArray.add(new AddressItem(mCNameTxt.getText().toString().trim(), mCAddress1Txt.getText().toString().trim(), mCAddress2Txt.getText().toString().trim(), mCCityTxt.getText().toString().trim(), mCStateTxt.getText().toString().trim(), mCZipTxt.getText().toString().trim(), mCCountryTxt.getText().toString().trim(), mCPhoneNoTxt.getText().toString().trim()));
-        mAddressArray.add(new AddressItem(mNameTxt.getText().toString().trim(), mAddress1Txt.getText().toString().trim(), mAddress2Txt.getText().toString().trim(), mCityTxt.getText().toString().trim(), mStateTxt.getText().toString().trim(), mZipTxt.getText().toString().trim(), mCountryTxt.getText().toString().trim(), mPhoneNoTxt.getText().toString().trim()));
+        mAddressArray.add(new AddressItem(new Long(1), mCNameTxt.getText().toString().trim(), mCAddress1Txt.getText().toString().trim(), mCAddress2Txt.getText().toString().trim(), mCCityTxt.getText().toString().trim(), mCStateTxt.getText().toString().trim(), mCZipTxt.getText().toString().trim(), mCCountryTxt.getText().toString().trim(), mCPhoneNoTxt.getText().toString().trim()));
+        mAddressArray.add(new AddressItem(new Long(2), mNameTxt.getText().toString().trim(), mAddress1Txt.getText().toString().trim(), mAddress2Txt.getText().toString().trim(), mCityTxt.getText().toString().trim(), mStateTxt.getText().toString().trim(), mZipTxt.getText().toString().trim(), mCountryTxt.getText().toString().trim(), mPhoneNoTxt.getText().toString().trim()));
         String json = gson.toJson(mAddressArray);
         prefsEditor.putString("profiledataof" + username, json);
         prefsEditor.commit();
@@ -219,7 +218,32 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
             }
         });
+        String token = prefs.getString("token", null);
+        Log.e("res2", "=" + token);
+        response2 = apiInterface.addProfileData(mAddressArray.get(0), token);
+        response2.enqueue(new Callback<AddressItem>() {
+            @Override
+            public void onResponse(Call<AddressItem> call, Response<AddressItem> response) {
+                Log.e("res2", "=" + response.body().toString());
+            }
 
+            @Override
+            public void onFailure(Call<AddressItem> call, Throwable t) {
+
+            }
+        });
+        response2 = apiInterface.addProfileData(mAddressArray.get(1), token);
+        response2.enqueue(new Callback<AddressItem>() {
+            @Override
+            public void onResponse(Call<AddressItem> call, Response<AddressItem> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<AddressItem> call, Throwable t) {
+
+            }
+        });
         Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
 
 
@@ -235,6 +259,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     public class AddressItem {
+        private Long id;
         private String name = "";
         private String address1 = "";
         private String address2 = "";
@@ -244,16 +269,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         private String country = "";
         private String phonenumber = "";
 
-        public AddressItem(String name, String address1, String address2, String city, String state, String zip, String country, String phonenumber) {
-            this.name = name;
-            this.address1 = address1;
-            this.address2 = address2;
-            this.city = city;
-            this.state = state;
-            this.zip = zip;
-            this.country = country;
-            this.phonenumber = phonenumber;
-        }
 
         public String getName() {
             return name;
@@ -319,16 +334,39 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             this.phonenumber = phonenumber;
         }
 
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public AddressItem(Long id, String name, String address1, String address2, String city, String state, String zip, String country, String phonenumber) {
+            this.id = id;
+            this.name = name;
+            this.address1 = address1;
+            this.address2 = address2;
+            this.city = city;
+            this.state = state;
+            this.zip = zip;
+            this.country = country;
+            this.phonenumber = phonenumber;
+        }
+
         @Override
         public String toString() {
-            return "" + name +
-                    "," + address1 +
-                    "," + address2 +
-                    "," + city +
-                    "," + state +
-                    "," + zip +
-                    "," + country +
-                    ", " + phonenumber;
+            return "AddressItem{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", address1='" + address1 + '\'' +
+                    ", address2='" + address2 + '\'' +
+                    ", city='" + city + '\'' +
+                    ", state='" + state + '\'' +
+                    ", zip='" + zip + '\'' +
+                    ", country='" + country + '\'' +
+                    ", phonenumber='" + phonenumber + '\'' +
+                    '}';
         }
     }
 }

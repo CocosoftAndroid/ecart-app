@@ -76,7 +76,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     }
 
     private static int value = 0;
-
     public double latitude;
     public double longitude;
     public LocationManager locationManager;
@@ -125,7 +124,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
         editor = getContext().getSharedPreferences("cocosoft", MODE_PRIVATE).edit();
         getLocation();
-
     }
 
     public String getCountryName(Context context, double latitude, double longitude) {
@@ -134,7 +132,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
         try {
             addresses = geocoder.getFromLocation(latitude, longitude, 1);
             Address result;
-
             if (addresses != null && !addresses.isEmpty()) {
                 return addresses.get(0).getCountryName();
             }
@@ -143,7 +140,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
             //do something
             return "exception";
         }
-
     }
 
     @Override
@@ -167,7 +163,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     }
 
     private void doLogin() {
-
         if (mUserNameEdtTxt.getText().toString().trim().length() == 0) {
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Please enter a valid Username");
@@ -256,7 +251,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
                 countryName = getCountryName(getContext(), latitude, longitude);
                 editor.putString("country", countryName);
                 editor.commit();
-
             } else {
                 //This is what you need:
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -264,8 +258,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
                 Log.e("getCountryName", "rrw1else");
             }
         } else {
-            //prompt user to enable location....
-            //.................
         }
     }
 
@@ -273,16 +265,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     public void onPause() {
         super.onPause();
 
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
         //Hey, a non null location! Sweet!
-
         //remove location callback:
         locationManager.removeUpdates(this);
-
         //open the map:
         latitude = location.getLatitude();
         longitude = location.getLongitude();

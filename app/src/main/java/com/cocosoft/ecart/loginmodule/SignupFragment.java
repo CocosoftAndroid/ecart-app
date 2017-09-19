@@ -54,6 +54,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
 
 
     private Call<User> response;
+    private DatePickerDialog datePickerDialog;
 
     @Nullable
     @Override
@@ -109,8 +110,8 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         mRadioGroup1=(RadioGroup)v.findViewById(R.id.radioGroup1);
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
         editor = getContext().getSharedPreferences("cocosoft", MODE_PRIVATE).edit();
-
-
+      datePickerDialog = new DatePickerDialog(
+                getContext(), this, 2017, 8, 31);
 
     }
 
@@ -121,9 +122,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
                 doSignup();
                 break;
             case R.id.dob_txt:
-                MonthYearPickerDialog pd = new MonthYearPickerDialog();
-                pd.setListener(this);
-                pd.show(getFragmentManager(), "MonthYearPickerDialog");
+                datePickerDialog.show();
                 break;
         }
     }
@@ -171,7 +170,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        mDOBTxt.setText("" + month + "-" + year);
+        mDOBTxt.setText("" + month + "-" + dayOfMonth+ "-" + year);
     }
 
 

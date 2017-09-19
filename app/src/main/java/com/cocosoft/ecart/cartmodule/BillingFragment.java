@@ -228,13 +228,11 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
     void emptyCheckoutData() {
         itemDetails.clear();
         String beforetempdata = prefs.getString("tempcartlist", null);
-
         prefsEditor = prefs.edit();
         String json = (new Gson()).toJson(itemDetails);
         prefsEditor.putString("tempcartlist", json);
         prefsEditor.commit();
         String aftertempdata = prefs.getString("tempcartlist", null);
-
     }
 
     @Override
@@ -280,7 +278,7 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
                                 e.printStackTrace();
                             }
                             if (status.contains("Successful.")) {
-//                                        Toast.makeText(getApplicationContext(), "Transaction Successful", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "Transaction Successful", Toast.LENGTH_SHORT).show();
                                 showAlertMsg(1);
                                 try {
                                     acctype = transactionRes.getString("accountType");

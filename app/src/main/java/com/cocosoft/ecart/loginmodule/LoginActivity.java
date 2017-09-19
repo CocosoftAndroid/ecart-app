@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         FacebookSdk.setIsDebugEnabled(true);
                                         FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
                                         Profile profile = Profile.getCurrentProfile();
-                                        Log.e("Anusha", "FACEBOOK"+AccessToken.getCurrentAccessToken());
+                                        Log.e("Anusha", "FACEBOOK" + AccessToken.getCurrentAccessToken());
                                         if (profile != null) {
                                             Log.d("Anusha", "profile");
                                             userName = profile.getName();
@@ -196,6 +196,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         }
+
     }
 
     private void init() {
@@ -218,11 +219,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         initNavigationDrawer();
         mDB = new DatabaseHandler(this);
-       /* mDB.addProduct(new ProductItem("501", "Dove Soap", 20, 1, 0, false));
+        /* mDB.addProduct(new ProductItem("501", "Dove Soap", 20, 1, 0, false));
         mDB.addProduct(new ProductItem("502", "Dove Shampoo", 30, 1, 0, false));
         mDB.addProduct(new ProductItem("503", "Fair & Lovely", 25, 1, 0, false));
         mDB.addProduct(new ProductItem("504", "Fog Perfume", 50, 1, 0, false));
-        mDB.addProduct(new ProductItem("505", "Hair Oil", 40, 1, 0, false));*/
+        mDB.addProduct(new ProductItem("505", "Hair Oil", 40, 1, 0, false)); */
         appSharedPrefs = getSharedPreferences("cocosoft", MODE_PRIVATE);
         _usrName = (TextView) findViewById(R.id.userName);
     }
@@ -258,9 +259,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         return true;
 
                     case R.id.menu_edit:
-
-                            openFrag(3, null);
-                          return true;
+                        openFrag(3, null);
+                        return true;
 
                     case R.id.menu_nfcwriter:
                         Intent intent = new Intent(context, NfcWriter.class);

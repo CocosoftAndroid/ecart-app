@@ -4,6 +4,7 @@ package com.cocosoft.ecart.network;
  * Created by.dmin on 5/3/2017.
  */
 
+import com.cocosoft.ecart.loginmodule.EditProfileFragment;
 import com.cocosoft.ecart.loginmodule.LoginCredentials;
 import com.cocosoft.ecart.loginmodule.User;
 import com.cocosoft.ecart.orderHistory.OrderMaster;
@@ -50,4 +51,11 @@ public interface APIInterface {
 
     @GET("secure/user/allorder")
     Call<List<OrderMaster>> allOrder(@Header("Authorization") String authHeader);
+
+
+    @POST("secure/user/profile")
+    Call<EditProfileFragment.AddressItem> addProfileData(@Body EditProfileFragment.AddressItem profiledata, @Header("Authorization") String authHeader);
+
+    @POST("secure/user/profile")
+    Call<List<EditProfileFragment.AddressItem>> getProfileData(@Header("Authorization") String authHeader);
 }

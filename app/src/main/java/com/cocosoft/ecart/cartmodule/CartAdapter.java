@@ -15,13 +15,16 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.cocosoft.ecart.R;
 import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.listeners.CheckboxListener;
 import com.cocosoft.ecart.listeners.IndividualItemListener;
 import com.cocosoft.ecart.listeners.QuantityListener;
 import com.cocosoft.ecart.listeners.WishlistListener;
+
 import java.util.ArrayList;
+
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -42,6 +45,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
         public ImageView plusBtn, minusBtn, indicatorImg, removeBtn;
         public CheckBox favBtn, cartCheckbox;
         public CardView cardView;
+
         public MyViewHolders(View view) {
             super(view);
             productName = (TextView) view.findViewById(R.id.name_txt);

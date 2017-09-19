@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class ScanListAdapter extends RecyclerView.Adapter<ScanListAdapter.MyView
         public ImageView plusBtn, minusBtn, indicatorImg;
         public CheckBox favBtn, cartCheckbox;
         public CardView cardView;
+        public LinearLayout cardlayout;
 
         public MyViewHolders(View view) {
             super(view);
@@ -54,11 +56,11 @@ public class ScanListAdapter extends RecyclerView.Adapter<ScanListAdapter.MyView
             count = (TextView) view.findViewById(R.id.count_txt);
             plusBtn = (ImageView) view.findViewById(R.id.plus_btn);
             minusBtn = (ImageView) view.findViewById(R.id.minus_btn);
-            //removeBtn = (ImageView) view.findViewById(R.id.remove_btn);
             favBtn = (CheckBox) view.findViewById(R.id.fav_btn);
             cartCheckbox = (CheckBox) view.findViewById(R.id.cart_chkbox);
             indicatorImg = (ImageView) view.findViewById(R.id.indicator);
             cardView = (CardView) view.findViewById(R.id.card_view);
+            cardlayout = (LinearLayout) view.findViewById(R.id.cardlayout);
         }
     }
 
@@ -146,7 +148,7 @@ public class ScanListAdapter extends RecyclerView.Adapter<ScanListAdapter.MyView
                 }
             }
         });
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.cardlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 individualListener.OnCardClick(productList.get(position).getProductId());

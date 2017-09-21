@@ -73,12 +73,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.barcode_capture);
-
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-
         boolean autoFocus = true;
         boolean useFlash = false;
-
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);

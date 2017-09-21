@@ -31,10 +31,8 @@ import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.listeners.CheckboxListener;
 import com.cocosoft.ecart.listeners.IndividualItemListener;
 import com.cocosoft.ecart.listeners.QuantityListener;
-import com.cocosoft.ecart.listeners.ScanResultListener;
 import com.cocosoft.ecart.listeners.WishlistListener;
 import com.cocosoft.ecart.loginmodule.IndividualItemFragment;
-import com.cocosoft.ecart.loginmodule.LoginCredentials;
 import com.cocosoft.ecart.loginmodule.LoginFragment;
 import com.cocosoft.ecart.network.APIInterface;
 import com.cocosoft.ecart.network.RetrofitAPIClient;
@@ -84,6 +82,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
     private Call<WishList> response;
     private Call<Product> response2;
     private String nfcResult;
+    private ImageView mScanImgView;
 
 
     @Override
@@ -166,6 +165,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
                 }
             }
         });
+        mScanImgView.setOnClickListener(this);
     }
 
     private void init(View view) {
@@ -178,6 +178,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         mProductRView.setLayoutManager(mLManager);
         mScanListAdapter = new ScanListAdapter(getContext(), mProductArray, this, this, this, this);
         mProductRView.setAdapter(mScanListAdapter);
+        mScanImgView = (ImageView) view.findViewById(R.id.scan_imgview);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
@@ -192,7 +193,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
             startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
         }
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
-        if (scantype == 1) {
+        if (scantype == 1&&nfcResult!=null) {
             try {
                 onScanResult(new JSONObject(nfcResult), 1);
             } catch (JSONException e) {
@@ -216,6 +217,11 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
             case R.id.cart_img:
                 openFrag(0, "");
                 break;
+
+            case R.id.scan_imgview:
+                Intent intent = new Intent(getContext(), BarcodeCaptureActivity.class);
+                startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
+                break;
         }
     }
 
@@ -225,7 +231,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         for (int i = 0; i < mProductArray.size(); i++) {
             if (mProductArray.get(i).isChecked()) {
                 {
-                    mCartArray.add(new CartItem(mProductArray.get(i).getProductId(), mProductArray.get(i).getProductName(), mProductArray.get(i).getProductDesc(), mProductArray.get(i).getProductPrice(),mProductArray.get(i).getImageUrl(), mProductArray.get(i).getCount(), mProductArray.get(i).getScantype(), mProductArray.get(i).isChecked()));
+                    mCartArray.add(new CartItem(mProductArray.get(i).getProductId(), mProductArray.get(i).getProductName(), mProductArray.get(i).getProductDesc(), mProductArray.get(i).getProductPrice(), mProductArray.get(i).getImageUrl(), mProductArray.get(i).getCount(), mProductArray.get(i).getScantype(), mProductArray.get(i).isChecked()));
                 }
             }
         }
@@ -363,6 +369,7 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
         response2.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
+
                 dbItem.setProductId(response.body().getProductId());
                 dbItem.setProductName(response.body().getProductName());
                 dbItem.setProductPrice(response.body().getPrice());

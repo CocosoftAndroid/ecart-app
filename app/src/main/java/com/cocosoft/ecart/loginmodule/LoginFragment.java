@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -32,7 +31,6 @@ import com.cocosoft.ecart.R;
 import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.network.APIInterface;
 import com.cocosoft.ecart.network.RetrofitAPIClient;
-
 
 import java.io.IOException;
 import java.util.List;
@@ -65,7 +63,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     private Call<String> response;
     private CheckBox mAdminCheckbox;
     private String countryName;
-
 
     public static int getValue() {
         return value;
@@ -193,13 +190,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
                         getActivity().getSupportFragmentManager().popBackStack();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             });
-
-
         }
     }
 
@@ -222,14 +218,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     }
 
     public static boolean isLocationEnabled(Context context) {
-        //...............
         return true;
     }
 
     protected void getLocation() {
         if (isLocationEnabled(getContext())) {
             locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
             //You can still do this if you like, you might get lucky:
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling

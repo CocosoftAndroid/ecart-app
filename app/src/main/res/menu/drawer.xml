@@ -85,6 +85,16 @@
             android:title="NFC Tag Writer" />
     </group>
     <group
+        android:id="@+id/grp11"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menu_scannedlist"
+            android:checked="false"
+            android:icon="@drawable/ic_list"
+            android:title="Scanned List" />
+    </group>
+    <group
         android:id="@+id/grp9"
         android:checkableBehavior="single">
 

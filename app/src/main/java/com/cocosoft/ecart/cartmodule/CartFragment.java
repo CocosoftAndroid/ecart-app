@@ -221,7 +221,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                 navigateToBaseActivity();  // call this function for payumoney gateway
             } else {
                 //For US and UK (Authorize.net)
-                openFrag(3, "");
+                //openFrag(3, "");
+                navigateToBaseActivity();
             }
         } else {
             Toast.makeText(getContext(), "Sorry !! No items in your Cart to check out", Toast.LENGTH_SHORT).show();

@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="@dimen/dp15"
-                android:text="Barcode"
+                android:text="Scanner"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/black" />
         </LinearLayout>
@@ -61,6 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp15"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <ImageView

@@ -262,6 +262,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         openFrag(3, null);
                         return true;
 
+                    case R.id.menu_scannedlist:
+                        ((HomeFragment) firstFragment).openScanListFrag(null);
+                        return true;
+
                     case R.id.menu_nfcwriter:
                         Intent intent = new Intent(context, NfcWriter.class);
                         startActivity(intent);
@@ -410,6 +414,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case 8:
                 firstFragment = new ProfileFragment();
                 break;
+
 
         }
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -30,18 +30,15 @@ import static android.content.Context.MODE_PRIVATE;
 public class SigninFragment extends Fragment implements View.OnClickListener {
 
 
-    Button _esaySignup;
-    Button loginButton;
-    SignInButton signInButton;
-    Button _esayLoginIn;
-
+    private Button _esaySignup;
+    private Button loginButton;
+    private Button signInButton;
+    private Button _esayLoginIn;
     private TextView mCountTxtView;
     private TextView mTitleTxtView, mGuestTxt;
     private ImageView mCartImg;
     private RelativeLayout mSearchLayout;
-
-
-    Activity activity;
+    private Activity activity;
     private SharedPreferences appSharedPrefs;
     private SharedPreferences.Editor editor;
 
@@ -80,8 +77,7 @@ public class SigninFragment extends Fragment implements View.OnClickListener {
     private void init(View v) {
 
         _esaySignup = (Button) v.findViewById(R.id.shopEsaySignIn);
-        signInButton = (SignInButton) v.findViewById(R.id.sign_in_button);
-        ((TextView) signInButton.getChildAt(0)).setText("Sign In with Google");
+        signInButton = (Button) v.findViewById(R.id.sign_in_button);
         loginButton = (Button) v.findViewById(R.id.facebook_login_button);
         _esayLoginIn = (Button) v.findViewById(R.id.shopEsayLoginIn);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
@@ -95,7 +91,6 @@ public class SigninFragment extends Fragment implements View.OnClickListener {
         mSearchLayout.setVisibility(View.GONE);
         appSharedPrefs = getActivity().getSharedPreferences("cocosoft", MODE_PRIVATE);
         editor = appSharedPrefs.edit();
-
     }
 
     private void shopEsaySignUpPage() {

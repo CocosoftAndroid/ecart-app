@@ -212,21 +212,19 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             public void onResponse(Call<User> call, Response<User> response) {
 
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
 
             }
         });
         String token = prefs.getString("token", null);
-        Log.e("res2", "=" + token);
+
         response2 = apiInterface.addProfileData(mAddressArray.get(0), token);
         response2.enqueue(new Callback<AddressItem>() {
             @Override
             public void onResponse(Call<AddressItem> call, Response<AddressItem> response) {
-                Log.e("res2", "=" + response.body().toString());
-            }
 
+            }
             @Override
             public void onFailure(Call<AddressItem> call, Throwable t) {
 
@@ -238,15 +236,12 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             public void onResponse(Call<AddressItem> call, Response<AddressItem> response) {
 
             }
-
             @Override
             public void onFailure(Call<AddressItem> call, Throwable t) {
 
             }
         });
         Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
-
-
     }
 
     @Override

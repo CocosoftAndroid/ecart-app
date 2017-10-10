@@ -37,10 +37,7 @@ import com.cocosoft.ecart.R;
 import com.cocosoft.ecart.adminmodule.AllUsersFragment;
 import com.cocosoft.ecart.cartmodule.CartFragment;
 import com.cocosoft.ecart.cartmodule.CartItem;
-import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.orderHistory.OrderHistory;
-import com.cocosoft.ecart.scanlistmodule.ProductItem;
-import com.cocosoft.ecart.scanlistmodule.ScannedListFragment;
 import com.cocosoft.ecart.wishlistmodule.WishListFragment;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -67,7 +64,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -85,7 +81,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Toolbar mToolbar;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private ImageView mCartImg;
-    private DatabaseHandler mDB;
     private NfcAdapter mNfcAdapter;
     private Context context;
     public static final String TAG = "NFCReaderDemo";
@@ -109,7 +104,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -218,12 +212,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         initNavigationDrawer();
-        mDB = new DatabaseHandler(this);
-        /* mDB.addProduct(new ProductItem("501", "Dove Soap", 20, 1, 0, false));
-        mDB.addProduct(new ProductItem("502", "Dove Shampoo", 30, 1, 0, false));
-        mDB.addProduct(new ProductItem("503", "Fair & Lovely", 25, 1, 0, false));
-        mDB.addProduct(new ProductItem("504", "Fog Perfume", 50, 1, 0, false));
-        mDB.addProduct(new ProductItem("505", "Hair Oil", 40, 1, 0, false)); */
         appSharedPrefs = getSharedPreferences("cocosoft", MODE_PRIVATE);
         _usrName = (TextView) findViewById(R.id.userName);
     }
@@ -386,17 +374,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 firstFragment = new CartFragment();
                 break;
             case 3:
-
-
                 firstFragment = new EditProfileFragment();
-
-
                 break;
             case 4:
                 firstFragment = new SettingsFragment();
                 break;
             case 5:
-
                 if (isloggedin)
                     firstFragment = new WishListFragment();
                 else
@@ -441,7 +424,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cart_img:
-
                 break;
 
         }

@@ -57,7 +57,7 @@ public class BillingAdapter extends RecyclerView.Adapter<BillingAdapter.MyViewHo
         holder.productName.setText(productList.get(position).getProductName());
         holder.count.setText("" + productList.get(position).getCount());
         holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
-        holder.productid.setText(productList.get(position).getProductId());
+
     }
 
     @Override

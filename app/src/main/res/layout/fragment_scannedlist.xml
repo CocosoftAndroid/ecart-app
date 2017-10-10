@@ -3,6 +3,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bgcolor"
     android:fitsSystemWindows="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -46,7 +47,9 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 
@@ -80,10 +83,10 @@
 
             <Button
                 android:id="@+id/add_cart_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:layout_margin="@dimen/dp10"
-                android:background="@drawable/custombutton"
+                android:background="@drawable/cartbutton"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
                 android:text="Add To Cart"

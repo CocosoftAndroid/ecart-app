@@ -9,6 +9,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.MyViewHolders> {
 
@@ -76,13 +76,15 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public void onBindViewHolder(final MyViewHolders holder, final int position) {
         holder.transactionIdTxt.setText(orderHistoryList.get(position).getTransactionId());
         holder.countTxt.setText("" + orderHistoryList.get(position).getTotalItems());
+        Log.e("date","="+orderHistoryList.get(position).getOrderDate());
+        Log.e("date","created="+orderHistoryList.get(position).getCreated());
         holder.totalTxt.setText("$ " + orderHistoryList.get(position).getTotalPrice());
         holder.dateTxt.setText(holder.getDate(orderHistoryList.get(position).getCreated()));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<OrderList> olist = orderHistoryList.get(position).getOrderList();
-                cartlist = null;
+                cartlist.clear();
                 cartlist = new ArrayList<CartItem>();
                 for (int y = 0; y < olist.size(); y++) {
                     cartlist.add(new CartItem(olist.get(y).getProductId(), olist.get(y).getProductName(), "", olist.get(y).getProductPrice(), olist.get(y).getProductCount(), 0, false));

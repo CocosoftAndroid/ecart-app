@@ -75,7 +75,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     private TextView mAddWishTxt;
     private Gson gson;
     private SharedPreferences.Editor prefsEditor;
-    private DatabaseHandler mDB;
+
     int _checkoutAmount = 0;
     private APIInterface apiInterface;
     private Call<WishList> response;
@@ -114,23 +114,27 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         }.getType();
         ArrayList<CartItem> arr = gson.fromJson(tempdata, type);
         if (arr != null) {
-            mCartArray = gson.fromJson(tempdata, type);
+            mCartArray.clear();
+            mCartArray.addAll((ArrayList<CartItem>)gson.fromJson(tempdata, type));
         }
+
+        Log.e("cart","onCreate"+mCartArray.size());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
-        apiInterface = RetrofitAPIClient.getClient(this.getActivity()).create(APIInterface.class);
         init(view);
         setListeners();
+        Log.e("cart","onCreateView");
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("cart","onResume");
         mTitleTxtView.setText("Cart");
     }
 
@@ -144,14 +148,14 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     }
 
     private void init(View view) {
-        gson = new Gson();
+
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
         mLinearLayout = (LinearLayout) view.findViewById(R.id.llayout1);
         mNoItemLayout = (LinearLayout) view.findViewById(R.id.noitem_layout);
         mAddCartTxt = (TextView) view.findViewById(R.id.add_cart_txt);
         mAddWishTxt = (TextView) view.findViewById(R.id.add_wish_txt);
         mGrandTotalTxt = (TextView) view.findViewById(R.id.grandtotal_txt);
-        mDB = new DatabaseHandler(getContext());
+
         mLManager = new LinearLayoutManager(getContext());
         mProductRView = (RecyclerView) view.findViewById(R.id.rview);
         mProductRView.setLayoutManager(mLManager);

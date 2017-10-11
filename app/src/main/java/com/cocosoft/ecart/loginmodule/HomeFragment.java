@@ -1,6 +1,8 @@
 package com.cocosoft.ecart.loginmodule;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cocosoft.ecart.R;
+import com.cocosoft.ecart.barcode.BarcodeCaptureActivity;
 import com.cocosoft.ecart.cartmodule.CartFragment;
 import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.listeners.QuantityListener;
@@ -28,9 +31,12 @@ import com.cocosoft.ecart.network.RetrofitAPIClient;
 import com.cocosoft.ecart.scanlistmodule.Product;
 import com.cocosoft.ecart.scanlistmodule.ProductItem;
 import com.cocosoft.ecart.scanlistmodule.ScannedListFragment;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -60,10 +66,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
     private ImageView mCartImg;
     Fragment firstFragment = null;
     private int scanTypeFlag = 0;
-    private DatabaseHandler mDB;
+
     private Gson gson;
-    private APIInterface apiInterface;
-    private Call<Product> response;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,8 +119,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
         mCartImg.setOnClickListener(this);
         mCountTxtView.setVisibility(View.VISIBLE);
         mCartImg.setVisibility(View.VISIBLE);
-        mDB = new DatabaseHandler(getContext());
-        apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
+
     }
 
     @Override
@@ -128,7 +132,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
                 break;
             case R.id.llay2:
                 scanTypeFlag = 2;
-                openFrag(1, true, null);
+
+                Intent intent = new Intent(getContext(), BarcodeCaptureActivity.class);
+                startActivityForResult(intent, 444);
                 break;
             case R.id.llay3:
                 scanTypeFlag = 3;
@@ -154,6 +160,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
                 break;
             case 2:
                 firstFragment = new CartFragment();
+                break;
+            case 3:
+                firstFragment = new DescriptionFragment();
+                Bundle b = new Bundle();
+                b.putString("id", result);
+                firstFragment.setArguments(b);
                 break;
         }
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -190,5 +202,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
     public void openScanListFrag(String result) {
         scanTypeFlag = 1;
         openFrag(1, false, result);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 444) {
+
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    Point[] p = barcode.cornerPoints;
+                    JSONObject obj = null;
+                    try {
+                        obj = new JSONObject(barcode.displayValue);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (obj != null) {
+                        String id = obj.optString("id");
+                        openFrag(3, false, id);
+
+                    }
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

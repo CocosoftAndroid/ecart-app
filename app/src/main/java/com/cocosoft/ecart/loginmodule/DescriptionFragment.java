@@ -86,6 +86,8 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                     theCount = theCount + mCartArray.get(i).getCount();
                 }
             }
+            if(mCartArray.get(i).getProductId().equals(id))
+                count=mCartArray.get(i).getCount();
         }
         if (cartItem != null)
             Log.e("cartItem", "=" + cartItem.getProductName());
@@ -183,11 +185,13 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.plus_img_view:
+                count=count+1;
                 mCountTxtView.setText("" + count);
                 changeCount(+1);
                 break;
             case R.id.minus_img_view:
                 if (count > 0) {
+                    count=count+1;
                     mCountTxtView.setText("" + count);
                     changeCount(-1);
                 }

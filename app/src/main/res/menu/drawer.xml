@@ -84,6 +84,7 @@
             android:icon="@drawable/ic_nfc"
             android:title="NFC Tag Writer" />
     </group>
+<!--
     <group
         android:id="@+id/grp11"
         android:checkableBehavior="single">
@@ -94,6 +95,7 @@
             android:icon="@drawable/ic_list"
             android:title="Scanned List" />
     </group>
+-->
     <group
         android:id="@+id/grp9"
         android:checkableBehavior="single">

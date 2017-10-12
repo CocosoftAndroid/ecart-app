@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
     @Override
     public void onResume() {
         super.onResume();
-        mTitleTxtView.setText("");
+        mTitleTxtView.setText("Home");
     }
 
     private void setListeners() {

@@ -50,7 +50,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         private String getDate(long timeStamp) {
 
             try {
-                DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
                 Date netDate = (new Date(timeStamp));
                 return sdf.format(netDate);
             } catch (Exception ex) {
@@ -76,8 +76,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     public void onBindViewHolder(final MyViewHolders holder, final int position) {
         holder.transactionIdTxt.setText(orderHistoryList.get(position).getTransactionId());
         holder.countTxt.setText("" + orderHistoryList.get(position).getTotalItems());
-        Log.e("date","="+orderHistoryList.get(position).getOrderDate());
-        Log.e("date","created="+orderHistoryList.get(position).getCreated());
+
         holder.totalTxt.setText("$ " + orderHistoryList.get(position).getTotalPrice());
         holder.dateTxt.setText(holder.getDate(orderHistoryList.get(position).getCreated()));
         holder.cardView.setOnClickListener(new View.OnClickListener() {

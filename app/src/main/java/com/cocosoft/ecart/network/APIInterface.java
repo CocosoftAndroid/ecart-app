@@ -51,6 +51,6 @@ public interface APIInterface {
     @POST("secure/user/profile")
     Call<EditProfileFragment.AddressItem> addProfileData(@Body EditProfileFragment.AddressItem profiledata, @Header("Authorization") String authHeader);
 
-    @POST("secure/user/profile")
+    @GET("secure/user/profile")
     Call<List<EditProfileFragment.AddressItem>> getProfileData(@Header("Authorization") String authHeader);
 }

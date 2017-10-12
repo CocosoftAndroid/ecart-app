@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cocosoft.ecart.R;
-import com.cocosoft.ecart.cartmodule.CartItem;
 import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.network.APIInterface;
 import com.cocosoft.ecart.network.RetrofitAPIClient;
@@ -68,6 +66,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private Call<User> response;
     private Call<AddressItem> response2;
     private LinearLayout mShippingLayout;
+    private String token;
+    ArrayList<AddressItem> arr = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,6 +126,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void init(View view) {
+        token = prefs.getString("token", null);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
@@ -160,23 +161,38 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mFirstNameETxt = (EditText) view.findViewById(R.id.firstname_etxt);
         mLastNameETxt = (EditText) view.findViewById(R.id.lastname_etxt);
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
-        setProfileData();
+
         mCheckBox.setChecked(prefs.getBoolean("sameshippingaddress", true));
         if (mCheckBox.isChecked()) {
             mShippingLayout.setVisibility(View.GONE);
         } else {
             mShippingLayout.setVisibility(View.VISIBLE);
         }
+        apiInterface.getProfileData(token).enqueue(new Callback<List<AddressItem>>() {
+            @Override
+            public void onResponse(Call<List<AddressItem>> call, Response<List<AddressItem>> response) {
+
+
+                if (response.body() != null) {
+                    Log.e("profile","="+response.body().size());
+                    if (response.body().size() == 2) {
+
+                        setProfileData(response.body());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AddressItem>> call, Throwable t) {
+
+            }
+        });
     }
 
-    private void setProfileData() {
+    private void setProfileData(List<AddressItem> arr) {
         gson = new Gson();
         String username = prefs.getString("username", null);
-        String tempdata = prefs.getString("profiledataof" + username, null);
-        Type type = new TypeToken<List<AddressItem>>() {
-        }.getType();
-        ArrayList<AddressItem> arr = gson.fromJson(tempdata, type);
-        if (arr != null) {
+        if (true) {
             AddressItem addrItem = arr.get(0);
             mCNameTxt.setText(addrItem.getName());
             mCAddress1Txt.setText(addrItem.getAddress1());
@@ -201,8 +217,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private void saveProfileData() {
         String username = prefs.getString("username", "guest");
         mAddressArray.clear();
-        mAddressArray.add(new AddressItem(new Long(1), mCNameTxt.getText().toString().trim(), mCAddress1Txt.getText().toString().trim(), mCAddress2Txt.getText().toString().trim(), mCCityTxt.getText().toString().trim(), mCStateTxt.getText().toString().trim(), mCZipTxt.getText().toString().trim(), mCCountryTxt.getText().toString().trim(), mCPhoneNoTxt.getText().toString().trim()));
-        mAddressArray.add(new AddressItem(new Long(2), mNameTxt.getText().toString().trim(), mAddress1Txt.getText().toString().trim(), mAddress2Txt.getText().toString().trim(), mCityTxt.getText().toString().trim(), mStateTxt.getText().toString().trim(), mZipTxt.getText().toString().trim(), mCountryTxt.getText().toString().trim(), mPhoneNoTxt.getText().toString().trim()));
+        mAddressArray.add(new AddressItem(new Long(1), mCNameTxt.getText().toString().trim(), mCAddress1Txt.getText().toString().trim(), mCAddress2Txt.getText().toString().trim(), mCCityTxt.getText().toString().trim(), mCStateTxt.getText().toString().trim(), mCZipTxt.getText().toString().trim(), mCCountryTxt.getText().toString().trim(), mCPhoneNoTxt.getText().toString().trim(), username));
+        mAddressArray.add(new AddressItem(new Long(2), mNameTxt.getText().toString().trim(), mAddress1Txt.getText().toString().trim(), mAddress2Txt.getText().toString().trim(), mCityTxt.getText().toString().trim(), mStateTxt.getText().toString().trim(), mZipTxt.getText().toString().trim(), mCountryTxt.getText().toString().trim(), mPhoneNoTxt.getText().toString().trim(), username));
         String json = gson.toJson(mAddressArray);
         prefsEditor.putString("profiledataof" + username, json);
         prefsEditor.commit();
@@ -212,12 +228,13 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             public void onResponse(Call<User> call, Response<User> response) {
 
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
 
             }
         });
-        String token = prefs.getString("token", null);
+
 
         response2 = apiInterface.addProfileData(mAddressArray.get(0), token);
         response2.enqueue(new Callback<AddressItem>() {
@@ -225,6 +242,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             public void onResponse(Call<AddressItem> call, Response<AddressItem> response) {
 
             }
+
             @Override
             public void onFailure(Call<AddressItem> call, Throwable t) {
 
@@ -236,6 +254,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             public void onResponse(Call<AddressItem> call, Response<AddressItem> response) {
 
             }
+
             @Override
             public void onFailure(Call<AddressItem> call, Throwable t) {
 
@@ -263,7 +282,15 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         private String zip = "";
         private String country = "";
         private String phonenumber = "";
+        private String userEmail = "";
 
+        public String getUserEmail() {
+            return userEmail;
+        }
+
+        public void setUserEmail(String userEmail) {
+            this.userEmail = userEmail;
+        }
 
         public String getName() {
             return name;
@@ -337,7 +364,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             this.id = id;
         }
 
-        public AddressItem(Long id, String name, String address1, String address2, String city, String state, String zip, String country, String phonenumber) {
+        public AddressItem(Long id, String name, String address1, String address2, String city, String state, String zip, String country, String phonenumber, String userEmail) {
             this.id = id;
             this.name = name;
             this.address1 = address1;
@@ -347,6 +374,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             this.zip = zip;
             this.country = country;
             this.phonenumber = phonenumber;
+            this.userEmail = userEmail;
         }
 
         @Override

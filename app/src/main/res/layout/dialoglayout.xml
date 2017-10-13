@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp5"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -20,8 +21,9 @@
             android:lines="1"
             android:padding="@dimen/dp2"
             android:text="Name"
+            android:textStyle="bold"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/grey_15" />
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/quantity"
@@ -30,8 +32,9 @@
             android:layout_weight="1"
             android:padding="@dimen/dp2"
             android:text="Qty"
+            android:textStyle="bold"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/grey_15" />
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/price"
@@ -40,8 +43,9 @@
             android:layout_weight="1"
             android:padding="@dimen/dp2"
             android:text="Price"
+            android:textStyle="bold"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/grey_15" />
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

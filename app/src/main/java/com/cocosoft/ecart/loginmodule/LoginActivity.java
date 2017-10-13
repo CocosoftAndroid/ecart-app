@@ -38,6 +38,8 @@ import com.cocosoft.ecart.adminmodule.AllUsersFragment;
 import com.cocosoft.ecart.cartmodule.CartFragment;
 import com.cocosoft.ecart.cartmodule.CartItem;
 import com.cocosoft.ecart.orderHistory.OrderHistory;
+import com.cocosoft.ecart.scanlistmodule.ScannedListFragment;
+import com.cocosoft.ecart.scanlistmodule.ScannedListFragment2;
 import com.cocosoft.ecart.wishlistmodule.WishListFragment;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -100,6 +102,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInAccount acct;
     private CallbackManager mCallbackManager;
+    private ArrayList<String> mScannedList=new ArrayList<>();
 
 
     @Override
@@ -169,6 +172,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
     }
 
     @Override
@@ -195,6 +199,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void init() {
         context = this;
+        gson = new Gson();
         mSearchView = (SearchView) findViewById(R.id.search_view);
         mSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,6 +219,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initNavigationDrawer();
         appSharedPrefs = getSharedPreferences("cocosoft", MODE_PRIVATE);
         _usrName = (TextView) findViewById(R.id.userName);
+        String tempdata2 = appSharedPrefs.getString("tempscanlist2", null);
+
+        Type type2 = new TypeToken<List<String>>() {
+        }.getType();
+        ArrayList<String> arr2 = gson.fromJson(tempdata2, type2);
+        if (arr2 != null) {
+            mScannedList = gson.fromJson(tempdata2, type2);
+        }
     }
 
     private void initNavigationDrawer() {
@@ -250,8 +263,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         openFrag(3, null);
                         return true;
 
-
-
                     case R.id.menu_nfcwriter:
                         Intent intent = new Intent(context, NfcWriter.class);
                         startActivity(intent);
@@ -261,9 +272,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         openFrag(1, null);
                         return true;
 
-                   /* case R.id.menu_updateprofile:
-                        openFrag(8, null);
-                        return true;*/
+                    case R.id.menu_scannedlist:
+                 openFrag(9,null);
+                        return true;
 
                     case R.id.menu_history:
                         openFrag(6, null);
@@ -394,6 +405,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case 8:
                 firstFragment = new ProfileFragment();
+                break;
+            case 9:
+                firstFragment=new ScannedListFragment2();
+                Bundle b=new Bundle();
+                b.putStringArrayList("scannedlist",mScannedList);
+                firstFragment.setArguments(b);
                 break;
 
 
@@ -554,7 +571,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void changeCount() {
         int mCount = 0;
-        gson = new Gson();
+
         String tempdata = appSharedPrefs.getString("tempcartlist", null);
         Type type = new TypeToken<List<CartItem>>() {
         }.getType();

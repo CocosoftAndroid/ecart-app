@@ -1,122 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/dp15"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/product_img_view"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/ic_imgborder"
-        android:padding="5dp"
-        android:scaleType="fitXY" />
-
-
-    <TextView
-        android:id="@+id/product_title_txt"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/dp15"
+        android:orientation="vertical">
 
-        android:layout_centerVertical="true"
-        android:layout_margin="@dimen/dp5"
-
-        android:lines="1"
-        android:padding="@dimen/dp5"
-        android:text="Fogg Perfume"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
-
-
-    <TextView
-        android:id="@+id/product_desc_txt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp5"
-        android:lines="6"
-        android:padding="@dimen/dp5"
-        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-        android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/product_price_txt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp5"
-        android:lines="1"
-        android:padding="@dimen/dp5"
-        android:text="$ 20"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:orientation="horizontal"
-        android:weightSum="3.5">
-
-
-        <ImageView
-            android:id="@+id/minus_img_view"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/minus_bg"
+            android:orientation="horizontal">
 
-            android:src="@drawable/ic_minus" />
+            <ImageView
+                android:id="@+id/product_img_view"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_imgborder"
+                android:padding="5dp"
+                android:scaleType="fitXY" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/dp15"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/product_title_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/dp5"
+
+                    android:lines="1"
+                    android:padding="@dimen/dp5"
+                    android:text="Fogg Perfume"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/product_price_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:lines="1"
+                    android:padding="@dimen/dp5"
+                    android:text="$ 20"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/black"
+                     />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:id="@+id/minus_img_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_minus_circle" />
+
+                    <TextView
+                        android:id="@+id/count_txt_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/dp15"
+                        android:paddingRight="@dimen/dp15"
+                        android:text="0"
+                        android:textAppearance="?android:textAppearanceMedium"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/plus_img_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_plus_circle" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
 
         <TextView
-            android:id="@+id/count_txt_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1.5"
-            android:background="@drawable/count_bg2"
-            android:gravity="center"
-            android:text="0"
-            android:textAppearance="?android:textAppearanceMedium"
+            android:id="@+id/product_desc_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:lines="6"
+            android:padding="@dimen/dp5"
+            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+            android:textAppearance="?android:textAppearanceSmall"
             android:textColor="@color/black" />
 
-        <ImageView
-            android:id="@+id/plus_img_view"
-            android:layout_width="0dp"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/plus_bg"
-            android:src="@drawable/ic_plus" />
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dp15"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/wishlist_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp10"
+                android:background="@drawable/btn_bg"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:text="Add Wishlist"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/addcart_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp10"
+                android:background="@drawable/btn_bg"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:text="Add Cart"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp15"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="horizontal">
-    <Button
-        android:id="@+id/wishlist_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:text="Add Wishlist"
-        android:layout_margin="@dimen/dp10"
-        android:textAllCaps="false"/>
-    <Button
-        android:id="@+id/addcart_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:layout_margin="@dimen/dp10"
-        android:text="Add Cart"
-        android:textAllCaps="false"/>
-</LinearLayout>
-</LinearLayout>
+</ScrollView>

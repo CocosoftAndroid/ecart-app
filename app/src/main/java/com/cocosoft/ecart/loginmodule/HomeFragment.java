@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
     private ImageView mCartImg;
     Fragment firstFragment = null;
     private int scanTypeFlag = 0;
+    private ArrayList<String> mScannedList = new ArrayList<>();
 
     private Gson gson;
 
@@ -82,6 +83,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
         ArrayList<ProductItem> arr = gson.fromJson(tempdata, type);
         if (arr != null) {
             mProductArray = gson.fromJson(tempdata, type);
+        }
+        String tempdata2 = prefs.getString("tempscanlist2", null);
+
+        Type type2 = new TypeToken<List<String>>() {
+        }.getType();
+        ArrayList<String> arr2 = gson.fromJson(tempdata2, type2);
+        if (arr2 != null) {
+            mScannedList = gson.fromJson(tempdata2, type2);
         }
     }
 
@@ -220,12 +229,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
                     }
                     if (obj != null) {
                         String id = obj.optString("id");
+                        addToScannedList(id);
                         openFrag(3, false, id);
+
 
                     }
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void addToScannedList(String id) {
+        if (mScannedList.size() > 0) {
+            for (int i = 0; i < mScannedList.size(); i++) {
+                if (mScannedList.get(i).equals(id)) {
+                } else {
+                    mScannedList.add(id);
+                }
+            }
+        } else {
+            mScannedList.add(id);
+        }
+        String json = gson.toJson(mScannedList);
+        prefsEditor.putString("tempscanlist2", json);
+        prefsEditor.commit();
+
     }
 }

@@ -27,7 +27,6 @@ import com.cocosoft.ecart.cartmodule.CartItem;
 import com.cocosoft.ecart.network.APIInterface;
 import com.cocosoft.ecart.network.RetrofitAPIClient;
 import com.cocosoft.ecart.scanlistmodule.Product;
-import com.cocosoft.ecart.scanlistmodule.ScannedListFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -56,7 +55,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     private SharedPreferences.Editor prefsEditor;
     private Gson gson;
     private static CartItem cartItem = null;
-    private int theCount = 0;
+    private int prevCount = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +70,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        theCount = 0;
+        int theCount = 0;
         String tempdata = prefs.getString("tempcartlist", null);
         Type type = new TypeToken<List<CartItem>>() {
         }.getType();
@@ -86,12 +85,13 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                     theCount = theCount + mCartArray.get(i).getCount();
                 }
             }
-            if(mCartArray.get(i).getProductId().equals(id))
-                count=mCartArray.get(i).getCount();
+            if (mCartArray.get(i).getProductId().equals(id))
+                count = mCartArray.get(i).getCount();
         }
         if (cartItem != null)
             Log.e("cartItem", "=" + cartItem.getProductName());
         Log.e("desc", "onResume");
+        mCountTxtView.setText("" + count);
     }
 
     @Nullable
@@ -112,6 +112,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     }
 
     private void changeCount(int count) {
+        int theCount = 0;
         if (mCartArray.size() > 0) {
             for (int i = 0; i < mCartArray.size(); i++) {
                 if (mCartArray.get(i).getProductId().equals(id)) {
@@ -121,7 +122,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
             }
             if (contains) {
                 int itemcount = item.getCount();
-                item.setCount(itemcount + count);
+                item.setCount(count);
             } else {
                 mCartArray.add(cartItem);
                 Log.e("cartAdded", "=" + mCartArray.size());
@@ -185,19 +186,23 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.plus_img_view:
-                count=count+1;
+                count = count + 1;
+
                 mCountTxtView.setText("" + count);
-                changeCount(+1);
+
                 break;
             case R.id.minus_img_view:
                 if (count > 0) {
-                    count=count+1;
+                    count = count - 1;
                     mCountTxtView.setText("" + count);
-                    changeCount(-1);
+
                 }
                 break;
             case R.id.addcart_btn:
-                openFrag(1);
+                if (count != prevCount) {
+                    changeCount(count);
+                    prevCount = count;
+                }
                 break;
         }
     }

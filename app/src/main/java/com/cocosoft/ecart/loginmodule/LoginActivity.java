@@ -194,7 +194,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         }
-
     }
 
     private void init() {
@@ -220,7 +219,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         appSharedPrefs = getSharedPreferences("cocosoft", MODE_PRIVATE);
         _usrName = (TextView) findViewById(R.id.userName);
         String tempdata2 = appSharedPrefs.getString("tempscanlist2", null);
-
         Type type2 = new TypeToken<List<String>>() {
         }.getType();
         ArrayList<String> arr2 = gson.fromJson(tempdata2, type2);

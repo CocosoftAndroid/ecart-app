@@ -119,17 +119,21 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                     contains = true;
                     item = mCartArray.get(i);
                 }
+                else if (mCartArray.get(i).getCount() > 0) {
+                    {
+                        theCount = theCount + mCartArray.get(i).getCount();
+                    }
+                }
             }
             if (contains) {
-                int itemcount = item.getCount();
                 item.setCount(count);
             } else {
                 mCartArray.add(cartItem);
-                Log.e("cartAdded", "=" + mCartArray.size());
+
             }
         } else {
             mCartArray.add(cartItem);
-            Log.e("cartAdded", "else=" + mCartArray.size());
+
         }
         theCount = theCount + count;
         mCartCountTxt.setText("" + (theCount));

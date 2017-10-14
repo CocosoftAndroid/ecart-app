@@ -5,6 +5,7 @@ package com.cocosoft.ecart.wishlistmodule;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cocosoft.ecart.R;
 import com.cocosoft.ecart.listeners.CheckboxListener;
 import com.cocosoft.ecart.listeners.WishlistListener;
@@ -33,8 +36,9 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
 
     public class MyViewHolders extends RecyclerView.ViewHolder {
         public TextView productName, productPrice ;
-        public ImageView  removeBtn;
+        public ImageView  removeBtn,imageView;
         public CheckBox checkBox;
+
 
 
 
@@ -45,6 +49,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
 
             removeBtn = (ImageView) view.findViewById(R.id.remove_btn);
             checkBox = (CheckBox) view.findViewById(R.id.chk_box);
+            imageView = (ImageView) view.findViewById(R.id.img_view);
 
 
         }
@@ -71,7 +76,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolders holder, final int position) {
 
-        holder.productName.setText(productList.get(position).getProductId() + " - " + productList.get(position).getProductName());
+        holder.productName.setText(productList.get(position).getProductName());
 
         holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
 
@@ -90,8 +95,14 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
                 checkboxListener.onChecked(productList.get(position).getProductId(),isChecked);
             }
         });
-
-
+        String[] splited = productList.get(position).getImageUrl().split("\\\\");
+        Log.e("wishlist","http://54.68.141.32:8080/" + splited[splited.length - 1]);
+        Glide.with(context).load("http://54.68.141.32:8080/name" + productList.get(position).getProductId()+".jpg")
+                .thumbnail(0.5f)
+                .crossFade()
+                .placeholder(R.drawable.ic_placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.imageView);
     }
 
     @Override

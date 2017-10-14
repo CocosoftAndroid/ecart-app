@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bgcolor"
+        android:background="@color/white"
         android:orientation="vertical">
 
 
@@ -29,8 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif"
-                android:text="New to IZY Cart"
-
+                android:text="New to ECart"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -59,8 +58,8 @@
 
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="298dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
@@ -68,23 +67,11 @@
             android:weightSum="1">
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_gravity="center"
-                android:background="@drawable/signup_arrow"
-                android:fontFamily="sans-serif"
-                android:gravity="center_vertical"
-                android:text="Already a member ? Sign in with"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
 
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
@@ -119,9 +106,9 @@
                 <Button
                     android:id="@+id/shopEsayLoginIn"
                     android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dp8"
-                    android:layout_height="80dp"
 
                     android:background="@drawable/ecartlogin"
 

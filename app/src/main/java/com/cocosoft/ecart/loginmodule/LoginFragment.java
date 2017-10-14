@@ -71,7 +71,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     public static void setValue(int value) {
         LoginFragment.value = value;
     }
-
     private static int value = 0;
     public double latitude;
     public double longitude;
@@ -185,15 +184,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
                             editor.putString("usertype", "user");
                             editor.commit();
                         }
-                        Toast.makeText(getContext(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
-                        getActivity().getSupportFragmentManager().popBackStack();
-                        getActivity().getSupportFragmentManager().popBackStack();
+                        if(isVisible()) {
+                            Toast.makeText(getActivity(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().popBackStack();
+                            getActivity().getSupportFragmentManager().popBackStack();
+                        }
                     }
                 }
-
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
-                    Toast.makeText(getContext(), "Login Failed", Toast.LENGTH_SHORT).show();
+                    if(isVisible())
+                    Toast.makeText(getActivity(), "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             });
         }

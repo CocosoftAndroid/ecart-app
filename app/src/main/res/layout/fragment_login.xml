@@ -9,7 +9,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bgcolor"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -113,7 +113,7 @@
                 android:layout_marginLeft="@dimen/dp28"
                 android:layout_marginRight="@dimen/dp28"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/buttons"
+                android:background="@drawable/btn_bg"
                 android:gravity="center"
                 android:paddingBottom="@dimen/dp10"
                 android:paddingTop="@dimen/dp10"

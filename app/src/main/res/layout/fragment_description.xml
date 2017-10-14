@@ -20,7 +20,7 @@
                 android:layout_height="160dp"
                 android:layout_margin="5dp"
                 android:background="@drawable/ic_imgborder"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:scaleType="fitXY" />
 
             <LinearLayout

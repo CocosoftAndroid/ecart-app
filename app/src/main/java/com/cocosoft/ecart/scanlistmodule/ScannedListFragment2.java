@@ -102,7 +102,6 @@ public class ScannedListFragment2 extends Fragment implements CheckboxListener {
                     mProductList.add(response.body());
                     mScanListAdapter.notifyDataSetChanged();
                 }
-
                 @Override
                 public void onFailure(Call<Product> call, Throwable t) {
 

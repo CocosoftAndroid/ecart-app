@@ -267,8 +267,8 @@
             android:checked="true"
             android:gravity="center"
             android:padding="@dimen/dp10"
-            android:text="Same as present address"
-            android:textAppearance="?android:textAppearanceMedium"
+            android:text="Shipping Address same as Present Address"
+            android:textAppearance="?android:textAppearanceSmall"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
 

@@ -19,38 +19,62 @@
             android:id="@+id/img_view"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:padding="@dimen/dp2"
             android:background="@drawable/ic_imgborder"
+            android:padding="@dimen/dp2"
             android:scaleType="fitXY" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp28"
+
+            android:layout_marginLeft="@dimen/dp5"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/name_txt"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:padding="@dimen/dp5"
-                android:text="Dove Soap"
-                android:textStyle="bold"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/black"
-               />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/name_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/price_txt"
+                    android:maxLines="1"
+                    android:padding="@dimen/dp5"
+                    android:text="Dove Soap"
+                    android:layout_centerVertical="true"
+
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_2a" />
+
+                <TextView
+                    android:id="@+id/price_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:maxLines="1"
+                    android:padding="@dimen/dp5"
+                    android:text="$ 25"
+                    android:layout_marginRight="@dimen/dp15"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/grey_2a"
+                    android:textSize="32sp" />
+            </RelativeLayout>
             <TextView
-                android:id="@+id/price_txt"
-                android:layout_width="wrap_content"
+                android:id="@+id/desc_txt"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:padding="@dimen/dp5"
-                android:text="$ 25"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/grey_15" />
+
+                android:maxLines="2"
+                android:paddingLeft="@dimen/dp5"
+                android:text="This soap comes with natural herbal ingredients which can be used all age people"
+                android:layout_centerVertical="true"
+
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/grey_2a" />
         </LinearLayout>
+
     </LinearLayout>
 </android.support.v7.widget.CardView>

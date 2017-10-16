@@ -95,13 +95,12 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
         response.enqueue(new Callback<List<WishList>>() {
             @Override
             public void onResponse(Call<List<WishList>> call, Response<List<WishList>> response) {
-                mWishListArr = response.body();
-                Log.e("ee", "=" + mWishListArr.size());
+                mWishListArr.clear();
+                mWishListArr.addAll(response.body());
+                mProductArray.clear();
                 for (int y = 0; y < mWishListArr.size(); y++) {
-
                     mProductArray.add(new ProductItem("" + mWishListArr.get(y).getProductId(), mWishListArr.get(y).getProductName(), "", mWishListArr.get(y).getPrice(), 0, 0, false));
                     mWishlistAdapter.notifyDataSetChanged();
-
                 }
             }
 

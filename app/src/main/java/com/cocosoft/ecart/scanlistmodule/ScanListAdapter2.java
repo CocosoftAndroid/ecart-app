@@ -31,13 +31,14 @@ public class ScanListAdapter2 extends RecyclerView.Adapter<ScanListAdapter2.MyVi
 
     public class MyViewHolders extends RecyclerView.ViewHolder {
 
-        public TextView productName, productPrice;
+        public TextView productName, productPrice,productDesc;
         public ImageView imageView;
         public CardView cardview;
 
         public MyViewHolders(View view) {
             super(view);
             productName = (TextView) view.findViewById(R.id.name_txt);
+            productDesc = (TextView) view.findViewById(R.id.desc_txt);
             cardview = (CardView) view.findViewById(R.id.card_view);
             productPrice = (TextView) view.findViewById(R.id.price_txt);
             imageView = (ImageView) view.findViewById(R.id.img_view);
@@ -62,6 +63,7 @@ public class ScanListAdapter2 extends RecyclerView.Adapter<ScanListAdapter2.MyVi
     public void onBindViewHolder(final MyViewHolders holder, final int position) {
 
         holder.productName.setText(productList.get(position).getProductName());
+        holder.productDesc.setText(productList.get(position).getProductDesc());
         holder.productPrice.setText("$ " + productList.get(position).getPrice());
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -241,12 +241,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
     }
 
     private void addToScannedList(String id) {
+        boolean contains = false;
         if (mScannedList.size() > 0) {
             for (int i = 0; i < mScannedList.size(); i++) {
                 if (mScannedList.get(i).equals(id)) {
+                    contains=true;
                 } else {
-                    mScannedList.add(id);
+
                 }
+            }
+            if(!contains)
+            {
+                mScannedList.add(id);
             }
         } else {
             mScannedList.add(id);

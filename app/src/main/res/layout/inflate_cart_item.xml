@@ -22,11 +22,13 @@
             android:layout_margin="1dp">
 
             <LinearLayout
+                android:id="@+id/llayout2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/count"
+                android:layout_marginRight="@dimen/dp30"
                 android:orientation="horizontal">
 
                 <ImageView

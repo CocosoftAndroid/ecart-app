@@ -16,8 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -27,13 +30,12 @@ import com.cocosoft.ecart.cartmodule.CartItem;
 import com.cocosoft.ecart.network.APIInterface;
 import com.cocosoft.ecart.network.RetrofitAPIClient;
 import com.cocosoft.ecart.scanlistmodule.Product;
+import com.cocosoft.ecart.wishlistmodule.WishList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,6 +50,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     boolean contains = false;
     CartItem item = null;
     private Button mWishlistBtn, mAddCartBtn;
+    private CheckBox mFavouriteCheckbox;
     private TextView mProductTitleTxt, mProductPriceTxt, mProductDescTxt, mCountTxtView, mCartCountTxt, mTitleTxtView;
     private ImageView mProductImgView, mPlusImgView, mMinusImgView, mCartImg;
     private ArrayList<CartItem> mCartArray = new ArrayList<>();
@@ -118,8 +121,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 if (mCartArray.get(i).getProductId().equals(id)) {
                     contains = true;
                     item = mCartArray.get(i);
-                }
-                else if (mCartArray.get(i).getCount() > 0) {
+                } else if (mCartArray.get(i).getCount() > 0) {
                     {
                         theCount = theCount + mCartArray.get(i).getCount();
                     }
@@ -154,6 +156,8 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         mProductPriceTxt = (TextView) v.findViewById(R.id.product_price_txt);
         mProductDescTxt = (TextView) v.findViewById(R.id.product_desc_txt);
         mProductDescTxt = (TextView) v.findViewById(R.id.product_desc_txt);
+        mFavouriteCheckbox = (CheckBox) v.findViewById(R.id.fav_btn);
+
         mWishlistBtn = (Button) v.findViewById(R.id.wishlist_btn);
         mAddCartBtn = (Button) v.findViewById(R.id.addcart_btn);
         mProductImgView = (ImageView) v.findViewById(R.id.product_img_view);
@@ -170,16 +174,37 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 mProductDescTxt.setText(response.body().getProductDesc());
                 mProductPriceTxt.setText("$ " + response.body().getPrice());
                 String[] splited = response.body().getImgUrl().split("\\\\");
+                if(isVisible())
                 Glide.with(getContext()).load("http://54.68.141.32:8080/" + splited[splited.length - 1])
                         .thumbnail(0.5f)
                         .crossFade()
                         .placeholder(R.drawable.ic_placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(mProductImgView);
+                mWishlistBtn.setEnabled(true);
+                mWishlistBtn.setAlpha(1f);
             }
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
+
+            }
+        });
+        mFavouriteCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+                    boolean isloggedin = prefs.getBoolean("isloggedin", false);
+                    String username = prefs.getString("username", "");
+                    String token = prefs.getString("token", "");
+                    if (isloggedin) {
+                        mWishlistBtn.setEnabled(false);
+                        mWishlistBtn.setAlpha(0.4f);
+                        addWishList(new WishList(Integer.parseInt(cartItem.getProductId()), username, cartItem.getProductName(), cartItem.getProductPrice(), null, isChecked, isChecked), token);
+                    } else {
+                        Toast.makeText(getContext(), "Please login to continue", Toast.LENGTH_SHORT).show();
+                    }
 
             }
         });
@@ -208,7 +233,27 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                     prevCount = count;
                 }
                 break;
+            case R.id.wishlist_btn:
+
+                break;
         }
+    }
+
+    private void addWishList(WishList wlist, String token) {
+
+        apiInterface.addWishList(wlist, token).enqueue(new Callback<WishList>() {
+            @Override
+            public void onResponse(Call<WishList> call, Response<WishList> response) {
+                mWishlistBtn.setEnabled(true);
+                mWishlistBtn.setAlpha(1f);
+            }
+
+            @Override
+            public void onFailure(Call<WishList> call, Throwable t) {
+                mWishlistBtn.setEnabled(true);
+                mWishlistBtn.setAlpha(1f);
+            }
+        });
     }
 
     private void openFrag(int i) {

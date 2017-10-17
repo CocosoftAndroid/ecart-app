@@ -10,9 +10,7 @@ import com.cocosoft.ecart.loginmodule.User;
 import com.cocosoft.ecart.orderHistory.OrderMaster;
 import com.cocosoft.ecart.scanlistmodule.Product;
 import com.cocosoft.ecart.wishlistmodule.WishList;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

@@ -53,13 +53,11 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private ArrayList<AddressItem> mAddressArray = new ArrayList<>();
     private ArrayList<AddressItem> mAddressArray2 = new ArrayList<>();
     private EditText mNameTxt, mAddress1Txt, mAddress2Txt, mCityTxt, mStateTxt, mZipTxt, mCountryTxt, mPhoneNoTxt, mCNameTxt, mCAddress1Txt, mCAddress2Txt, mCCityTxt, mCStateTxt, mCZipTxt, mCCountryTxt, mCPhoneNoTxt;
-
     private EditText mUserNameEdtTxt;
     private EditText mPwdEdtTxt;
     private EditText mConfirmPwdEdtTxt, mEmailEdtText, mFirstNameETxt, mLastNameETxt;
     private TextView mSignupTxt, mWarnTxt, mDOBTxt;
     private DatabaseHandler mDB;
-
     private String mUserType = "user";
     private RadioGroup mRadioGroup1;
     private APIInterface apiInterface;
@@ -161,7 +159,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         mFirstNameETxt = (EditText) view.findViewById(R.id.firstname_etxt);
         mLastNameETxt = (EditText) view.findViewById(R.id.lastname_etxt);
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
-
         mCheckBox.setChecked(prefs.getBoolean("sameshippingaddress", true));
         if (mCheckBox.isChecked()) {
             mShippingLayout.setVisibility(View.GONE);
@@ -171,8 +168,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         apiInterface.getProfileData(token).enqueue(new Callback<List<AddressItem>>() {
             @Override
             public void onResponse(Call<List<AddressItem>> call, Response<List<AddressItem>> response) {
-
-
                 if (response.body() != null) {
                     Log.e("profile","="+response.body().size());
                     if (response.body().size() == 2) {
@@ -181,7 +176,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<List<AddressItem>> call, Throwable t) {
 
@@ -228,7 +222,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             public void onResponse(Call<User> call, Response<User> response) {
 
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
 

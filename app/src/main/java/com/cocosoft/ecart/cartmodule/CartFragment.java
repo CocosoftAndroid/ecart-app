@@ -2,6 +2,7 @@ package com.cocosoft.ecart.cartmodule;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,11 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cocosoft.ecart.R;
+import com.cocosoft.ecart.barcode.BarcodeCaptureActivity;
 import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.listeners.CheckboxListener;
 import com.cocosoft.ecart.listeners.IndividualItemListener;
 import com.cocosoft.ecart.listeners.QuantityListener;
 import com.cocosoft.ecart.listeners.WishlistListener;
+import com.cocosoft.ecart.loginmodule.DescriptionFragment;
 import com.cocosoft.ecart.loginmodule.EditProfileFragment;
 import com.cocosoft.ecart.loginmodule.IndividualItemFragment;
 import com.cocosoft.ecart.loginmodule.LoginFragment;
@@ -35,6 +38,8 @@ import com.cocosoft.ecart.orderHistory.OrderList;
 import com.cocosoft.ecart.orderHistory.OrderMaster;
 import com.cocosoft.ecart.scanlistmodule.ProductItem;
 import com.cocosoft.ecart.wishlistmodule.WishList;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.payu.india.Extras.PayUChecksum;
@@ -70,7 +75,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     private ArrayList<CartItem> mCartArray = new ArrayList<>();
     private TextView mCountTxtView;
     private TextView mTitleTxtView;
-    private ImageView mCartImg;
+    private ImageView mCartImg,mScanImg;
     private SharedPreferences prefs;
     private TextView mAddWishTxt;
     private Gson gson;
@@ -102,6 +107,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     private String countryName;
     private LinearLayout mLinearLayout;
     private LinearLayout mNoItemLayout;
+    private ArrayList<String> mScannedList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,7 +123,14 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
             mCartArray.clear();
             mCartArray.addAll((ArrayList<CartItem>)gson.fromJson(tempdata, type));
         }
+        String tempdata2 = prefs.getString("tempscanlist2", null);
 
+        Type type2 = new TypeToken<List<String>>() {
+        }.getType();
+        ArrayList<String> arr2 = gson.fromJson(tempdata2, type2);
+        if (arr2 != null) {
+            mScannedList = gson.fromJson(tempdata2, type2);
+        }
         Log.e("cart","onCreate"+mCartArray.size());
     }
 
@@ -155,7 +168,6 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         mAddCartTxt = (TextView) view.findViewById(R.id.add_cart_txt);
         mAddWishTxt = (TextView) view.findViewById(R.id.add_wish_txt);
         mGrandTotalTxt = (TextView) view.findViewById(R.id.grandtotal_txt);
-
         mLManager = new LinearLayoutManager(getContext());
         mProductRView = (RecyclerView) view.findViewById(R.id.rview);
         mProductRView.setLayoutManager(mLManager);
@@ -165,6 +177,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
+        mScanImg = (ImageView) view.findViewById(R.id.scan_img);
+        mScanImg.setOnClickListener(this);
         mCountTxtView.setVisibility(View.GONE);
         mCartImg.setVisibility(View.GONE);
         RelativeLayout mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
@@ -203,9 +217,37 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                     openFrag(1, "");
                 }
                 break;
+
+            case R.id.scan_img:
+                Intent intent = new Intent(getContext(), BarcodeCaptureActivity.class);
+                startActivityForResult(intent, 444);
+                break;
         }
     }
 
+
+    private void addToScannedList(String id) {
+        boolean contains = false;
+        if (mScannedList.size() > 0) {
+            for (int i = 0; i < mScannedList.size(); i++) {
+                if (mScannedList.get(i).equals(id)) {
+                    contains=true;
+                } else {
+
+                }
+            }
+            if(!contains)
+            {
+                mScannedList.add(id);
+            }
+        } else {
+            mScannedList.add(id);
+        }
+        String json = gson.toJson(mScannedList);
+        prefsEditor.putString("tempscanlist2", json);
+        prefsEditor.commit();
+
+    }
     private boolean isAddressFilled() {
         String tempdata = prefs.getString("profiledataof" + username, null);
         Type type = new TypeToken<List<EditProfileFragment.AddressItem>>() {
@@ -409,6 +451,29 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                 Toast.makeText(this.getActivity(), "Couldn't do transaction ! Try again", Toast.LENGTH_LONG).show();
             }
         }
+
+        if (requestCode == 444) {
+
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    Point[] p = barcode.cornerPoints;
+                    JSONObject obj = null;
+                    try {
+                        obj = new JSONObject(barcode.displayValue);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (obj != null) {
+                        String id = obj.optString("id");
+                        addToScannedList(id);
+                        openFrag(4, id);
+
+
+                    }
+                }
+            }
+        }
     }
 
 
@@ -517,6 +582,12 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                 args.putParcelableArrayList("ARRAYLIST", mCartArray);
                 args.putInt("Checkout Amount", _checkoutAmount);
                 firstFragment.setArguments(args);
+                break;
+            case 4:
+                firstFragment = new DescriptionFragment();
+                Bundle b = new Bundle();
+                b.putString("id", productid);
+                firstFragment.setArguments(b);
                 break;
         }
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

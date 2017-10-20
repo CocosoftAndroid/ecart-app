@@ -35,7 +35,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     public class MyViewHolders extends RecyclerView.ViewHolder {
 
-        public TextView transactionIdTxt, dateTxt, countTxt, totalTxt;
+        public TextView transactionIdTxt, dateTxt, countTxt, totalTxt,invoiceIdTxt;
         public CardView cardView;
 
         public MyViewHolders(View view) {
@@ -45,6 +45,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             countTxt = (TextView) view.findViewById(R.id.count_txt);
             totalTxt = (TextView) view.findViewById(R.id.total_txt);
             cardView = (CardView) view.findViewById(R.id.card_view);
+            invoiceIdTxt = (TextView) view.findViewById(R.id.invoiceid_txt);
         }
 
         private String getDate(long timeStamp) {
@@ -54,7 +55,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 Date netDate = (new Date(timeStamp));
                 return sdf.format(netDate);
             } catch (Exception ex) {
-                return "xx";
+                return "sd";
             }
         }
 
@@ -75,6 +76,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     @Override
     public void onBindViewHolder(final MyViewHolders holder, final int position) {
         holder.transactionIdTxt.setText(orderHistoryList.get(position).getTransactionId());
+        holder.invoiceIdTxt.setText(orderHistoryList.get(position).getTransactionId().substring(11));
         holder.countTxt.setText("" + orderHistoryList.get(position).getTotalItems());
 
         holder.totalTxt.setText("$ " + orderHistoryList.get(position).getTotalPrice());

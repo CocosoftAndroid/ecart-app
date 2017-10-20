@@ -122,7 +122,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, D
     }
 
     private void updateProfile() {
-        response = apiInterface.updateUser(new User(0, mFirstNameETxt.getText().toString().trim(), mLastNameETxt.getText().toString().trim(), mEmailEdtText.getText().toString().trim(), mPwdEdtTxt.getText().toString().trim(), 0, "", "", ""));
+        response = apiInterface.updateUser("",new User(0, mFirstNameETxt.getText().toString().trim(), mLastNameETxt.getText().toString().trim(), mEmailEdtText.getText().toString().trim(), mPwdEdtTxt.getText().toString().trim(), null, "", "", ""));
         response.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

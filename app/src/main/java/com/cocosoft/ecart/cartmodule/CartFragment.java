@@ -566,14 +566,10 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                 firstFragment = new LoginFragment();
                 break;
             case 2:
-                firstFragment = new IndividualItemFragment();
-                ProductItem item = null;
-                for (int ij = 0; ij < mCartArray.size(); ij++) {
-                    if (mCartArray.get(ij).getProductId().equals(productid))
-                        item = new ProductItem(mCartArray.get(ij).getProductId(), mCartArray.get(ij).getProductName(), mCartArray.get(ij).getProductDesc(), mCartArray.get(ij).getProductPrice(), mCartArray.get(ij).getImageUrl(), 0, 0, false);
-                }
+                firstFragment = new DescriptionFragment();
+
                 Bundle bundles = new Bundle();
-                bundles.putParcelable("item", item);
+                bundles.putString("id", productid);
                 firstFragment.setArguments(bundles);
                 break;
             case 3:

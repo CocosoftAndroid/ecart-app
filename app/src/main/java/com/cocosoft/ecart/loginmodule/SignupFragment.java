@@ -148,7 +148,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
 
             editor.putString("firstname",mFirstNameETxt.getText().toString().trim());
             editor.commit();
-            response = apiInterface.registerUser(new User(0,mFirstNameETxt.getText().toString().trim(),mLastNameETxt.getText().toString().trim(),mEmailEdtText.getText().toString().trim(),mPwdEdtTxt.getText().toString().trim(),0,"","",""));
+            response = apiInterface.registerUser(new User(0,mFirstNameETxt.getText().toString().trim(),mLastNameETxt.getText().toString().trim(),mEmailEdtText.getText().toString().trim(),mPwdEdtTxt.getText().toString().trim(),null,"","",""));
             response.enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {

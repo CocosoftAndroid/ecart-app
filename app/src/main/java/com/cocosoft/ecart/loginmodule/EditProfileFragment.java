@@ -66,6 +66,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private LinearLayout mShippingLayout;
     private String token;
     ArrayList<AddressItem> arr = new ArrayList<>();
+    private Integer theID;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -169,16 +170,35 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             @Override
             public void onResponse(Call<List<AddressItem>> call, Response<List<AddressItem>> response) {
                 if (response.body() != null) {
-                    Log.e("profile","="+response.body().size());
+                    Log.e("profile", "=" + response.body().size());
                     if (response.body().size() == 2) {
 
                         setProfileData(response.body());
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<List<AddressItem>> call, Throwable t) {
 
+            }
+        });
+        apiInterface.getUser(token).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.body()!=null) {
+                    theID=response.body().getUserId();
+                    mFirstNameETxt.setText(response.body().getFirstName().toString());
+                    mLastNameETxt.setText(response.body().getLastName().toString());
+                    mEmailEdtText.setText(response.body().getEmail().toString());
+                    mPhoneNoTxt.setText(response.body().getPhoneNumber().toString());
+                }
+                Log.e("data","=");
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("data","="+t.getMessage());
             }
         });
     }
@@ -216,12 +236,18 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         String json = gson.toJson(mAddressArray);
         prefsEditor.putString("profiledataof" + username, json);
         prefsEditor.commit();
-        response = apiInterface.updateUser(new User(0, mFirstNameETxt.getText().toString().trim(), mLastNameETxt.getText().toString().trim(), mEmailEdtText.getText().toString().trim(), "", 0, "", mPhoneNoTxt.getText().toString().trim(), ""));
+        response = apiInterface.updateUser(token,new User(theID, mFirstNameETxt.getText().toString().trim(), mLastNameETxt.getText().toString().trim(), mEmailEdtText.getText().toString().trim(), "", null, "", mPhoneNoTxt.getText().toString().trim(), ""));
         response.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-
+                if(response.body()!=null) {
+                    mFirstNameETxt.setText(response.body().getFirstName().toString());
+                    mLastNameETxt.setText(response.body().getLastName().toString());
+                    mEmailEdtText.setText(response.body().getEmail().toString());
+                    mPhoneNoTxt.setText(response.body().getPhoneNumber().toString());
+                }
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
 

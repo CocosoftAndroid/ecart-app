@@ -23,7 +23,7 @@ public class User {
     private String password;
     @SerializedName("created")
     @Expose
-    private Integer created;
+    private Long created;
     @SerializedName("gender")
     @Expose
     private Object gender;
@@ -35,7 +35,7 @@ public class User {
     private Object dob;
 
 
-    public User(Integer userId, Object firstName, Object lastName, String email, String password, Integer created, Object gender, Object phoneNumber, Object dob) {
+    public User(Integer userId, Object firstName, Object lastName, String email, String password, Long created, Object gender, Object phoneNumber, Object dob) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -87,11 +87,11 @@ public class User {
         this.password = password;
     }
 
-    public Integer getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(Long created) {
         this.created = created;
     }
 

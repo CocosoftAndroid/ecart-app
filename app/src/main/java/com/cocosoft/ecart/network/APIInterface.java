@@ -25,7 +25,10 @@ public interface APIInterface {
     Call<User> registerUser(@Body User user);
 
     @POST("secure/user/update")
-    Call<User> updateUser(@Body User user);
+    Call<User> updateUser( @Header("Authorization") String authHeader,@Body User user);
+
+    @GET("secure/user/get")
+    Call<User> getUser( @Header("Authorization") String authHeader);
 
     @POST("user/login")
     Call<String> loginUser(@Body LoginCredentials loginCredentials);

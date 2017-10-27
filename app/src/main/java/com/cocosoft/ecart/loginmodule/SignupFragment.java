@@ -40,21 +40,20 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
 
     private EditText mUserNameEdtTxt;
     private EditText mPwdEdtTxt;
-    private EditText mConfirmPwdEdtTxt,mEmailEdtText,mFirstNameETxt,mLastNameETxt;
+    private EditText mConfirmPwdEdtTxt, mEmailEdtText, mFirstNameETxt, mLastNameETxt,mPhoneEditTxt;
     private TextView mSignupTxt, mWarnTxt, mDOBTxt;
     private DatabaseHandler mDB;
     private TextView mCountTxtView;
     private TextView mTitleTxtView;
     private ImageView mCartImg;
     private RelativeLayout mSearchLayout;
-    private String mUserType="user";
-    private RadioGroup mRadioGroup1;
+    private String mUserType = "user";
+    private RadioGroup mRadioGroup1,mRadioGroupGender;
     private APIInterface apiInterface;
     private SharedPreferences.Editor editor;
-
-
     private Call<User> response;
     private DatePickerDialog datePickerDialog;
+    private String mGender;
 
     @Nullable
     @Override
@@ -71,13 +70,21 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         mRadioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                if(checkedId==R.id.user_radio_btn)
-                {
-                    mUserType="user";
+                if (checkedId == R.id.user_radio_btn) {
+                    mUserType = "user";
+                } else if (checkedId == R.id.admin_radio_btn) {
+                    mUserType = "admin";
                 }
-                else if(checkedId==R.id.admin_radio_btn)
-                {
-                    mUserType="admin";
+            }
+        });
+
+        mRadioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                if (checkedId == R.id.radioButton) {
+                    mGender = "Male";
+                } else if (checkedId == R.id.radioButton2) {
+                    mGender = "Female";
                 }
             }
         });
@@ -88,6 +95,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         super.onResume();
         mTitleTxtView.setText("SignUp");
     }
+
     private void init(View v) {
         mUserNameEdtTxt = (EditText) v.findViewById(R.id.username_etxt);
         mPwdEdtTxt = (EditText) v.findViewById(R.id.pwd_etxt);
@@ -98,6 +106,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         mSignupTxt = (TextView) v.findViewById(R.id.finish_signup_txt);
         mWarnTxt = (TextView) v.findViewById(R.id.warning_txt);
         mDOBTxt = (TextView) v.findViewById(R.id.dob_txt);
+        mPhoneEditTxt = (EditText) v.findViewById(R.id.phone_etxt);
         mDB = new DatabaseHandler(getContext());
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
@@ -107,10 +116,11 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         mCartImg.setVisibility(View.GONE);
         mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
         mSearchLayout.setVisibility(View.GONE);
-        mRadioGroup1=(RadioGroup)v.findViewById(R.id.radioGroup1);
+        mRadioGroup1 = (RadioGroup) v.findViewById(R.id.radioGroup1);
+        mRadioGroupGender = (RadioGroup) v.findViewById(R.id.radioGroup);
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
         editor = getContext().getSharedPreferences("cocosoft", MODE_PRIVATE).edit();
-      datePickerDialog = new DatePickerDialog(
+        datePickerDialog = new DatePickerDialog(
                 getContext(), this, 2017, 8, 31);
 
     }
@@ -140,37 +150,32 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Da
         } else if (!(mPwdEdtTxt.getText().toString().trim().equals(mConfirmPwdEdtTxt.getText().toString().trim()))) {
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Passwords do not match ");
-        }else if (!(isValidEmail(mEmailEdtText.getText().toString()))) {
+        } else if (!(isValidEmail(mEmailEdtText.getText().toString()))) {
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Not a valid email ");
-        }
-        else {
+        } else {
 
-            editor.putString("firstname",mFirstNameETxt.getText().toString().trim());
+            editor.putString("firstname", mFirstNameETxt.getText().toString().trim());
             editor.commit();
-            response = apiInterface.registerUser(new User(0,mFirstNameETxt.getText().toString().trim(),mLastNameETxt.getText().toString().trim(),mEmailEdtText.getText().toString().trim(),mPwdEdtTxt.getText().toString().trim(),null,"","",""));
+            response = apiInterface.registerUser(new User(0, mFirstNameETxt.getText().toString().trim(), mLastNameETxt.getText().toString().trim(), mEmailEdtText.getText().toString().trim(), mPwdEdtTxt.getText().toString().trim(), null, mGender, mPhoneEditTxt.getText().toString(), mDOBTxt.getText().toString()));
             response.enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
-
                 }
-
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
                     Log.e("LoginFragment", "=" + t.getMessage());
                 }
             });
             getActivity().getSupportFragmentManager().popBackStack();
-
             Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT).show();
-
             getActivity().getSupportFragmentManager().popBackStack();
         }
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        mDOBTxt.setText("" + month + "-" + dayOfMonth+ "-" + year);
+        mDOBTxt.setText("" + month + "-" + dayOfMonth + "-" + year);
     }
 
 

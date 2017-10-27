@@ -21,7 +21,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cocosoft.ecart.R;
@@ -39,7 +38,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import static android.content.Context.MODE_PRIVATE;
 
 public class DescriptionFragment extends Fragment implements View.OnClickListener {
@@ -131,11 +129,9 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 item.setCount(count);
             } else {
                 mCartArray.add(cartItem);
-
             }
         } else {
             mCartArray.add(cartItem);
-
         }
         theCount = theCount + count;
         mCartCountTxt.setText("" + (theCount));
@@ -157,7 +153,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         mProductDescTxt = (TextView) v.findViewById(R.id.product_desc_txt);
         mProductDescTxt = (TextView) v.findViewById(R.id.product_desc_txt);
         mFavouriteCheckbox = (CheckBox) v.findViewById(R.id.fav_btn);
-
         mWishlistBtn = (Button) v.findViewById(R.id.wishlist_btn);
         mAddCartBtn = (Button) v.findViewById(R.id.addcart_btn);
         mProductImgView = (ImageView) v.findViewById(R.id.product_img_view);
@@ -193,8 +188,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         mFavouriteCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
                     boolean isloggedin = prefs.getBoolean("isloggedin", false);
                     String username = prefs.getString("username", "");
                     String token = prefs.getString("token", "");
@@ -205,7 +198,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                     } else {
                         Toast.makeText(getContext(), "Please login to continue", Toast.LENGTH_SHORT).show();
                     }
-
             }
         });
 
@@ -216,7 +208,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.plus_img_view:
                 count = count + 1;
-
                 mCountTxtView.setText("" + count);
 
                 break;
@@ -234,7 +225,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 }
                 break;
             case R.id.wishlist_btn:
-
                 break;
         }
     }
@@ -247,7 +237,6 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 mWishlistBtn.setEnabled(true);
                 mWishlistBtn.setAlpha(1f);
             }
-
             @Override
             public void onFailure(Call<WishList> call, Throwable t) {
                 mWishlistBtn.setEnabled(true);
@@ -260,10 +249,8 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         Fragment fragment = null;
         switch (i) {
             case 1:
-
                 fragment = new CartFragment();
                 break;
-
         }
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

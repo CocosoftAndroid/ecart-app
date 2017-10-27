@@ -94,16 +94,18 @@ public class OrderHistory extends Fragment implements View.OnClickListener {
 
             @Override
             public void onResponse(Call<List<OrderMaster>> call, Response<List<OrderMaster>> response) {
-                mOrderHistoryList = response.body();
+                if(response.body()!=null) {
+                    mOrderHistoryList = response.body();
 
-                mOrderHistoryAdapter = new OrderHistoryAdapter(getActivity(), getContext(), mOrderHistoryList);
-                mOrderHistoryRView.setAdapter(mOrderHistoryAdapter);
-                mOrderHistoryAdapter.notifyDataSetChanged();
+                    mOrderHistoryAdapter = new OrderHistoryAdapter(getActivity(), getContext(), mOrderHistoryList);
+                    mOrderHistoryRView.setAdapter(mOrderHistoryAdapter);
+                    mOrderHistoryAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onFailure(Call<List<OrderMaster>> call, Throwable t) {
-                Log.e("opo", "=" + t.getMessage());
+
             }
         });
     }

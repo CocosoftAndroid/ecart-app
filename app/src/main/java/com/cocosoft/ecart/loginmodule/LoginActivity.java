@@ -121,8 +121,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Profile fbProfile = Profile.getCurrentProfile();
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                       AccessToken currentAccessToken) {
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
                     Log.d(TAG, "onLogout catched");
                 }

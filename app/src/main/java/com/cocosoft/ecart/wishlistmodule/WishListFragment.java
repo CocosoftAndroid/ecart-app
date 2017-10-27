@@ -126,7 +126,6 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
 
     private void init(View view) {
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
-        apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
         mAddCartTxt = (TextView) view.findViewById(R.id.add_cart_txt);
         mLManager = new LinearLayoutManager(getContext());
         mProductRView = (RecyclerView) view.findViewById(R.id.rview);
@@ -135,13 +134,7 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
         String username = prefs.getString("username", null);
         token = prefs.getString("token", null);
         getAllWishList(token);
-       /* ArrayList<String> productids = mDb.getAllWishList(username);
-        if (productids != null) {
-            for (int i = 0; i < productids.size(); i++) {
-                mProductArray.add(mDb.getProductItem(productids.get(i)));
-                Log.e("sa", "=" + productids.size());
-            }
-        }*/
+
         mWishlistAdapter = new WishlistAdapter(getContext(), mProductArray, this, this);
         mProductRView.setAdapter(mWishlistAdapter);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);

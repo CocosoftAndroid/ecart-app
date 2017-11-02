@@ -205,6 +205,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 mSearchView.setIconified(false);
             }
         });
+
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

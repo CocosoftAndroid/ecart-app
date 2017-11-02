@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ECart</string>
+    <string name="app_name">eCart</string>
     <string name="explanation">NFC Tag Monitor Device</string>
     <string name="tabexplanation">Tap Device With NFC Tag</string>
     <string name="tabsubhead">Display NFC Tag Reader Data </string>
@@ -45,4 +45,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="loading">Loading...</string>
     <string name="base_url">http://54.68.141.32:8080/</string>
+    <string name="rs">\u20A8</string>
 </resources>

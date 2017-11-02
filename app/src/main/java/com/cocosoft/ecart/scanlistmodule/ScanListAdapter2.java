@@ -60,15 +60,18 @@ public class ScanListAdapter2 extends RecyclerView.Adapter<ScanListAdapter2.MyVi
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolders holder, final int position) {
+    public void onBindViewHolder(final MyViewHolders holder, final int position)
+    {
 
         holder.productName.setText(productList.get(position).getProductName());
         holder.productDesc.setText(productList.get(position).getProductDesc());
-        holder.productPrice.setText("$ " + productList.get(position).getPrice());
+        holder.productPrice.setText("$ " + productList.get(position).getPrice()+"0");
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 listener.onChecked(productList.get(position).getProductId(), false);
+
             }
         });
         String[] splited = productList.get(position).getImgUrl().split("\\\\");

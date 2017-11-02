@@ -6,5 +6,5 @@ package com.cocosoft.ecart.listeners;
 
 public interface WishlistListener {
     void onFavouriteClicked(String productid,boolean isChecked);
-    void onFavouriteClicked(String productid,String productname,Double price,boolean isChecked);
+    void onFavouriteClicked(String productid,String productname,Double price,boolean isChecked,String productDesc);
 }

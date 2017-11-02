@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif"
-                android:text="New to ECart"
+                android:text="New to eCart"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -49,7 +49,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/buttons"
                 android:gravity="center"
-                android:text="Create account with IZY cart"
+                android:text="Create account with eCart"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white" />
@@ -136,4 +136,5 @@
 
 
     </LinearLayout>
+
 </ScrollView>

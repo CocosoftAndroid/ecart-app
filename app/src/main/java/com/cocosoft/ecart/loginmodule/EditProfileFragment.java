@@ -398,17 +398,14 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         @Override
         public String toString() {
-            return "AddressItem{" +
-                    "id=" + id +
-                    ", name='" + name + '\'' +
-                    ", address1='" + address1 + '\'' +
-                    ", address2='" + address2 + '\'' +
-                    ", city='" + city + '\'' +
-                    ", state='" + state + '\'' +
-                    ", zip='" + zip + '\'' +
-                    ", country='" + country + '\'' +
-                    ", phonenumber='" + phonenumber + '\'' +
-                    '}';
+            return name +
+                    ", " + address1 +
+                    "," + address2 +
+                    "," + city +
+                    ", " + state +
+                    ", " + zip +
+                    ", " + country +
+                    ", " + phonenumber ;
         }
     }
 }

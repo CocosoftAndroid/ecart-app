@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
 
     private TextView mAddCartTxt;
     private LinearLayoutManager mLManager;
+    private  LinearLayout wishlistnoitem,mlinearlayoutt;
     private RecyclerView mProductRView;
     private WishlistAdapter mWishlistAdapter;
     private ArrayList<ProductItem> mProductArray = new ArrayList<>();
@@ -99,9 +101,19 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
                 mWishListArr.addAll(response.body());
                 mProductArray.clear();
                 for (int y = 0; y < mWishListArr.size(); y++) {
-                    mProductArray.add(new ProductItem("" + mWishListArr.get(y).getProductId(), mWishListArr.get(y).getProductName(), "", mWishListArr.get(y).getPrice(), 0, 0, false));
+                    mProductArray.add(new ProductItem("" + mWishListArr.get(y).getProductId(), mWishListArr.get(y).getProductName(), mWishListArr.get(y).getProductDesc(), mWishListArr.get(y).getPrice(), 0, 0, false));
                     mWishlistAdapter.notifyDataSetChanged();
                 }
+                if (mWishListArr.size() == 0) {
+                    mlinearlayoutt.setVisibility(View.GONE);
+                    mAddCartTxt.setVisibility(View.GONE);
+                    wishlistnoitem.setVisibility(View.VISIBLE);
+                } else {
+                    mlinearlayoutt.setVisibility(View.VISIBLE);
+                    wishlistnoitem.setVisibility(View.GONE);
+                    mAddCartTxt.setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
@@ -115,7 +127,7 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        mTitleTxtView.setText("WishList");
+        mTitleTxtView.setText("Wish List");
     }
 
     private void setListeners() {
@@ -125,10 +137,14 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
 
 
     private void init(View view) {
+
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
         mAddCartTxt = (TextView) view.findViewById(R.id.add_cart_txt);
+
+
         mLManager = new LinearLayoutManager(getContext());
         mProductRView = (RecyclerView) view.findViewById(R.id.rview);
+
         mProductRView.setLayoutManager(mLManager);
         mDb = new DatabaseHandler(getContext());
         String username = prefs.getString("username", null);
@@ -141,8 +157,15 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
+
+
         mCountTxtView.setVisibility(View.GONE);
         mCartImg.setVisibility(View.GONE);
+
+        wishlistnoitem=(LinearLayout)view.findViewById(R.id.wishlistnoitem_layout);
+        mlinearlayoutt=(LinearLayout)view.findViewById(R.id.fwr1);
+
+
 
         for (int j = 0; j < mProductArray.size(); j++) {
             mWishlistArray.add(j, new WishlistItem(mProductArray.get(j).getProductId(), false));
@@ -156,7 +179,13 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
         String username = prefs.getString("username", "");
         switch (v.getId()) {
             case R.id.add_cart_txt:
-                Toast.makeText(getContext(), "Added to Cart", Toast.LENGTH_SHORT).show();
+                if(mWishListArr.size()==0) {
+                    Toast.makeText(getContext(), "No Items In WishList", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "Added To Card", Toast.LENGTH_SHORT).show();
+                }
                 addToCart();
                 break;
         }
@@ -233,10 +262,10 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onFavouriteClicked(String productid, String productname, Double price, boolean isChecked) {
+    public void onFavouriteClicked(String productid, String productname, Double price, boolean isChecked,String productDesc) {
         String username = prefs.getString("username", "");
         String token = prefs.getString("token", "");
-        addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false, false), token);
+        addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false, false,productDesc), token);
 
     }
 

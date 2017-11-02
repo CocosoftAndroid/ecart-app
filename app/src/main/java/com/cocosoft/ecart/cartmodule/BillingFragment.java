@@ -65,6 +65,7 @@ import retrofit2.Response;
 
 public class BillingFragment extends Fragment implements View.OnClickListener {
 
+
     EditText _cardNumber;
     EditText _month;
     EditText _year;
@@ -101,7 +102,7 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
     private String acctype;
     private TextView mCountTxtView;
     private TextView mTitleTxtView;
-    private ImageView mCartImg;
+    private ImageView mCartImg,mCamscn;
     private LinearLayout mAddrLayout;
 
 
@@ -134,6 +135,9 @@ public class BillingFragment extends Fragment implements View.OnClickListener {
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
         mTitleTxtView.setText("Billing Page");
+
+
+
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
         mCountTxtView.setVisibility(View.GONE);
         mCartImg.setVisibility(View.GONE);

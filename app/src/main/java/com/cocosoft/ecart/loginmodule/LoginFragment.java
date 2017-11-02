@@ -162,6 +162,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
         if (mUserNameEdtTxt.getText().toString().trim().length() == 0) {
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Please enter a valid Username");
+            Log.d("login", "doLogin: "+mUserNameEdtTxt.getText().toString().trim());
         } else if (mPwdEdtTxt.getText().toString().trim().length() == 0) {
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Please enter a valid Password");

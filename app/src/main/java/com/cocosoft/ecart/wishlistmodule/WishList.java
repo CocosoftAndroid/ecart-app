@@ -17,6 +17,15 @@ public class WishList {
     @SerializedName("productName")
     @Expose
     private String productName;
+
+    public String getProductDesc() {
+        return productDesc;
+    }
+
+    public void setProductDesc(String productDesc) {
+        this.productDesc = productDesc;
+    }
+
     @SerializedName("price")
     @Expose
     private Double price;
@@ -29,8 +38,11 @@ public class WishList {
 
     private boolean checked=false;
 
+    @SerializedName("productDesc")
+    @Expose
+    private String productDesc;
 
-    public WishList(int productId, String userEmail, String productName, Double price, Long created, Boolean favourite, Boolean checked) {
+    public WishList(int productId, String userEmail, String productName, Double price, Long created, Boolean favourite, boolean checked, String productDesc) {
         this.productId = productId;
         this.userEmail = userEmail;
         this.productName = productName;
@@ -38,6 +50,7 @@ public class WishList {
         this.created = created;
         this.favourite = favourite;
         this.checked = checked;
+        this.productDesc = productDesc;
     }
 
     public int getProductId() {

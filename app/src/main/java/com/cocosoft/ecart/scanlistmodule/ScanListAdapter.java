@@ -106,7 +106,7 @@ public class ScanListAdapter extends RecyclerView.Adapter<ScanListAdapter.MyView
         }
         holder.productName.setText(productList.get(position).getProductId() + " - " + productList.get(position).getProductName());
         holder.count.setText("" + productList.get(position).getCount());
-        holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
+        holder.productPrice.setText("$"+productList.get(position).getProductPrice()+"00");
         holder.plusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,7 +141,7 @@ public class ScanListAdapter extends RecyclerView.Adapter<ScanListAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isloggedin) {
-                    wishlistListener.onFavouriteClicked(productList.get(position).getProductId(),productList.get(position).getProductName(),productList.get(position).getProductPrice(), isChecked);
+                    wishlistListener.onFavouriteClicked(productList.get(position).getProductId(),productList.get(position).getProductName(),productList.get(position).getProductPrice(), isChecked,productList.get(position).getProductDesc());
                 } else {
                     Toast.makeText(context, "Please login to continue", Toast.LENGTH_SHORT).show();
                     holder.favBtn.setChecked(false);

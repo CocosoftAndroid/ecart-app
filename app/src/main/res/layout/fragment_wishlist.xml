@@ -5,6 +5,7 @@
     android:layout_margin="@dimen/dp2">
 
 <LinearLayout
+    android:id="@+id/fwr1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -17,7 +18,28 @@
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/wishlistnoitem_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_sadsimley" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/dp15"
+            android:text="No Items in Wish List"
+            android:textAppearance="?android:textAppearanceLarge" />
+    </LinearLayout>
 
 </LinearLayout>
     <LinearLayout

@@ -20,7 +20,7 @@
         android:layout_marginBottom="@dimen/dp20"
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
-        android:text="ECART"
+        android:text="eCart"
         android:background="@drawable/ic_edit_txt_bg"
         android:hint="App Name"
         android:padding="@dimen/dp10" />

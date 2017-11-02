@@ -318,17 +318,17 @@ public class ScannedListFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onFavouriteClicked(String productid, String productname, Double price, boolean isChecked) {
+    public void onFavouriteClicked(String productid, String productname, Double price, boolean isChecked,String productDesc) {
         String username = prefs.getString("username", "");
         String token = prefs.getString("token", "");
         if (isChecked) {
             Toast.makeText(getContext(), "Added to Wishlist", Toast.LENGTH_SHORT).show();
             //mDB.addToWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true, false), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true, false,productDesc), token);
         } else {
             Toast.makeText(getContext(), "Wishlist Removed", Toast.LENGTH_SHORT).show();
 //            mDB.removeWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false, false), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false, false,productDesc), token);
         }
     }
 

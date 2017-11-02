@@ -45,7 +45,7 @@ public class SigninFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        mTitleTxtView.setText("ECART SIGN UP ");
+        mTitleTxtView.setText("eCart SignUp ");
     }
 
     @Override

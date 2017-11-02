@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cocosoft.ecart.R;
 import com.cocosoft.ecart.database.DatabaseHandler;
 import com.cocosoft.ecart.listeners.CheckboxListener;
@@ -99,9 +102,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
             if (mDB.wishlistAlreadyAdded(username, productList.get(position).getProductId()))
                 holder.favBtn.setChecked(true);
         }
-        holder.productName.setText("(" + productList.get(position).getProductId() + ") " + productList.get(position).getProductName());
+        holder.productName.setText("" + productList.get(position).getProductName());
         holder.count.setText("" + productList.get(position).getCount());
-        holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
+        holder.productPrice.setText("$ " + productList.get(position).getProductPrice()+"0");
+
+
+
         holder.plusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +127,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
                 quantityListener.onQuantityChange(productList.get(position).getProductId(), 0);
             }
         });
-        switch (productList.get(position).getScantype()) {
+
+        String[] splited = productList.get(position).getImageUrl().split("\\\\");
+        Log.e("scanlist","http://54.68.141.32:8080/" + splited[splited.length - 1]);
+        Glide.with(context).load("http://54.68.141.32:8080/" + splited[splited.length - 1])
+                .thumbnail(0.5f)
+                .crossFade()
+                .placeholder(R.drawable.ic_placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.indicatorImg);
+        /*switch (productList.get(position).getScantype()) {
             case 1:
                 holder.indicatorImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_nfc));
                 break;
@@ -131,12 +146,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolders>
             case 3:
                 holder.indicatorImg.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_qrcode));
                 break;
-        }
+        }*/
         holder.favBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isloggedin) {
-                    wishlistListener.onFavouriteClicked(productList.get(position).getProductId(), productList.get(position).getProductName(), productList.get(position).getProductPrice(), isChecked);
+                    wishlistListener.onFavouriteClicked(productList.get(position).getProductId(), productList.get(position).getProductName(), productList.get(position).getProductPrice(), isChecked,productList.get(position).getProductDesc());
                 } else {
                     Toast.makeText(context, "Please login to continue", Toast.LENGTH_SHORT).show();
                     holder.favBtn.setChecked(false);

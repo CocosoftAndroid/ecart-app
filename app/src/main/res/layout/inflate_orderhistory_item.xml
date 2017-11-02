@@ -5,16 +5,21 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="4dp"
-    card_view:cardCornerRadius="1dp"
-    card_view:cardElevation="@dimen/dp5"
-    card_view:contentPadding="2dp">
+    android:layout_margin="3dp"
+    card_view:cardCornerRadius="5dp"
+    card_view:cardElevation="7dp"
+    card_view:contentPadding="1dp"
+    card_view:contentPaddingLeft="22dp"
+    card_view:cardBackgroundColor="@color/colorPrimary">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="2dp"
-        android:orientation="vertical">
+        android:layout_margin="1dp"
+        android:padding="7dp"
+        android:orientation="vertical"
+        android:background="#F8F8FF"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,14 +27,17 @@
             android:orientation="horizontal">
 
             <TextView
+                android:layout_marginBottom="5dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="@dimen/dp2"
-                android:text="INVOICE ID"
+                android:text="Invoice ID"
                 android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/grey_2a"
-                android:visibility="visible" />
+                android:textColor="@color/black"
+                android:visibility="visible"
+                android:textAllCaps="false"
+                android:layout_marginLeft="0dp"/>
 
             <TextView
                 android:id="@+id/transactionid_txt"
@@ -39,7 +47,8 @@
                 android:text="ECART3637380091"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/black"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:textAllCaps="false"/>
 
             <TextView
                 android:id="@+id/invoiceid_txt"
@@ -49,7 +58,8 @@
                 android:paddingLeft="@dimen/dp2"
                 android:text="7380091"
                 android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/grey_2a" />
+                android:textColor="@color/grey_2a"
+                android:textAllCaps="false"/>
         </LinearLayout>
 
         <LinearLayout
@@ -62,9 +72,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="@dimen/dp2"
-                android:text="ORDER DATE"
+                android:text="Order Date"
                 android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/grey_2a"
+                android:textColor="@color/black"
+                android:textAllCaps="false"
 
                 />
 
@@ -76,7 +87,8 @@
                 android:paddingLeft="@dimen/dp2"
                 android:text="15-07-2017"
                 android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/grey_2a" />
+                android:textColor="@color/grey_2a"
+                android:textAllCaps="false"/>
         </LinearLayout>
 
 
@@ -117,10 +129,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="@dimen/dp2"
-                android:text="TOTAL PRICE"
+                android:text="Total Price"
                 android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/grey_2a" />
-
+                android:textColor="@color/black"
+                android:textAllCaps="false"/>
             <TextView
                 android:id="@+id/total_txt"
                 android:layout_width="0dp"
@@ -129,12 +141,11 @@
                 android:paddingLeft="@dimen/dp2"
                 android:text="20 $"
                 android:textStyle="bold"
-                android:textColor="@color/grey_2a"
-                android:textSize="22dp" />
-
+                android:textColor="@color/colorPrimary"
+                android:textSize="18dp"
+                android:textAllCaps="false"/>
 
         </LinearLayout>
-
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

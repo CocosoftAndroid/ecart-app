@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -56,6 +58,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +72,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class CartFragment extends Fragment implements View.OnClickListener, QuantityListener, WishlistListener, IndividualItemListener, CheckboxListener {
 
-    private TextView mAddCartTxt, mGrandTotalTxt;
+    private TextView mAddCartTxt, mGrandTotalTxt, mSubTotalTxt, mTaxTxt;
     private LinearLayoutManager mLManager;
     private RecyclerView mProductRView;
     private CartAdapter mCartAdapter;
@@ -75,13 +80,15 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     private ArrayList<CartItem> mCartArray = new ArrayList<>();
     private TextView mCountTxtView;
     private TextView mTitleTxtView;
-    private ImageView mCartImg,mScanImg;
+    private ImageView mCartImg, mScanImg;
     private SharedPreferences prefs;
+
     private TextView mAddWishTxt;
     private Gson gson;
     private SharedPreferences.Editor prefsEditor;
 
     int _checkoutAmount = 0;
+    double grandtotal = 0.0;
     private APIInterface apiInterface;
     private Call<WishList> response;
     private Call<OrderMaster> Orderresponse;
@@ -108,6 +115,8 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     private LinearLayout mLinearLayout;
     private LinearLayout mNoItemLayout;
     private ArrayList<String> mScannedList = new ArrayList<>();
+    private FloatingActionButton mCameraFAB;
+    private DecimalFormat decim;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +130,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         ArrayList<CartItem> arr = gson.fromJson(tempdata, type);
         if (arr != null) {
             mCartArray.clear();
-            mCartArray.addAll((ArrayList<CartItem>)gson.fromJson(tempdata, type));
+            mCartArray.addAll((ArrayList<CartItem>) gson.fromJson(tempdata, type));
         }
         String tempdata2 = prefs.getString("tempscanlist2", null);
 
@@ -131,7 +140,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         if (arr2 != null) {
             mScannedList = gson.fromJson(tempdata2, type2);
         }
-        Log.e("cart","onCreate"+mCartArray.size());
+        Log.e("cart", "onCreate" + mCartArray.size());
     }
 
     @Nullable
@@ -140,20 +149,21 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         init(view);
         setListeners();
-        Log.e("cart","onCreateView");
+        Log.e("cart", "onCreateView");
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("cart","onResume");
+        Log.e("cart", "onResume");
         mTitleTxtView.setText("Cart");
     }
 
     private void setListeners() {
         mAddCartTxt.setOnClickListener(this);
         mAddWishTxt.setOnClickListener(this);
+        mCameraFAB.setOnClickListener(this);
     }
 
     public void setListener(QuantityListener lis) {
@@ -167,22 +177,32 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         mNoItemLayout = (LinearLayout) view.findViewById(R.id.noitem_layout);
         mAddCartTxt = (TextView) view.findViewById(R.id.add_cart_txt);
         mAddWishTxt = (TextView) view.findViewById(R.id.add_wish_txt);
+        mCameraFAB = (FloatingActionButton) view.findViewById(R.id.fab);
         mGrandTotalTxt = (TextView) view.findViewById(R.id.grandtotal_txt);
+        mTaxTxt = (TextView) view.findViewById(R.id.tax_txt);
+        mSubTotalTxt = (TextView) view.findViewById(R.id.subtotal_txt);
         mLManager = new LinearLayoutManager(getContext());
         mProductRView = (RecyclerView) view.findViewById(R.id.rview);
         mProductRView.setLayoutManager(mLManager);
         mCartAdapter = new CartAdapter(getContext(), mCartArray, this, this, this, this);
         mProductRView.setAdapter(mCartAdapter);
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
-        mScanImg = (ImageView) view.findViewById(R.id.scan_img);
+
+        //Madhu Modification For Title Camera Scan For All
+        RelativeLayout relativeLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
+        mScanImg = (ImageView) relativeLayout.findViewById(R.id.scan_img);
         mScanImg.setOnClickListener(this);
+        relativeLayout.setVisibility(View.GONE);
+
         mCountTxtView.setVisibility(View.GONE);
         mCartImg.setVisibility(View.GONE);
+
         RelativeLayout mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
-        mSearchLayout.setVisibility(View.VISIBLE);
+        mSearchLayout.setVisibility(View.GONE);
         calculateTotal();
         if (mCartArray.size() == 0) {
             mLinearLayout.setVisibility(View.GONE);
@@ -218,7 +238,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                 }
                 break;
 
-            case R.id.scan_img:
+            case R.id.fab:
                 Intent intent = new Intent(getContext(), BarcodeCaptureActivity.class);
                 startActivityForResult(intent, 444);
                 break;
@@ -231,13 +251,12 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         if (mScannedList.size() > 0) {
             for (int i = 0; i < mScannedList.size(); i++) {
                 if (mScannedList.get(i).equals(id)) {
-                    contains=true;
+                    contains = true;
                 } else {
 
                 }
             }
-            if(!contains)
-            {
+            if (!contains) {
                 mScannedList.add(id);
             }
         } else {
@@ -248,6 +267,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         prefsEditor.commit();
 
     }
+
     private boolean isAddressFilled() {
         String tempdata = prefs.getString("profiledataof" + username, null);
         Type type = new TypeToken<List<EditProfileFragment.AddressItem>>() {
@@ -278,7 +298,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     public void navigateToBaseActivity() {
 
         merchantKey = "gtKFFx"; //0MQaQP
-        amount = String.valueOf(_checkoutAmount);
+        amount = String.valueOf(decim.format(grandtotal));
         txnid = "" + System.currentTimeMillis();
         udf1 = "udf1";
         udf2 = "udf2";
@@ -292,6 +312,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
         mPaymentParams.setAmount(amount);
         mPaymentParams.setProductInfo(productInfo);
         mPaymentParams.setFirstName(firstName);
+
         mPaymentParams.setEmail(username);
         mPaymentParams.setTxnId(txnid);
         /**
@@ -432,7 +453,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
                         productInfo = mCartArray.get(y).getProductName();
 
                     }
-                    addBillDetailToWeb(new OrderMaster("", 0, status, card_typ, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
+                    addBillDetailToWeb(new OrderMaster("", 0, status, card_typ, "", "", "", username, "", "", totalitems, grandtotal, orderlist, null));
                     emptyCheckoutData();
                     Toast.makeText(this.getActivity(), "Transaction successfull", Toast.LENGTH_LONG).show();
                     onPressGotoHomePage();
@@ -440,7 +461,7 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
 
                 } else {
                     Toast.makeText(this.getActivity(), "Payment failed with Error message(" + status + ") . Please try checkout again", Toast.LENGTH_LONG).show();
-                    addBillDetailToWeb(new OrderMaster("", 0, "failed", card_typ, "", "", "", username, "", "", totalitems, totalPrice, orderlist, null));
+                    addBillDetailToWeb(new OrderMaster("", 0, "failed", card_typ, "", "", "", username, "", "", totalitems, grandtotal, orderlist, null));
 
 
                 }
@@ -552,11 +573,32 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     }
 
     private void calculateTotal() {
+        /*double tax=5;
+        double ordertotal;
+        double purcheseprice;
+
+        double tt=_checkoutAmount*(tax/100.0);
+        double tx=_checkoutAmount+tt;
+*/
         _checkoutAmount = 0;
         for (int i = 0; i < mCartArray.size(); i++) {
             _checkoutAmount = _checkoutAmount + (mCartArray.get(i).getCount() * mCartArray.get(i).getProductPrice().intValue());
         }
-        mGrandTotalTxt.setText("GRAND TOTAL = $ " + _checkoutAmount);
+        decim = new DecimalFormat("0.00");
+        String subtotal = decim.format(_checkoutAmount);
+        mSubTotalTxt.setText("SubTotal = $" + subtotal);
+
+        mTaxTxt.setText("Tax (5%) = $" + calcTax(_checkoutAmount));
+       /* mGrandTotalTxt.setText("Order Total = $" + tx+".00");*/
+        grandtotal = Double.parseDouble(subtotal) + Double.parseDouble(calcTax(_checkoutAmount));
+        mGrandTotalTxt.setText("Order Total = $" + decim.format(grandtotal));
+    }
+
+    private String calcTax(int checkoutAmount) {
+        double tax = (checkoutAmount / 100.0) * 5;
+        DecimalFormat decim = new DecimalFormat("0.00");
+
+        return decim.format(tax);
     }
 
     private void openFrag(int i, String productid) {
@@ -611,19 +653,19 @@ public class CartFragment extends Fragment implements View.OnClickListener, Quan
     }
 
     @Override
-    public void onFavouriteClicked(String productid, String productname, Double price, boolean isChecked) {
+    public void onFavouriteClicked(String productid, String productname, Double price, boolean isChecked, String productDesc) {
         String username = prefs.getString("username", "");
         String token = prefs.getString("token", "");
         if (isChecked) {
 
             Toast.makeText(getContext(), "Added to Wishlist", Toast.LENGTH_SHORT).show();
 //            mDB.addToWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true, false), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, true, false, productDesc), token);
 
         } else {
             Toast.makeText(getContext(), "Wishlist Removed", Toast.LENGTH_SHORT).show();
 //            mDB.removeWishlist(productid, username);
-            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false, false), token);
+            addWishList(new WishList(Integer.parseInt(productid), username, productname, price, null, false, false, productDesc), token);
         }
 
     }

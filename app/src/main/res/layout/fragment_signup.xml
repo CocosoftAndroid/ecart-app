@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:padding="@dimen/dp20"
-                android:text="ECART"
+                android:text="eCart"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
@@ -37,7 +37,8 @@
                 android:hint="First Name"
                 android:lines="1"
                 android:padding="@dimen/dp10"
-                android:text="" />
+                android:text=""
+                android:inputType="textCapSentences"/>
 
             <EditText
                 android:id="@+id/lastname_etxt"
@@ -48,11 +49,11 @@
                 android:layout_marginRight="@dimen/dp32"
                 android:background="@drawable/ic_edit_txt_bg"
                 android:drawableLeft="@drawable/ic_username"
-
                 android:drawablePadding="@dimen/dp10"
                 android:hint="Last Name"
                 android:lines="1"
-                android:padding="@dimen/dp10" />
+                android:padding="@dimen/dp10"
+                android:inputType="textCapSentences"/>
 
             <EditText
                 android:id="@+id/username_etxt"
@@ -66,7 +67,8 @@
                 android:drawablePadding="@dimen/dp10"
                 android:hint="User Name"
                 android:lines="1"
-                android:padding="@dimen/dp10" />
+                android:padding="@dimen/dp10"
+                android:inputType="textCapSentences"/>
 
             <EditText
                 android:id="@+id/pwd_etxt"
@@ -81,7 +83,8 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:lines="1"
-                android:padding="@dimen/dp10" />
+                android:padding="@dimen/dp10"
+                />
 
             <EditText
                 android:id="@+id/confirm_pwd_etxt"

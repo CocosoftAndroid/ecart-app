@@ -100,13 +100,12 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginBottom="@dimen/dp8"
-
-                    android:layout_toLeftOf="@+id/cam_mic"
+                    android:layout_toLeftOf="@+id/cam"
                     android:background="@drawable/ic_edit_txt_bg2"
                     app:queryHint="Type something..." />
 
                 <LinearLayout
-                    android:id="@+id/cam_mic"
+                    android:id="@+id/cam"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -115,6 +114,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/scan_img"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -146,7 +146,6 @@
         android:background="#FFFFFF"
         app:headerLayout="@layout/drawer_header"
         app:itemTextColor="@color/black"
-        app:menu="@menu/drawer"
-
-        />
+        app:itemIconTint="@color/colorPrimary"
+        app:menu="@menu/drawer" />
 </android.support.v4.widget.DrawerLayout>

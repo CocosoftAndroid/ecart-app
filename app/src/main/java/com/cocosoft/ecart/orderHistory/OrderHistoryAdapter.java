@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cocosoft.ecart.R;
@@ -21,6 +22,7 @@ import com.cocosoft.ecart.cartmodule.BillingAdapter;
 import com.cocosoft.ecart.cartmodule.CartItem;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,10 +34,14 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     private Context context;
     private Activity activity;
     private ArrayList<CartItem> cartlist = new ArrayList<>();
+    double tax = 5;
+    double tt;
+    double ordertotal;
+    double purcheseprice;
 
     public class MyViewHolders extends RecyclerView.ViewHolder {
 
-        public TextView transactionIdTxt, dateTxt, countTxt, totalTxt,invoiceIdTxt;
+        public TextView transactionIdTxt, dateTxt, countTxt, totalTxt, invoiceIdTxt;
         public CardView cardView;
 
         public MyViewHolders(View view) {
@@ -79,7 +85,10 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.invoiceIdTxt.setText(orderHistoryList.get(position).getTransactionId().substring(11));
         holder.countTxt.setText("" + orderHistoryList.get(position).getTotalItems());
 
-        holder.totalTxt.setText("$ " + orderHistoryList.get(position).getTotalPrice());
+        double d = (double) orderHistoryList.get(position).getTotalPrice();
+        tt = purcheseprice * (tax / 100.0);
+        double dd = d + tt;
+        holder.totalTxt.setText("$" + dd + "0");
         holder.dateTxt.setText(holder.getDate(orderHistoryList.get(position).getCreated()));
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,21 +96,47 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 List<OrderList> olist = orderHistoryList.get(position).getOrderList();
                 cartlist.clear();
                 cartlist = new ArrayList<CartItem>();
+                double total = 0.0;
                 for (int y = 0; y < olist.size(); y++) {
                     cartlist.add(new CartItem(olist.get(y).getProductId(), olist.get(y).getProductName(), "", olist.get(y).getProductPrice(), olist.get(y).getProductCount(), 0, false));
+                    total = total + (olist.get(y).getProductPrice() * olist.get(y).getProductCount());
                 }
-                showDialog(cartlist);
+                showDialog(cartlist, orderHistoryList.get(position).getTransactionId().substring(11), holder.getDate(orderHistoryList.get(position).getCreated()), orderHistoryList.get(position).getTotalItems(), (Double) total);
             }
         });
         //holder.dateTxt.setText(""+orderHistoryList.get(position).getOrderDate());
     }
 
-    private void showDialog(ArrayList<CartItem> listContent) {
+    private void showDialog(ArrayList<CartItem> listContent, String invoiceId, String date, int items, double total) {
         final Dialog dialog = new Dialog(context);
         View view = activity.getLayoutInflater().inflate(R.layout.dialoglayout, null);
         RecyclerView lv = (RecyclerView) view.findViewById(R.id.dialoglist);
         LinearLayoutManager lmanager = new LinearLayoutManager(context);
         BillingAdapter adapter = new BillingAdapter(context, listContent, 2);
+
+
+        TextView invoiceTxt = (TextView) view.findViewById(R.id.invoiceid_txt1);
+        TextView idate = (TextView) view.findViewById(R.id.date_txt1);
+        TextView subtotal = (TextView) view.findViewById(R.id.subt);
+        TextView countt = (TextView) view.findViewById(R.id.countt);
+        ImageView dialogcancel = (ImageView) view.findViewById(R.id.dialogcancel);
+        TextView totalamt = (TextView) view.findViewById(R.id.totalamt);
+        purcheseprice = total;
+
+        DecimalFormat decim = new DecimalFormat("0.00");
+        subtotal.setText("$" + decim.format(purcheseprice));
+
+        countt.setText("(" + items + ")");
+        invoiceTxt.setText(invoiceId);
+        idate.setText(date);
+//Tax
+        TextView taxxx = (TextView) view.findViewById(R.id.tax);
+        tt = ((purcheseprice * tax) / 100.0);
+        ordertotal = purcheseprice + tt;
+        taxxx.setText("$" + decim.format(tt));
+        totalamt.setText("$" + decim.format(ordertotal));
+
+
         lv.setLayoutManager(lmanager);
         lv.setAdapter(adapter);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -109,7 +144,16 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         Window window = dialog.getWindow();
         window.setLayout(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
         dialog.show();
+//madhu changed
+        dialogcancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
     }
+
 
     @Override
     public int getItemCount() {

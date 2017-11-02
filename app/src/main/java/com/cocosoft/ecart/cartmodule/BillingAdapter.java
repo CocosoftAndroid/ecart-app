@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.cocosoft.ecart.R;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class BillingAdapter extends RecyclerView.Adapter<BillingAdapter.MyViewHolders> {
@@ -56,7 +58,8 @@ public class BillingAdapter extends RecyclerView.Adapter<BillingAdapter.MyViewHo
     public void onBindViewHolder(final MyViewHolders holder, final int position) {
         holder.productName.setText(productList.get(position).getProductName());
         holder.count.setText("" + productList.get(position).getCount());
-        holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
+        DecimalFormat decim = new DecimalFormat("0.00");
+        holder.productPrice.setText("$" + decim.format(productList.get(position).getProductPrice()));
 
     }
 

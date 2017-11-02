@@ -35,7 +35,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
     private Context context;
 
     public class MyViewHolders extends RecyclerView.ViewHolder {
-        public TextView productName, productPrice ;
+        public TextView productName, productPrice,wproduct_desc;
         public ImageView  removeBtn,imageView;
         public CheckBox checkBox;
 
@@ -46,6 +46,8 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
             super(view);
             productName = (TextView) view.findViewById(R.id.name_txt);
             productPrice = (TextView) view.findViewById(R.id.price_txt);
+            wproduct_desc=(TextView)view.findViewById(R.id.wproduct_desc);
+
 
             removeBtn = (ImageView) view.findViewById(R.id.remove_btn);
             checkBox = (CheckBox) view.findViewById(R.id.chk_box);
@@ -77,22 +79,24 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.MyView
     public void onBindViewHolder(final MyViewHolders holder, final int position) {
 
         holder.productName.setText(productList.get(position).getProductName());
+        holder.productPrice.setText("$" + productList.get(position).getProductPrice()+"0");
+        holder.wproduct_desc.setText(productList.get(position).getProductDesc());
 
-        holder.productPrice.setText("$ " + productList.get(position).getProductPrice());
 
 
 
         holder.removeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wishlistListener.onFavouriteClicked(productList.get(position).getProductId(),productList.get(position).getProductName(),productList.get(position).getProductPrice(),false);
+                wishlistListener.onFavouriteClicked(productList.get(position).getProductId(),productList.get(position).getProductName(),productList.get(position).getProductPrice(),false,productList.get(position).getProductDesc());
             }
         });
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                checkboxListener.onChecked(productList.get(position).getProductId(),isChecked);
+                checkboxListener.onChecked(productList.get(position).getProductId(),isChecked)
+                ;
             }
         });
         String[] splited = productList.get(position).getImageUrl().split("\\\\");

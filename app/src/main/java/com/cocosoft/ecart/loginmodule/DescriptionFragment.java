@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
@@ -42,8 +44,9 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class DescriptionFragment extends Fragment implements View.OnClickListener {
 
+    private RelativeLayout mSearchLayout;
     String id = "";
-    private int count = 0;
+    private int count = 1;
     private APIInterface apiInterface;
     boolean contains = false;
     CartItem item = null;
@@ -57,6 +60,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
     private Gson gson;
     private static CartItem cartItem = null;
     private int prevCount = -1;
+    private SearchView sv;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -142,9 +146,15 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
 
     private void init(View v) {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+
+        mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
+        mSearchLayout.setVisibility(View.GONE);
+
         mCartCountTxt = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView = (TextView) toolbar.findViewById(R.id.title_txt);
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
+
+
         mCartCountTxt.setVisibility(View.VISIBLE);
         mCartImg.setVisibility(View.VISIBLE);
         mTitleTxtView.setText("Scan Result");
@@ -159,6 +169,9 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
         mPlusImgView = (ImageView) v.findViewById(R.id.plus_img_view);
         mMinusImgView = (ImageView) v.findViewById(R.id.minus_img_view);
         mCountTxtView = (TextView) v.findViewById(R.id.count_txt_view);
+
+
+
         apiInterface = RetrofitAPIClient.getClient(getContext()).create(APIInterface.class);
         apiInterface.getProduct(Integer.parseInt(id)).enqueue(new Callback<Product>() {
             @Override
@@ -167,7 +180,7 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                 mProductTitleTxt.setText(response.body().getProductName());
                 mTitleTxtView.setText(response.body().getProductName());
                 mProductDescTxt.setText(response.body().getProductDesc());
-                mProductPriceTxt.setText("$ " + response.body().getPrice());
+                mProductPriceTxt.setText("$"+response.body().getPrice()+"0");
                 String[] splited = response.body().getImgUrl().split("\\\\");
                 if(isVisible())
                 Glide.with(getContext()).load("http://54.68.141.32:8080/" + splited[splited.length - 1])
@@ -194,13 +207,12 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
                     if (isloggedin) {
                         mWishlistBtn.setEnabled(false);
                         mWishlistBtn.setAlpha(0.4f);
-                        addWishList(new WishList(Integer.parseInt(cartItem.getProductId()), username, cartItem.getProductName(), cartItem.getProductPrice(), null, isChecked, isChecked), token);
+                        addWishList(new WishList(Integer.parseInt(cartItem.getProductId()), username, cartItem.getProductName(), cartItem.getProductPrice(), null, isChecked, isChecked,mProductDescTxt.getText().toString()), token);
                     } else {
                         Toast.makeText(getContext(), "Please login to continue", Toast.LENGTH_SHORT).show();
                     }
             }
         });
-
     }
 
     @Override
@@ -212,11 +224,15 @@ public class DescriptionFragment extends Fragment implements View.OnClickListene
 
                 break;
             case R.id.minus_img_view:
-                if (count > 0) {
+                if (count > 1) {
                     count = count - 1;
                     mCountTxtView.setText("" + count);
 
                 }
+               /* else
+                {
+                   mAddCartBtn.setEnabled(false);
+                }*/
                 break;
             case R.id.addcart_btn:
                 if (count != prevCount) {

@@ -98,6 +98,7 @@ public class WishListFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onResponse(Call<List<WishList>> call, Response<List<WishList>> response) {
                 mWishListArr.clear();
+                if(response.body()!=null&&response.body().size()>0)
                 mWishListArr.addAll(response.body());
                 mProductArray.clear();
                 for (int y = 0; y < mWishListArr.size(); y++) {

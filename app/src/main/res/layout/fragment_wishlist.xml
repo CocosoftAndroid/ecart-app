@@ -4,20 +4,53 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/dp2">
 
-<LinearLayout
-    android:id="@+id/fwr1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_above="@+id/footer"
-    android:layout_alignParentTop="true">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rview"
+    <LinearLayout
+        android:id="@+id/fwr1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/footer"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/add_cart_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/dp15"
+            android:background="@drawable/rounded_corner"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp10"
+            android:paddingLeft="@dimen/dp20"
+            android:paddingRight="@dimen/dp20"
+            android:paddingTop="@dimen/dp10"
+            android:text="Add Cart"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/wishlistnoitem_layout"
         android:layout_width="match_parent"
@@ -40,36 +73,4 @@
             android:text="No Items in Wish List"
             android:textAppearance="?android:textAppearanceLarge" />
     </LinearLayout>
-
-</LinearLayout>
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-
-
-            <TextView
-                android:id="@+id/add_cart_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/dp15"
-                android:background="@drawable/rounded_corner"
-                android:gravity="center"
-                android:paddingBottom="@dimen/dp10"
-                android:paddingLeft="@dimen/dp20"
-                android:paddingRight="@dimen/dp20"
-                android:paddingTop="@dimen/dp10"
-                android:text="Add Cart"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-
-
-    </LinearLayout>
-
 </RelativeLayout>

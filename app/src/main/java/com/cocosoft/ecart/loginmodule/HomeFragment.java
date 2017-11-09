@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
     private ArrayList<String> mScannedList = new ArrayList<>();
 
     private Gson gson;
+    private RelativeLayout mSearchLayout;
 
 
     @Override
@@ -107,6 +109,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
     public void onResume() {
         super.onResume();
         mTitleTxtView.setText("Home");
+        mSearchLayout.setVisibility(View.VISIBLE);
     }
 
     private void setListeners() {
@@ -124,6 +127,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Quan
         mCountTxtView = (TextView) toolbar.findViewById(R.id.total_count);
         mTitleTxtView.setText("");
         coordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.coordinatorLayout);
+         mSearchLayout = (RelativeLayout) getActivity().findViewById(R.id.search_layout);
+
         mCartImg = (ImageView) toolbar.findViewById(R.id.cart_img);
         mCartImg.setOnClickListener(this);
         mCountTxtView.setVisibility(View.VISIBLE);

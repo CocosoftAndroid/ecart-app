@@ -71,6 +71,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     public static void setValue(int value) {
         LoginFragment.value = value;
     }
+
     private static int value = 0;
     public double latitude;
     public double longitude;
@@ -162,7 +163,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
         if (mUserNameEdtTxt.getText().toString().trim().length() == 0) {
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Please enter a valid Username");
-            Log.d("login", "doLogin: "+mUserNameEdtTxt.getText().toString().trim());
+            Log.d("login", "doLogin: " + mUserNameEdtTxt.getText().toString().trim());
         } else if (mPwdEdtTxt.getText().toString().trim().length() == 0) {
             mWarnTxt.setVisibility(View.VISIBLE);
             mWarnTxt.setText("Please enter a valid Password");
@@ -185,17 +186,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
                             editor.putString("usertype", "user");
                             editor.commit();
                         }
-                        if(isVisible()) {
+                        if (isVisible()) {
                             Toast.makeText(getActivity(), "Successfully Logged In", Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().popBackStack();
                             getActivity().getSupportFragmentManager().popBackStack();
                         }
                     }
                 }
+
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
-                    if(isVisible())
-                    Toast.makeText(getActivity(), "Login Failed", Toast.LENGTH_SHORT).show();
+                    if (isVisible())
+                        Toast.makeText(getActivity(), "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -226,19 +228,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
     protected void getLocation() {
         if (isLocationEnabled(getContext())) {
             locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            //You can still do this if you like, you might get lucky:
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Log.e("getCountryName", "rrw1");
+
             if (location != null) {
                 Log.e("TAG", "GPS is on");
                 latitude = location.getLatitude();
@@ -251,7 +245,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
                 //This is what you need:
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-                Log.e("getCountryName", "rrw1else");
+
             }
         } else {
         }
@@ -265,16 +259,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Loc
 
     @Override
     public void onLocationChanged(Location location) {
-        //Hey, a non null location! Sweet!
-        //remove location callback:
         locationManager.removeUpdates(this);
-        //open the map:
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         countryName = getCountryName(getContext(), latitude, longitude);
         editor.putString("country", countryName);
         editor.commit();
-        Log.e("getCountryName", "rrwlch");
+
     }
 
     @Override

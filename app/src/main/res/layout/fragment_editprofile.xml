@@ -116,7 +116,7 @@
             android:gravity="top"
             android:hint="Full Name"
             android:minLines="1"
-            android:text="Kalathuru Madhu"
+            android:text="CHRIS NISWANDEE"
             android:padding="@dimen/dp10" />
 
         <TextView
@@ -137,7 +137,7 @@
             android:gravity="top"
             android:hint="Address line 1"
             android:minLines="1"
-            android:text="#32,Eldams Road"
+            android:text="SMALLSYS INC"
             android:padding="@dimen/dp10" />
 
         <TextView
@@ -157,7 +157,7 @@
             android:background="@drawable/ic_edit_txt_bg"
             android:gravity="top"
             android:hint="Address line 2"
-            android:text="#32,Eldams Road"
+            android:text="200 E MAIN ST"
             android:minLines="1"
             android:padding="@dimen/dp10" />
 
@@ -178,7 +178,7 @@
             android:background="@drawable/ic_edit_txt_bg"
             android:gravity="top"
             android:hint="City"
-            android:text="Chennai"
+            android:text="PHOENIX"
             android:minLines="1"
             android:padding="@dimen/dp10" />
 
@@ -200,7 +200,7 @@
             android:gravity="top"
             android:hint="State/Province/region"
             android:minLines="1"
-            android:text="Chennai"
+            android:text="SEATTLE "
             android:padding="@dimen/dp10" />
 
         <TextView
@@ -222,7 +222,7 @@
             android:hint="Zip Code"
             android:inputType="number"
             android:minLines="1"
-            android:text="518738"
+            android:text="98102"
             android:padding="@dimen/dp10" />
 
         <TextView
@@ -243,7 +243,7 @@
             android:gravity="top"
             android:hint="Country"
             android:minLines="1"
-            android:text="India"
+            android:text="USA"
             android:padding="@dimen/dp10" />
 
         <TextView
@@ -265,7 +265,7 @@
             android:hint="Phone number"
             android:inputType="number"
             android:minLines="1"
-            android:text="9701990021"
+            android:text="205217100"
             android:padding="@dimen/dp10" />
 
         <android.support.v7.widget.AppCompatCheckBox
